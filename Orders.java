@@ -113,7 +113,8 @@ public class Orders{
             String Adress = UserInterface.StringInput("Type Drivers Adress: ");
             String DriversEmail = UserInterface.StringInput("Type Drivers Email: ");
             Integer DriverSAFM =UserInterface.IntegerInputForAFM("Type Drivers AFM: ");
-
+            String DriversPlateNumber = UserInterface.StringInput("Type Drivers PlateNumber: ");
+            Drivers.AddNew(Drivers.GetDriverList(),DriverName,DriverLastName,Adress,DriversEmail,DriverSAFM,DriversPlateNumber);
         }
 }
 
