@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class Main {
         productList.add(new Products("Swaz Professional General Purpose Cleaning Liquid 4lt", "Cleaning & Household Items", "Swaz", 2));
         productList.add(new Products("Amita Peach fruit drink 1000ml", "Drinks", "Amita", 12));
 
-        Drivers.CreateDefaultDrivers(Drivers.GetDriverList());
+        Drivers.CreateDefaultDrivers();
 
         costumersList.add(new Costumers("Maria","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
         costumersList.add(new Costumers("Izabela","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
@@ -26,7 +27,7 @@ public class Main {
         // Drivers.printTableDrivers(driverList);
         // Products.printTableProducts(productList);
         // Costumers.printTableCostumers(costumersList);
-
+        Drivers.printTableDrivers();
 
     }
 
