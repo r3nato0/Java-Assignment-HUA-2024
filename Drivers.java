@@ -41,7 +41,7 @@ public class Drivers extends  Person{
         this.Driverid = Driverid;
     }
 
-    public static void printTableDrivers(List<Drivers> driverList) {
+    public static void printTableDrivers() {
         // Printing table header
         System.out.printf("%-5s %-17s %-20s %-30s %-20s %-19s %-10s%n ", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number");
     
@@ -52,12 +52,12 @@ public class Drivers extends  Person{
         }
     }
 
-    public static void CreateDefaultDrivers(List<Drivers> driverList){
+    public static void CreateDefaultDrivers(){
         driverList.add(new Drivers("Renato","Nake","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946"));
         driverList.add(new Drivers("George","Papadopoylos","dimitrakopoulou 105","georgepapadopoylos@gmail.com",13231021,"IZN5236"));
         driverList.add(new Drivers("Anthoni","Tsouklas","Hrakleous 70","ATsouklas@gmail.com",17231021,"IZN5236"));
     }
-    public static boolean CheckDriverExists(List<Drivers> driverList,String DriverName,String DriverLastName){
+    public static boolean CheckDriverExists(String DriverName,String DriverLastName){
         boolean isValid = false;
     
         for (Drivers driver : driverList) {
