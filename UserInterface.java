@@ -2,6 +2,8 @@ import java.util.Scanner;
 // rerourcses used : 
 // https://www.javatpoint.com/java-int-to-string
 // https://www.javatpoint.com/java-string-length
+//https://docs.oracle.com/javase/8/docs/api/java/lang/String.html
+//no specific part of code has beeing copied , onlt the methods are beeing used 
 public class UserInterface{
 
 
@@ -125,4 +127,34 @@ public class UserInterface{
     public static Integer InputTypeNumber(){
         return 0;
     }
+
+    public static String InputTypeEmail(String Message){
+        Scanner scanner = new Scanner(System.in);
+        
+        System.err.printf("%s",Message);
+        String Email;
+        Integer indexOfPapaki = -1;
+        String DomainPart = "";
+        String AdressPart = "";
+        boolean PapakiValid = false ;
+        boolean formatValid = false;
+        while (true) {
+            Email = scanner.nextLine();
+            Integer LastElement = Email.length() -1;
+            //FIrst i need to find if there is the @ inside the text,
+            // after the @ is the local part of the adress, any "." 
+            //before the @ does not matter with the exeption of not beeing the last character of the domain (example renato.@gmailcom is forbiden)
+
+            //Finding if there is an "@" inside the text, if yes we get the index
+            for(int i=0;i<=Email.length()-1;i++){
+                if(Email.charAt(i)== '@'){
+                    indexOfPapaki = i;
+                    PapakiValid =true;}                    
+                }
+            DomainPart = Email.substring(0, indexOfPapaki);
+            AdressPart = Email.substring(indexOfPapaki+1,Email.length()-1);
+            
+
+    }
+}
 }

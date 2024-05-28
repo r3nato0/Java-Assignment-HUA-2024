@@ -27,8 +27,8 @@ public class Main {
         // Drivers.printTableDrivers(driverList);
         // Products.printTableProducts(productList);
         // Costumers.printTableCostumers(costumersList);
-        Integer test = UserInterface.InputTypeAFM("HELLO");
-        System.out.println("works");
+        String test = UserInterface.InputTypeEmail("HELLO\n");
+        System.out.println("works\n");
 
     }
 
