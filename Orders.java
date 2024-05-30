@@ -99,26 +99,5 @@ public class Orders{
         this.Status = Status;
     }
 
-    public static void Create() {
-        String DriverName = UserInterface.StringInput("Type Drivers First Name: ");
-        String DriverLastName = UserInterface.StringInput("Type Drivers Last Name: ");
-        Boolean IsValid = Drivers.CheckDriverExists(DriverName,DriverLastName);
-        if ( IsValid ){
-            System.out.printf("The Driver allready Exsits, the rest of the fields are filled accordingly %n");
-            Drivers SelectedDriver = Drivers.GetDriver(Drivers.GetDriverList(),DriverName);
-            
-        }
-        else{
-            System.out.printf("The Driver Name does not exist, continuing with the rest of the fields: ");
-            String Adress = UserInterface.StringInput("Type Drivers Adress: ");
-            String DriversEmail = UserInterface.StringInput("Type Drivers Email: ");
-            Integer DriverSAFM =UserInterface.InputTypeAFM("Type Drivers AFM: ");
-            String DriversPlateNumber = UserInterface.InputTypePlateNumber("Type Drivers PlateNumber: ");
-            //Drivers.AddNew(Drivers.GetDriverList(),DriverName,DriverLastName,Adress,DriversEmail,DriverSAFM,DriversPlateNumber);
-        }
-}
-
-
-
 
 }

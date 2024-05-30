@@ -40,41 +40,27 @@ public class UserInterface{
 
     public static Integer InputTypeAFM(String Message){
         Scanner scanner = new Scanner(System.in);
-        char[] nums = {'0','1','2','3','4','5','6','7','8','9'};
+
         String StringNumber ;
         System.out.printf("%s",Message);
         while(true){
             boolean isValid = false;
-
-
             StringNumber = scanner.nextLine();
-            outerLoop:
-            for (int i = 0; i < StringNumber.length()-1; i++) {
-                for(int j =0; j <nums.length;j++){
-                    System.out.println(StringNumber.charAt(i));
-                    System.out.println(nums[j]);
-                    if(StringNumber.charAt(i)==nums[j] ){
-                        System.out.println("OKEYA");
-                        isValid =true;
-                        break outerLoop;
-
-                    } else{
-                        isValid =false;
-                        System.out.printf("Please enter your 8-Digit tax code corectly: ");
- 
+            if( StringNumber.length()==8){
+                for (int i=0; i < StringNumber.length();i++){
+                    char c = StringNumber.charAt(i);
+                    if(Character.isDigit(c)){
+                        isValid=true;
                     }
-                    
+                    else{
+                        break;
+                    }
                 }
-            
-            }   
-         
-        if (StringNumber.length() == 8 && isValid && !StringNumber.isEmpty()){
-            return Integer.parseInt(StringNumber);
-        }
+            }
+            if (isValid){
+                return Integer.parseInt(StringNumber);
+            }
     }
-
-
-    
 }
 
     public static String InputTypePlateNumber(String Message){
@@ -120,41 +106,129 @@ public class UserInterface{
         }
     }
 
-    public static String InputTypeStringWithSpaces(){
-        return "hello";
-    }
+    public static String InputTypeStringWithSpace(String Message){ 
 
-    public static Integer InputTypeNumber(){
-        return 0;
-    }
-
-    public static String InputTypeEmail(String Message){
         Scanner scanner = new Scanner(System.in);
-        
-        System.err.printf("%s",Message);
-        String Email;
-        Integer indexOfPapaki = -1;
-        String DomainPart = "";
-        String AdressPart = "";
-        boolean PapakiValid = false ;
-        boolean formatValid = false;
+        String FirstPart="";
+        String SecodPart="";
         while (true) {
-            Email = scanner.nextLine();
-            Integer LastElement = Email.length() -1;
-            //FIrst i need to find if there is the @ inside the text,
-            // after the @ is the local part of the adress, any "." 
-            //before the @ does not matter with the exeption of not beeing the last character of the domain (example renato.@gmailcom is forbiden)
+            System.out.printf("%s",Message);
+            String Input = scanner.nextLine();
+            System.out.println(Message);
+            Integer SpacePos = Input.indexOf(" ");
 
-            //Finding if there is an "@" inside the text, if yes we get the index
-            for(int i=0;i<=Email.length()-1;i++){
-                if(Email.charAt(i)== '@'){
-                    indexOfPapaki = i;
-                    PapakiValid =true;}                    
+            if ((Input.length()>=3) && (SpacePos!=-1) && (SpacePos< Input.length()-1)){
+                FirstPart = Input.substring(0, SpacePos);
+                SecodPart = Input.substring(SpacePos+1,Input.length());
+            }
+            if (FirstPart.matches("[a-zA-Z]+") && SecodPart.matches("[a-zA-Z]+") ) {
+                System.out.println(FirstPart);
+                System.out.println(SecodPart);
+                return Input;
+            } 
+        } 
+    }
+
+    public static Integer InputTypeNumber(String message) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(message);
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.length() == 1) {
+                char ch = input.charAt(0);
+                if (ch >= '0' && ch <= '9') {
+                    return Integer.parseInt(input);
+                } else {
+                    System.out.println("Please enter a single digit number:");
                 }
-            DomainPart = Email.substring(0, indexOfPapaki);
-            AdressPart = Email.substring(indexOfPapaki+1,Email.length()-1);
-            
+            } else {
+                System.out.println("Please enter a single digit number:");
+            }
+        }
+    }
 
+    public static String InputTypeEmail(String Message) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.err.printf("%s", Message);
+
+        while (true) {
+            String Email = scanner.nextLine();
+            
+            // Check for invalid sequences
+            boolean IsValidSequence = (
+                !Email.contains("@.") &&
+                !Email.contains("..") &&
+                !Email.contains(".@") &&
+                !Email.startsWith(".") &&
+                !Email.startsWith("@") &&
+                !Email.endsWith(".") &&
+                !Email.endsWith("@")
+            );
+
+            // Check if email contains exactly one @
+            int atPosition = Email.indexOf('@');
+            boolean validat = atPosition != -1 && Email.indexOf('@', atPosition + 1) == -1;
+
+            // Check if email contains at least one dot after the @
+            boolean ValiddotPOS = atPosition != -1 && Email.indexOf('.', atPosition + 1) != -1;
+
+            // If all conditions are met
+            if (IsValidSequence && ValiddotPOS && validat) {
+                return Email;
+            } else {
+                System.err.printf("Invalid email address. Please enter again:  ");
+            }
+        }
+    }
+
+    public static String InputTypeAdress(String Message){
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println(Message);
+            String Input = scanner.nextLine();
+            String StreetAdress = "" ;
+            String StreetNumber = "";
+            boolean isValidStreetAdress = false;
+            boolean isValidSStreetNumber = false;
+            Integer Separator = Input.indexOf(" ") ;
+            if ((Input.length() >= 3) && (Separator != -1) && (Separator < Input.length()-1)){
+                StreetAdress = Input.substring(0, Separator);
+                StreetNumber = Input.substring(Separator+1, Input.length());
+                System.out.println(StreetAdress);
+                System.out.println(StreetNumber);
+            }
+            if (StreetAdress.matches("[a-zA-Z]+")) {
+                isValidStreetAdress = true;
+
+            } 
+            for(int i =0 ; i < StreetNumber.length();i++){
+                char c = StreetNumber.charAt(i);
+                if(Character.isDigit(c)){
+                    isValidSStreetNumber=true;
+
+                } 
+                else{
+                    break;
+                }
+            }
+            if(isValidSStreetNumber&& isValidStreetAdress){
+                return Input;
+            }
+        }
+    }
+
+    public static boolean InputTypeBoolean(String Message){
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            String Input = scanner.nextLine(); 
+            if (Input.equals("yes") || Input.equals("Yes") || Input.equals("YES") || Input.equals("y") || Input.equals("Y")){
+                return true;
+            }
+            if (Input.equals("no") || Input.equals("No") || Input.equals("NO") || Input.equals("n")){
+                return false;
+            }
+        }
     }
 }
-}
+
