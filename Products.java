@@ -62,7 +62,7 @@ public class Products {
     }
 
     public void setAvailableQuantity( Integer AvailableQuantity) {
-        System.out.println("hey");
+
         this.AvailableQuantity = AvailableQuantity;
     }
 }

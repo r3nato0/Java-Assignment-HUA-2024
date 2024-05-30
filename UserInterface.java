@@ -230,5 +230,23 @@ public class UserInterface{
             }
         }
     }
+    public static Integer InputTypeLockerORHome(String Message){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(Message);
+        while (true) {
+            String input = scanner.nextLine();
+            if (input.length() == 1) {
+                char c = input.charAt(0);
+                if(c==1){
+                    return 1;
+                }
+                if(c==2){
+                    return 2;
+                }
+            } else {
+                System.out.println("Please enter (1) For Costumers Home Address Or (2) For A locker Delivery:");
+            }
+        }
+    }
 }
 
