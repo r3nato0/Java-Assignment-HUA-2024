@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class OrderHome extends Orders{
+public class OrdersHome extends Orders{
     private String address;
 
 
