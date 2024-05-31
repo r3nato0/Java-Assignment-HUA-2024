@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
 public class OrderManager{
-    private static List<Products> TempOrderCreationProduct= new ArrayList<>();
-    private static List<Integer>  TempOrderCreationQuantity= new ArrayList<>();
 
 
 
@@ -10,9 +6,7 @@ public class OrderManager{
         
         Costumers SelectedCostumer;
         Drivers SelectedDriver;
-        String DeliveryLocation;
-        TempOrderCreationProduct.clear();
-        TempOrderCreationQuantity.clear();
+        BucketShop CostumerBucket;
         String CostumerFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
         if(CostumerManager.CheckCostumerExists(CostumerFullName)){
             System.out.printf("The Costumer allready Exsits, the rest of the fields are filled accordingly %n");
@@ -24,6 +18,7 @@ public class OrderManager{
             SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName(CostumerFullName);
         }
 
+        
         String DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
         if (DriverManager.CheckDriverExists(DriverFullName)){
             System.out.printf("The Driver allready Exsits, the rest of the fields are filled accordingly %n");
@@ -35,21 +30,20 @@ public class OrderManager{
             SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); 
         }
 
-        TempOrderCreationProduct.add(ProductManager.GetProductByNameORId());
-        TempOrderCreationQuantity.add(ProductManager.GetSelectedProductsQuantity(TempOrderCreationProduct.get(0)));
-        boolean AnotherProduct = UserInterface.InputTypeBoolean("Add Another product to the bucket; ");
-        if(AnotherProduct){
-            TempOrderCreationProduct.add(ProductManager.GetProductByNameORId());
-            TempOrderCreationQuantity.add(ProductManager.GetSelectedProductsQuantity(TempOrderCreationProduct.get(1)));
+        CostumerBucket = new BucketShop(SelectedCostumer);
+        while (true) {
+            Products product = ProductManager.GetProductByNameORId();
+            Integer quantity = ProductManager.GetSelectedProductsQuantity(product);
+            
+            CostumerBucket.addProductToBucket(product, quantity);
+            
+            boolean addAnotherProduct = UserInterface.InputTypeBoolean("Add another product to the bucket: ");
+            if (!addAnotherProduct) {
+                break;
+            }
         }
 
-        Integer DeliveryOption =UserInterface.InputTypeLockerORHome("Press (1) for Costumer's Home Address or (2) For Locker Delivery ");
-        if(DeliveryOption==1){
-            DeliveryLocation = SelectedCostumer.getAddress();
-        }
-        else{
-            DeliveryLocation =
-        }
+
 
 }
 }

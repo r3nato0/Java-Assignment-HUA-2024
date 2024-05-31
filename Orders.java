@@ -6,44 +6,41 @@
  * QUANTITY OF PRODUCTS
  * STATUS
  */
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.util.List;
-public class Orders{
-    private static int nextId = 001;
-    private int Orderid;
-    private String CostumerName;
-    private String DriverName;
-    private static final Scanner scanner = new Scanner(System.in);
-    private String OrderDateTime;
-    List<String> products = new ArrayList<>();
-    List<Integer> quantity = new ArrayList<>();
-    private Boolean Status;
-    private int ShipAdress;
+    import java.util.ArrayList;
+    import java.util.List;
+    public class Orders{
+        private static int nextId = 001;
+        private int Orderid;
+        private Costumers costumer;
+        private Drivers Driver;
+        private String OrderDateTime;
+        private List<String> products = new ArrayList<>();
+        private List<Integer> quantity = new ArrayList<>();
+        private Boolean Status;
+        private String ShipAdress;
+        private String CostumerName;
+        private String DriverName;
+        private List<BucketShop> ProductsInBucket;
 
-
-    public Orders( String CostumerName, String DriverName, String OrderDateTime, List<String> products, List<Integer> quantity, Boolean Status, int ShipAdress){
-        this.CostumerName = CostumerName;
-        this.DriverName = DriverName;
-        this.OrderDateTime = OrderDateTime;
-        this.products = products;
-        this.quantity = quantity;
-        this.Status = Status;
-        this.ShipAdress = ShipAdress;
-    }
+        public Orders( Costumers costumer, Drivers Driver, List<BucketShop> ProductsInBucket){
+            this.
+            this.costumer = costumer;
+            this.Driver = Driver;
+            this.ProductsInBucket = ProductsInBucket;
+        }
 
     public int getOrderid() {
         return this.Orderid;
     }
 
-    public int getShipAdress() {
+    public String getShipAdress() {
         return this.ShipAdress;
     }
     public void setOrderid(int Orderid) {
         this.Orderid = Orderid;
     }
 
-    public void setShipAdress(int ShipAdress) {
+    public void setShipAdress(String ShipAdress) {
         this.ShipAdress = ShipAdress;
     }
 
@@ -85,10 +82,6 @@ public class Orders{
 
     public void setQuantity(List<Integer> quantity) {
         this.quantity = quantity;
-    }
-
-    public Boolean isStatus() {
-        return this.Status;
     }
 
     public Boolean getStatus() {
