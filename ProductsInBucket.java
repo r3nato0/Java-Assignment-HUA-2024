@@ -16,10 +16,51 @@ public class ProductsInBucket {
     }
 
     public Products getProduct() {
-        return product;
+        return this.product;
+    }
+
+    public void setProduct(Products product) {
+        this.product = product;
     }
 
     public int getQuantity() {
-        return quantity;
+        return this.quantity;
     }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getProductName() {
+        return this.ProductName;
+    }
+
+    public void setProductName(String ProductName) {
+        this.ProductName = ProductName;
+    }
+
+    public String getProductCategory() {
+        return this.ProductCategory;
+    }
+
+    public void setProductCategory(String ProductCategory) {
+        this.ProductCategory = ProductCategory;
+    }
+
+    public Integer getProductid() {
+        return this.Productid;
+    }
+
+    public void setProductid(Integer Productid) {
+        this.Productid = Productid;
+    }
+
+    public String getProductBrand() {
+        return this.ProductBrand;
+    }
+
+    public void setProductBrand(String ProductBrand) {
+        this.ProductBrand = ProductBrand;
+    }
+
 }

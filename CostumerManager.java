@@ -24,11 +24,14 @@ public class CostumerManager{
 
     public static boolean CheckCostumerExists(String CostumerFullName){
         boolean isValid=false;
-        String FirstName= CostumerFullName.substring(0,CostumerFullName.indexOf(" "));
-        String LastName= CostumerFullName.substring((CostumerFullName.indexOf(" ")+1),CostumerFullName.length());
+        Integer SpacePos = CostumerFullName.indexOf(" ");
+        String FirstName= CostumerFullName.substring(0, SpacePos);
+        String LastName= CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
+        System.out.println(CostumerFullName);
         for(Costumers costumer : costumersList){
-            if(costumer.getName()==FirstName && costumer.getSurname()==LastName){
+            if (FirstName.equals(costumer.getName()) && LastName.equals(costumer.getSurname()) ) {
                 isValid=true;
+                break;
             }
 
         }
@@ -39,21 +42,19 @@ public class CostumerManager{
 
     public static void NotFoundAddNew(String CostumerFullName){
         Integer SpacePos = CostumerFullName.indexOf(" ");
-        String DriverFirstName = CostumerFullName.substring(0, SpacePos);
-        String DriverLastName = CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
-        System.out.printf("The Driver Name does not exist, continuing with the rest of the fields: ");
+        String CostumerFIrstName = CostumerFullName.substring(0, SpacePos);
+        String CostumerSurrname = CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
+        System.out.printf("The Costumer's Name does not exist, continuing with the rest of the fields: ");
         String address = UserInterface.StringInput("Type Drivers Adress: ");
-        String DriversEmail = UserInterface.StringInput("Type Drivers Email: ");
-        Integer DriverSAFM =UserInterface.InputTypeAFM("Type Drivers AFM: ");
-        String DriversPlateNumber = UserInterface.InputTypePlateNumber("Type Drivers PlateNumber: ");
-        costumersList.add(new Costumers(DriverFirstName,DriverLastName,address,DriversEmail));
+        String Email = UserInterface.StringInput("Type Drivers Email: ");
+        costumersList.add(new Costumers(CostumerFIrstName,CostumerSurrname,address,Email));
     }
 
 
 
 
 
-    public static void CreateDefaultCostumers(){}{
+    public static void CreateDefaultCostumers(){
         costumersList.add(new Costumers("Maria","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
         costumersList.add(new Costumers("Izabela","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
     }
@@ -68,8 +69,8 @@ public class CostumerManager{
     }
 
 
-    public static void AddNew(List<Costumers> CostumersList,String name, String surname, String address, String email) {
-        CostumersList.add(new Costumers (name,surname,address,email ));
+    public static void AddNew(String name, String surname, String address, String email) {
+        costumersList.add(new Costumers (name,surname,address,email ));
         }
 
 }

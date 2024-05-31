@@ -4,18 +4,24 @@ import java.util.List;
 public class BucketShop {
     private List<ProductsInBucket> customerBucket;
     private Costumers costumers;
-    private Integer customerID;
+
 
     public BucketShop(Costumers customer) {
         this.costumers = customer;
-        this.customerID = customer.getCostumerid();
         this.customerBucket = new ArrayList<>();
     }
 
+    public Costumers getCostumer(){
+       return this.costumers;
+    }
+
+    public void setCostumer(Costumers costumers){
+        this.costumers=costumers;
+     }
+
     // Method to add a product to the bucket with quantity
     public void addProductToBucket(Products product, int quantity) {
-        ProductsInBucket ProductBucket = new ProductsInBucket(product, quantity);
-        this.customerBucket.add(ProductBucket);
+        customerBucket.add(new ProductsInBucket(product, quantity));
     }
 
     // Method to get the list of products in the bucket

@@ -111,10 +111,9 @@ public class UserInterface{
         Scanner scanner = new Scanner(System.in);
         String FirstPart="";
         String SecodPart="";
+        System.out.printf("%s",Message);
         while (true) {
-            System.out.printf("%s",Message);
             String Input = scanner.nextLine();
-            System.out.println(Message);
             Integer SpacePos = Input.indexOf(" ");
 
             if ((Input.length()>=3) && (SpacePos!=-1) && (SpacePos< Input.length()-1)){
@@ -122,8 +121,6 @@ public class UserInterface{
                 SecodPart = Input.substring(SpacePos+1,Input.length());
             }
             if (FirstPart.matches("[a-zA-Z]+") && SecodPart.matches("[a-zA-Z]+") ) {
-                System.out.println(FirstPart);
-                System.out.println(SecodPart);
                 return Input;
             } 
         } 

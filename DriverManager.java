@@ -57,7 +57,7 @@ public class DriverManager{
         Integer SpacePos = DriverFullName.indexOf(" ");
         String DriverFirstName = DriverFullName.substring(0, SpacePos);
         String DriverLastName = DriverFullName.substring(SpacePos+1, DriverFullName.length());
-        System.out.printf("The Driver Name does not exist, continuing with the rest of the fields: ");
+        System.out.printf("The Driver Name does not exist, continuing with the rest of the fields:\n");
         String address = UserInterface.StringInput("Type Drivers Adress: ");
         String DriversEmail = UserInterface.StringInput("Type Drivers Email: ");
         Integer DriverSAFM =UserInterface.InputTypeAFM("Type Drivers AFM: ");
