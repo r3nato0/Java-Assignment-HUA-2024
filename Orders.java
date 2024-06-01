@@ -1,11 +1,4 @@
-/* 
- * COSTUMER
- * DRIVER
- * TIME AND DATE
- * PRODUCTS
- * QUANTITY OF PRODUCTS
- * STATUS
- */
+
 
 import java.util.List;
 
@@ -29,11 +22,6 @@ public class Orders{
         return this.Orderid;
     }
 
-    public static void printAllOrders(List<Orders> ordersList) {
-        for (Orders order : ordersList) {
-            System.out.println(order.getOrderid());
-        }
-    }
 
     public void setOrderid(Integer Orderid) {
         this.Orderid = Orderid;

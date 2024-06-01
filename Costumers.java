@@ -55,7 +55,10 @@ public class Costumers extends Person {
         BucketShop.addProductToBucket(product, quantity);
     }
     
-        public List<ProductsInBucket> getProductsInBucket() {
+    public List<ProductsInBucket> getProductsInBucket() {
         return BucketShop.getProductsBucket();
+    }
+    public void clearBucket() {
+        BucketShop.clearBucket();
     }
 }

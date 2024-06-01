@@ -3,15 +3,16 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        CreateDefaultData.CreateDefaultInstances();
-    List<Orders> ordersList = new ArrayList<>();
+        // Create a new Locker
+        Lockers newLocker = new Lockers("Example Address", 10, 3);
 
-        // Add orders to the list
+        // Get the compartments of the locker
+        ArrayList<Integer> compartments = newLocker.getCompartmentsLockers();
 
-        // Print all orders
-    Orders.printAllOrders(ordersList);
-    OrderManager.Create();
-    Orders.printAllOrders(ordersList);
-    OrderManager.Create();
+        // Print the compartments
+        System.out.println("Compartments of the locker:");
+        for (int compartment : compartments) {
+            System.out.println(compartment);
+        }
     }
 }

@@ -20,7 +20,7 @@ public class BucketShop {
      }
 
 
-    // Method to add a product to the bucket with quantity
+
     public void addProductToBucket(Products product, int quantity) {
         customerBucket.add(new ProductsInBucket(product, quantity));
     }
@@ -28,5 +28,8 @@ public class BucketShop {
     // Method to get the list of products in the bucket
     public List<ProductsInBucket> getProductsBucket() {
         return this.customerBucket;
+    }
+    public void clearBucket() {
+        customerBucket.clear();
     }
 }

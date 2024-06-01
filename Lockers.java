@@ -1,50 +1,32 @@
+import java.util.ArrayList;
+
+
 public class Lockers {
-    private static int nextId = 1;
-    private int LockerId;
-    private String LockerAdress;
-    private int LockerSpaces;
-    private int LockerSpacesUsed;
-    private int LockerSpacesFree;
+    private String address;
+    private ArrayList<Integer> spaces;
+    private ArrayList<Integer> unavailableSpaces;
+    private CompartmentsLockers compartmentsLockers;
 
-    public Lockers(String LockerAdress,int LockerSpaces,int LockerSpacesUsed){
-        this.LockerId=nextId++;
-        this.LockerAdress = LockerAdress;
-        this.LockerSpaces = LockerSpaces;
-        this.LockerSpacesUsed = LockerSpacesUsed;
-        this.LockerSpacesFree = this.LockerSpaces - this.LockerSpacesUsed;
+    public Lockers(String address, int spacesCount, int unavailableSpacesCount) {
+        this.address = address;
+        this.spaces = LockerManager.createNumberList(1, spacesCount);
+        this.unavailableSpaces = LockerManager.createNumberList(1, unavailableSpacesCount);
+        this.compartmentsLockers = new CompartmentsLockers(spaces, unavailableSpaces);
     }
 
-    //Getters
-    public int getLockerId(){
-        return LockerId;
-    }
-    public String getLockerAdress(){
-        return LockerAdress;
-    }
-    public int getLockerSpaces(){
-        return LockerSpaces;
-    }
-    public int getLockerSpacesUsed(){
-        return LockerSpacesUsed;
-    }
-    public int getLockerSpacesFree(){
-        return LockerSpacesFree;
+    public String getAddress(){
+        return this.address;
     }
 
-    //Setters
-
-    public void setLockerAdress(String LockerAdress) {
-        this.LockerAdress = LockerAdress;
+    public ArrayList<Integer> getSpaces(){
+        return this.spaces;
     }
-    public void setLockerSpaces(int LockerSpaces) {
-        this.LockerSpaces = LockerSpaces;
+    public ArrayList<Integer> getUnavailableSpaces(){
+        return this.unavailableSpaces;
     }
-    public void setLockerSpacesUsed(int LockerSpacesUsed) {
-        this.LockerSpacesUsed = LockerSpacesUsed;
-    }
-    public void setLockerSpacesFree(int LockerSpacesFree) {
-        this.LockerSpacesFree = this.LockerSpaces - this.LockerSpacesUsed;
+    
+    public ArrayList<Integer> getCompartmentsLockers(){
+        return compartmentsLockers.getCompartmentsLockers();
     }
 }
-
 

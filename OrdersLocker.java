@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrdersHome extends Orders{
+public class OrdersLocker extends Orders{
     private String CostumerName;
     private String CostumerSurrname;
     private String DriverName;
@@ -14,7 +14,7 @@ public class OrdersHome extends Orders{
 
 
 
-    public OrdersHome(Integer OrderId,Costumers costumer, Drivers Driver) {
+    public OrdersLocker(Integer OrderId,Costumers costumer, Drivers Driver) {
         super(OrderId,costumer, Driver);
         this.CostumerName = costumer.getName();
         this.CostumerSurrname = costumer.getSurname();
