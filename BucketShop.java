@@ -19,6 +19,7 @@ public class BucketShop {
         this.costumers=costumers;
      }
 
+
     // Method to add a product to the bucket with quantity
     public void addProductToBucket(Products product, int quantity) {
         customerBucket.add(new ProductsInBucket(product, quantity));

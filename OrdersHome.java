@@ -22,7 +22,28 @@ public class OrdersHome extends Orders{
         this.productsInOrder = costumer.getProductsInBucket();
 
     }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order ID: ").append(getOrderId()).append("\n");
+        sb.append("Customer Name: ").append(CostumerName).append("\n");
+        sb.append("Customer Surname: ").append(CostumerSurrname).append("\n");
+        sb.append("Driver Name: ").append(DriverName).append("\n");
+        sb.append("Driver Last Name: ").append(DriverLastName).append("\n");
+        sb.append("Date & Time: ").append(DateTime).append("\n");
+        sb.append("Address: ").append(address).append("\n");
+        sb.append("Status: ").append(Status).append("\n");
+        sb.append("Products Bought:\n");
+        for (ProductsInBucket product : productsInOrder) {
+            sb.append("  - ").append(product.getName()).append(", Quantity: ").append(product.getQuantity()).append("\n");
+            // Add more details of the product if needed
+        }
+        return sb.toString();
+    }
 
+    public Integer getOrderId(){
+        return super.getOrderid();
+    }
 
     public String getCostumerName() {
         return this.CostumerName;

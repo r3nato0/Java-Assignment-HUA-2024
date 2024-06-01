@@ -12,7 +12,7 @@ public class CostumerManager{
         String FirstName= CostumerFullName.substring(0,CostumerFullName.indexOf(" "));
         String LastName= CostumerFullName.substring((CostumerFullName.indexOf(" ")+1),CostumerFullName.length());
         for(Costumers costumer : costumersList){
-            if(costumer.getName()==FirstName && costumer.getSurname()==LastName){
+            if (FirstName.equals(costumer.getName()) && LastName.equals(costumer.getSurname()) ) {
                 SelectedCostumer = costumer;
             }
 
@@ -45,8 +45,8 @@ public class CostumerManager{
         String CostumerFIrstName = CostumerFullName.substring(0, SpacePos);
         String CostumerSurrname = CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
         System.out.printf("The Costumer's Name does not exist, continuing with the rest of the fields: ");
-        String address = UserInterface.StringInput("Type Drivers Adress: ");
-        String Email = UserInterface.StringInput("Type Drivers Email: ");
+        String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
+        String Email = UserInterface.InputTypeEmail("Type Drivers Email: ");
         costumersList.add(new Costumers(CostumerFIrstName,CostumerSurrname,address,Email));
     }
 

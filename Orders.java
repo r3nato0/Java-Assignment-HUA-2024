@@ -6,9 +6,10 @@
  * QUANTITY OF PRODUCTS
  * STATUS
  */
-    import java.util.ArrayList;
-    import java.util.List;
-    public class Orders{
+
+import java.util.List;
+
+public class Orders{
         protected static Integer nextId = 001;
         protected Integer Orderid;
         private Costumers costumer;
@@ -17,7 +18,7 @@
 
 
         public Orders(Integer OrderId,Costumers costumer, Drivers Driver){
-            this.Orderid=nextId;
+            this.Orderid=nextId++;
             this.costumer = costumer;
             this.Driver = Driver;
 
@@ -26,6 +27,12 @@
 
     public Integer getOrderid() {
         return this.Orderid;
+    }
+
+    public static void printAllOrders(List<Orders> ordersList) {
+        for (Orders order : ordersList) {
+            System.out.println(order.getOrderid());
+        }
     }
 
     public void setOrderid(Integer Orderid) {

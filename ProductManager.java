@@ -20,19 +20,21 @@ public class ProductManager{
 
     public static Integer GetSelectedProductsQuantity(Products SelectedProduct){
         Scanner scanner = new Scanner(System.in);
-
+        Integer SelectedQuantity ;
         while (true) {
-        System.out.println("Specify Quantiy of product 1-Max: ");
-        Integer SelectedQuantity = scanner.nextInt();
+        System.out.printf("Specify Quantiy of product, ranging from 1 to %d \n",SelectedProduct.getAvailableQuantity());
+        SelectedQuantity = scanner.nextInt();
 
         if((SelectedQuantity>0) && (SelectedQuantity<=SelectedProduct.getAvailableQuantity())){
             Integer NewAvailableQuantity = SelectedProduct.getAvailableQuantity() - SelectedQuantity;
-            System.out.println(NewAvailableQuantity);
             SelectedProduct.setAvailableQuantity(NewAvailableQuantity);
-            return SelectedQuantity;
+            break;
+        }else{
+            System.out.printf("Please Provide a quantity that is Valid, ranging from 1 to %d \n",SelectedProduct.getAvailableQuantity());
         }
 
         }
+        return SelectedQuantity;
     }
 
     public static Products GetProductByNameORId(){

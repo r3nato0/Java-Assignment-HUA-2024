@@ -15,6 +15,10 @@ public class ProductsInBucket {
         this.quantity = quantity;
     }
 
+    public String getName() {
+        return this.ProductName;
+    }
+
     public Products getProduct() {
         return this.product;
     }

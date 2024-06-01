@@ -218,6 +218,7 @@ public class UserInterface{
     public static boolean InputTypeBoolean(String Message){
         Scanner scanner = new Scanner(System.in);
         while (true) {
+            System.out.println(Message);
             String Input = scanner.nextLine(); 
             if (Input.equals("yes") || Input.equals("Yes") || Input.equals("YES") || Input.equals("y") || Input.equals("Y")){
                 return true;
