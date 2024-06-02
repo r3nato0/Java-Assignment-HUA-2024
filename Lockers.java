@@ -1,32 +1,33 @@
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Lockers {
     private String address;
-    private ArrayList<Integer> spaces;
-    private ArrayList<Integer> unavailableSpaces;
-    private CompartmentsLockers compartmentsLockers;
+    private List<String> status = new ArrayList<>(List.of("Unavailable","Free"));
+    private List<EachCompartmentOfLockers> compartmentsOfLocker;
 
-    public Lockers(String address, int spacesCount, int unavailableSpacesCount) {
+
+
+
+
+    public Lockers(String address, int Spaces) {
         this.address = address;
-        this.spaces = LockerManager.createNumberList(1, spacesCount);
-        this.unavailableSpaces = LockerManager.createNumberList(1, unavailableSpacesCount);
-        this.compartmentsLockers = new CompartmentsLockers(spaces, unavailableSpaces);
+        this.compartmentsOfLocker = new ArrayList<>();
+        for(int i=1;i<=Spaces;i++){
+            this.compartmentsOfLocker.add(new EachCompartmentOfLockers(this, status.get(1), i));
+        }
+
     }
 
     public String getAddress(){
         return this.address;
     }
 
-    public ArrayList<Integer> getSpaces(){
-        return this.spaces;
+    public List<EachCompartmentOfLockers> getCompartmentsOfLocker() {
+        return this.compartmentsOfLocker;
     }
-    public ArrayList<Integer> getUnavailableSpaces(){
-        return this.unavailableSpaces;
-    }
-    
-    public ArrayList<Integer> getCompartmentsLockers(){
-        return compartmentsLockers.getCompartmentsLockers();
-    }
+
+
 }
 

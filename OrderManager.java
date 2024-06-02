@@ -4,12 +4,13 @@ import java.util.List;
 public class OrderManager{
     private static List<Orders> AllOrdersList = new ArrayList<>();
     private final static Integer MaxProductsPrintLength = 15; // Just a Limit of characters from products name to get printed, will be passed to UserInterface.PrintOnly(Name,Max...)
-
+    
     public static void Create() {
-        
+        Lockers RandomLocker;
+        EachCompartmentOfLockers RandomCompartment;
         Costumers SelectedCostumer;
         Drivers SelectedDriver;
-        String CostumerFullName ="Maria Georgioy";//UserInterface.InputTypeStringWithSpace("Please Provide the full name of the Costumer (upper cases will be ignored)  (example: nikos papadopoylos): ");
+        String CostumerFullName =UserInterface.InputTypeStringWithSpace("Please Provide the full name of the Costumer (upper cases will be ignored)  (example: nikos papadopoylos): ");
         if(CostumerManager.CheckCostumerExists(CostumerFullName)){
             System.out.printf("The Costumer allready Exsits, the rest of the fields are filled accordingly %n");
         }
@@ -18,7 +19,7 @@ public class OrderManager{
             CostumerManager.NotFoundAddNew(CostumerFullName); // Other Filleds are prompted and filled via the NotFoundAddNew Method
         }
 
-        String DriverFullName = "Renato Nake";//UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
+        String DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
         if (DriverManager.CheckDriverExists(DriverFullName)){
             System.out.printf("The Driver allready Exsits, the rest of the fields are filled accordingly %n");
         }
@@ -47,6 +48,16 @@ public class OrderManager{
             OrdersHome NewOrderHome = new OrdersHome(null, SelectedCostumer, SelectedDriver);
             AllOrdersList.add(NewOrderHome);
         }
+        else{
+            RandomLocker = LockerManager.getRandomFreeLocker();
+            if(RandomLocker!=null){
+                RandomCompartment = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
+                OrdersLocker OrdersLocker = new OrdersLocker(null,SelectedCostumer, SelectedDriver,RandomLocker,RandomCompartment);
+                AllOrdersList.add(OrdersLocker);
+            }else{
+                System.out.println("There are no Empty Lockers at the moments, sorry the order has been canceled");
+            }
+        }
 
 }
 
@@ -61,6 +72,28 @@ public static void printAllOrders() {
             Integer orderId = ordersHome.getOrderId();
             String CostumerFullName = ordersHome.getCostumerName() + " " + ordersHome.getCostumerSurrname();
             List<ProductsInBucket> productsInOrder = ordersHome.getProductsInOrder();
+
+            // Print customer details first
+            if (!productsInOrder.isEmpty()) {
+                ProductsInBucket firstProduct = productsInOrder.get(0);
+                
+                System.out.printf("%-10d %-15s %-20s %-10d\n", orderId, CostumerFullName,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
+
+                // Print remaining products
+                for (int i = 1; i < productsInOrder.size(); i++) {
+                    ProductsInBucket product = productsInOrder.get(i);
+                    System.out.printf("%-10s %-15s %-20s %-10d\n", "", "", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
+                }
+            }
+            System.err.println("------------------------------------------------------------------------------------------------------------------------");}
+        }
+
+    for (Orders order : AllOrdersList) {
+        if (order instanceof OrdersLocker) {
+            OrdersLocker orderslocker = (OrdersLocker) order;
+            Integer orderId = orderslocker.getOrderId();
+            String CostumerFullName = orderslocker.getCostumerName() + " " + orderslocker.getCostumerSurrname();
+            List<ProductsInBucket> productsInOrder = orderslocker.getProductsInOrder();
 
             // Print customer details first
             if (!productsInOrder.isEmpty()) {

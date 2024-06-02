@@ -11,19 +11,21 @@ public class OrdersLocker extends Orders{
     private String Status;
     private BucketShop CostumersBucket;
     private List<ProductsInBucket> ItemsBought;
+    private Integer CompartmentNumber;
 
 
-
-    public OrdersLocker(Integer OrderId,Costumers costumer, Drivers Driver) {
+    public OrdersLocker(Integer OrderId,Costumers costumer, Drivers Driver,Lockers locker,EachCompartmentOfLockers compartment) {
         super(OrderId,costumer, Driver);
         this.CostumerName = costumer.getName();
         this.CostumerSurrname = costumer.getSurname();
         this.DriverName = Driver.getName();
         this.DriverLastName = Driver.getSurname();
-        this.address = costumer.getAddress();
+        this.address = locker.getAddress();
+        this.CompartmentNumber = compartment.getLockerNumber();
         this.Status = costumer.getAddress();
         this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
         costumer.clearBucket();
+
     }
 
 
@@ -45,6 +47,13 @@ public class OrdersLocker extends Orders{
         }
         return sb.toString();
     }
+
+
+
+    public Integer getCompartmentNumber(){
+        return this.CompartmentNumber;
+    }
+
 
     public Integer getOrderId(){
         return super.getOrderid();
