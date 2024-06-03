@@ -10,6 +10,8 @@ public class Costumers extends Person {
         this.BucketShop = new BucketShop(this);
     }
 
+
+    
     public BucketShop getBucketShop(){
         return this.BucketShop;
     }

@@ -40,7 +40,7 @@ public class DriverManager{
     public static void CreateDefaultDrivers(){
         driverList.add(new Drivers("Renato","Nake","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946"));
         driverList.add(new Drivers("George","Papadopoylos","dimitrakopoulou 105","georgepapadopoylos@gmail.com",13231021,"IZN5236"));
-        driverList.add(new Drivers("Anthoni","Tsouklas","Hrakleous 70","ATsouklas@gmail.com",17231021,"IZN5236"));
+        driverList.add(new Drivers("Anthoni","Mantellos","Hrakleous 70","AMantellos@gmail.com",17231021,"IZN5236"));
         }
 
     public static void printTableDrivers() {

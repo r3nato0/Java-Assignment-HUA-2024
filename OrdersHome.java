@@ -4,25 +4,25 @@ import java.util.List;
 public class OrdersHome extends Orders{
     private String CostumerName;
     private String CostumerSurrname;
-    private String DriverName;
+    private String DriverFirstName;
     private String DriverLastName;
     private String OrderTime;
     private String address;
     private String Status;
+    private Drivers Driver;
     private BucketShop CostumersBucket;
     private List<ProductsInBucket> ItemsBought;
 
 
-
     public OrdersHome(Costumers costumer, Drivers Driver) {
         super(costumer, Driver);
-        this.Orderid = super.getOrderid();
+        this.Orderid = super.getOrderId();
         this.Status = super.getStatus();
         this.OrderTime = super.getOrderDateTime();
         this.CostumerName = super.getCostumerFirstName();
         this.CostumerSurrname = super.getCostumerSurrname();
-        this.DriverName = super.getDriverFirstName();
-        this.DriverLastName = super.getCostumerSurrname();
+        this.DriverFirstName = super.getDriverFirstName();
+        this.DriverLastName = super.getDriverSurrname();
         this.address = super.getAddress();
         this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
         costumer.clearBucket();
@@ -40,7 +40,7 @@ public class OrdersHome extends Orders{
         return  super.getOrderDateTime();
     }
     public Integer getOrderId(){
-        return super.getOrderid();
+        return super.getOrderId();
     }
     
     public String getCostumerFirstName() {
@@ -50,7 +50,7 @@ public class OrdersHome extends Orders{
         return super.getCostumerSurrname();
     }
     public String getDriverFirstName() {
-        return super.getCostumerFirstName();
+        return super.getDriverFirstName();
     }
     public String getDriverLastName() {
         return super.getDriverSurrname();
@@ -83,8 +83,8 @@ public class OrdersHome extends Orders{
     public void setCostumerSurrname(String CostumerSurrname) {
         this.CostumerSurrname = CostumerSurrname;
     }
-    public void setDriverName(String DriverName) {
-        this.DriverName = DriverName;
+    public void setDriverName(String DriverFirstName) {
+        this.DriverFirstName = DriverFirstName;
     }
     public void setDriverLastName(String DriverLastName) {
         this.DriverLastName = DriverLastName;
@@ -100,6 +100,13 @@ public class OrdersHome extends Orders{
     }
     public void setProductsInOrder(List<ProductsInBucket> ItemsBought) {
         this.ItemsBought = ItemsBought;
+    }
+    @Override
+    public void setNewDriver(Drivers Driver) {
+        super.setNewDriver(Driver);
+        this.Driver =Driver;
+        this.DriverFirstName = Driver.getName();
+        this.DriverLastName = Driver.getSurname();
     }
 
 }

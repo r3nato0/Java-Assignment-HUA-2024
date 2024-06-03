@@ -2,7 +2,7 @@
 
 
 public class Orders{
-        protected static Integer nextId = 001;
+        protected static Integer nextId = 1;
         protected Integer Orderid;
         private Costumers costumer;
         private Drivers Driver;
@@ -44,7 +44,7 @@ public class Orders{
     public String getStatus(){
         return this.Status;
     }
-    public Integer getOrderid() {
+    public Integer getOrderId() {
         return this.Orderid;
     }
     public String getOrderDateTime(){
@@ -109,7 +109,6 @@ public class Orders{
         this.Driver = Driver;
         this.DriverFirstName = Driver.getName();
         this.DriverLastName= Driver.getSurname();
-
     }
 
 }

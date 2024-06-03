@@ -64,8 +64,6 @@ public class CostumerManager{
     }
 
 
-
-
     public static void CreateDefaultCostumers(){
         costumersList.add(new Costumers("Maria","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
         costumersList.add(new Costumers("Izabel","Georgioy","Zionos 25","izabelageorgioy@gmail.com"));

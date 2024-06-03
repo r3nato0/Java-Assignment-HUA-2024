@@ -18,7 +18,7 @@ public class OrdersLocker extends Orders{
 
     public OrdersLocker(Costumers costumer, Drivers Driver,Lockers locker,EachCompartmentOfLockers compartment) {
         super(costumer, Driver);
-        this.Orderid = super.getOrderid();
+        this.Orderid = super.getOrderId();
         this.Status = super.getStatus();
         this.DriverFirstName = super.getDriverFirstName();
         this.DriverLastName = super.getDriverSurrname();
@@ -30,7 +30,7 @@ public class OrdersLocker extends Orders{
         this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
         costumer.clearBucket();
         compartment.setStatusUnavailable();
-        compartment.setOrderId(super.getOrderid()); 
+        compartment.setOrderId(super.getOrderId()); 
         this.OrderTime = super.getOrderDateTime();
     
     }
@@ -70,6 +70,7 @@ public class OrdersLocker extends Orders{
     public Drivers getDriver(){
         return super.getDriver();
     }
+
     public String getDriverSurrname() {
         return super.getDriverSurrname();
     }
@@ -81,7 +82,7 @@ public class OrdersLocker extends Orders{
         return super.getCostumerFirstName();
     }
     public Integer getOrderId(){
-        return super.getOrderid();
+        return super.getOrderId();
     }
     public String getStatus(){
         return super.getStatus();
@@ -110,19 +111,25 @@ public class OrdersLocker extends Orders{
     public void setCostumerFirstName(String CostumersFirstName) {
         super.setCostumerFirstName(CostumersFirstName);
     }
+    public void setDriverFirstName(String DriverFirstName) {
+        super.setDriverFirstName(DriverFirstName);
+    }
     public void setCostumerSurrname(String CostumerSurrname) {
         super.setCostumerSurrname(CostumerSurrname);
     }
-    public void setDriversFirsName(String DriverFirstName){
-        super.setDriverFirstName(DriverFirstName);
-    }
+
     public void setDriverLastName(String DriverLastName) {
         super.setDriverLastName(DriverLastName);
     }
 
-    public void setNewDriver(Drivers Driver){
+    @Override
+    public void setNewDriver(Drivers Driver) {
         super.setNewDriver(Driver);
+        this.Driver =Driver;
+        this.DriverFirstName = Driver.getName();
+        this.DriverLastName = Driver.getSurname();
     }
+    
     public void setDriver(Drivers Driver){ // will be never used, as the setNewDriver does all the work
         super.setDriver(Driver);
     }

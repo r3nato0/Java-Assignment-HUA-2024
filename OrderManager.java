@@ -18,7 +18,7 @@ public class OrderManager{
         }
         else{
             System.out.println("The Costumer does not exits, Creating new Entry");
-            CostumerManager.NotFoundAddNew(CostumerFullName); // Other Filleds are prompted and filled via the NotFoundAddNew Method
+            CostumerManager.NotFoundAddNew(CostumerFullName); // Other Fildes are prompted and filled via the NotFoundAddNew Method
         }
 
         String DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
@@ -32,7 +32,7 @@ public class OrderManager{
 
         SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); 
         SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName(CostumerFullName);
-        System.out.println(SelectedCostumer.getName());
+
         while (true) {
             Products product = ProductManager.GetProductByNameORId();
             Integer quantity = ProductManager.GetSelectedProductsQuantity(product);
@@ -68,7 +68,7 @@ public class OrderManager{
 public static void printAllOrders() {
     // header
     System.err.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
-    System.out.printf("%-10s %-20s %-25s %-20s %-10s\n", "Order ID", "CustomerName","Address", "ProductName", "Quantity");
+    System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity");
     System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
 
     for (Orders order : AllOrdersList) {
@@ -76,18 +76,19 @@ public static void printAllOrders() {
             OrdersHome ordersHome = (OrdersHome) order;
             Integer orderId = ordersHome.getOrderId();
             String CostumerFullName = ordersHome.getCostumerFirstName() + " " + ordersHome.getCostumerSurrname();
+            String DriverFullName = ordersHome.getDriverFirstName() + " " + ordersHome.getDriverLastName();
             List<ProductsInBucket> productsInOrder = ordersHome.getProductsInOrder();
             String Address = ordersHome.getAddress();
             //customer details first
             if (!productsInOrder.isEmpty()) {
                 ProductsInBucket firstProduct = productsInOrder.get(0);
                 
-                System.out.printf("%-10d %-20s %-25s %-20s %-10d\n", orderId, CostumerFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
+                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d\n", orderId, CostumerFullName,DriverFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
 
                 // remaining products
                 for (int i = 1; i < productsInOrder.size(); i++) {
                     ProductsInBucket product = productsInOrder.get(i);
-                    System.out.printf("%-10s %-20s %-25s %-20s %-10d\n", "", "","", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
+                    System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10d\n", "", "","","", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
                 }
             }
             System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
@@ -104,13 +105,13 @@ public static void printAllOrders() {
             List<ProductsInBucket> productsInOrder = orderslocker.getProductsInOrder();
             String Address = orderslocker.getAddress();
             Integer CompartmentNumber = orderslocker.getCompartmentNumber();
-            
+            String DriverFullName = orderslocker.getDriverFirstName() + " " + orderslocker.getDriverLastName();
             // Print customer details first
             if (!productsInOrder.isEmpty()) {
                 ProductsInBucket firstProduct = productsInOrder.get(0);
                 
-                System.out.printf("%-10d %-20s %-25s %-20s %-10d\n", orderId, CostumerFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
-                System.out.printf("%-10s %-20s %-25s ", "","","Compartment: " + CompartmentNumber);
+                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d\n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
+                System.out.printf("%-10s %-20s %-20s %-25s ", "","","","Compartment: " + CompartmentNumber);
                 // Print remaining products
                 for (int i = 1; i < productsInOrder.size(); i++) {
                     ProductsInBucket product = productsInOrder.get(i);
@@ -147,7 +148,7 @@ public static void printAllOrders() {
         OrdersHome NewOrderHome = new OrdersHome(SelectedCostumer, SelectedDriver);
 
         
-        Drivers SelectedDriverSecond = DriverManager.GetCurrentDriverByFullName("Anthoni Tsouklas"); 
+        Drivers SelectedDriverSecond = DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"); 
         Costumers SelectedCostumerSecond = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
@@ -170,7 +171,7 @@ public static void printAllOrders() {
         OrdersLocker OrdersLockerFirst = new OrdersLocker(SelectedCostumerThird, SelectedDriverThird,RandomLocker,RandomCompartment);
 
         
-        Drivers SelectedDriverForth = DriverManager.GetCurrentDriverByFullName("Anthoni Tsouklas"); 
+        Drivers SelectedDriverForth = DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"); 
         Costumers SelectedCostumerForth = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
@@ -185,4 +186,47 @@ public static void printAllOrders() {
 
     }
 
+    public static void ChangeDriver(){
+        Orders SelectedOrder = OrderManager.SelectOrder();
+
+        while (true) {
+            String DriverName = UserInterface.InputTypeStringWithSpace("Type the Drivers Full name :");
+            if(DriverManager.CheckDriverExists(DriverName)){
+                Drivers driver = DriverManager.GetCurrentDriverByFullName(DriverName);
+                SelectedOrder.setNewDriver(driver);
+                break;
+            }else{
+                System.out.println("That Driver Does Not Exist");
+            }
+        }
+        
+    }
+
+
+    public static Orders SelectOrder(){
+        Orders SelectedOrder=null;
+        boolean ValidOrder =false;
+        Integer OrderId;
+        OrderManager.printAllOrders();
+        System.out.println("Printing all orders for reference");
+        while (true) {
+            OrderId = UserInterface.InputTypeIntegerNoLimit("Please type the number id of the order:");
+            if(OrderId<=AllOrdersList.size()){
+                ValidOrder =true;
+                break;
+            }else{
+                System.out.println("No such Order Exists");
+            }
+        }
+        if(ValidOrder){
+            for(Orders order : AllOrdersList){
+                if(order.getOrderId()==OrderId){
+                    SelectedOrder =order;
+                }
+            }
+        }
+
+        return SelectedOrder;
+    
+}
 }

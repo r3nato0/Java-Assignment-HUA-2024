@@ -5,6 +5,8 @@ public class  Person{
     private String Surname;
     private String Adress;
     private String Email;
+
+
     public Person(String Name,String Surname,String Adress,String Email){
         this.PersonId=nextId++;
         this.Name = Name;
@@ -18,23 +20,23 @@ public class  Person{
         this.PersonId = PersonId;
     }
     public Integer getId() {
-        return PersonId;
+        return this.PersonId;
     }
 
 
     //Geters
 
     public String getName() {
-        return Name;
+        return this.Name;
     }
     public String getSurname() {
-        return Surname;
+        return this.Surname;
     }
     public String getAdress() {
-        return Adress;
+        return this.Adress;
     }
     public String getEmail() {
-        return Email;
+        return this.Email;
     }
     //Setters
 
