@@ -1,15 +1,27 @@
 public class  Person{
+    private static int nextId = 1;
+    private int PersonId;
     private String Name;
     private String Surname;
     private String Adress;
     private String Email;
     public Person(String Name,String Surname,String Adress,String Email){
-
+        this.PersonId=nextId++;
         this.Name = Name;
         this.Surname = Surname;
         this.Adress = Adress;
         this.Email = Email;
     }
+
+
+    public void setPersonId(int PersonId){
+        this.PersonId = PersonId;
+    }
+    public Integer getId() {
+        return PersonId;
+    }
+
+
     //Geters
 
     public String getName() {

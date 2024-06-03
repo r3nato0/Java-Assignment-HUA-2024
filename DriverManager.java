@@ -64,4 +64,22 @@ public class DriverManager{
         String DriversPlateNumber = UserInterface.InputTypePlateNumber("Type Drivers PlateNumber: ");
         driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber));
     }
+
+    public static void AddNewDriver(){
+        String DriverFirstName = UserInterface.StringInput("Enter The First name of the Driver: ");
+        String DriverLastName = UserInterface.StringInput("Enter The Last name of the Driver: ");
+        String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
+        String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
+        Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
+        String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
+        Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber);
+        System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s" ,"The Driver Was Added Successfully",
+        "Driver ID: ",Driver.getId(),
+        "Driver First Name: ",Driver.getName(),
+        " Driver Last Name: ",Driver.getSurname(),
+        "Driver's Address: ",Driver.getAddress(),
+        " Driver's Email: ",Driver.getEmail(),
+        "Driver's AFM: ",Driver.getDriverAFM(),
+        " Driver's PLateNumber: ",Driver.getPlateNumber());
+    }
 }

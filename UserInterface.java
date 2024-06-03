@@ -76,33 +76,31 @@ public class UserInterface{
             boolean isValidNumbers=false;
             Integer CharsPart = 2;
             Integer NumsPart = 6;
-            Integer checker = 0;
+
             if (PlateNumber.length() == 7){
                 for (int i =0,j =3;(i <= CharsPart && j <= NumsPart);i++,j++){
                     if(PlateNumber.charAt(i) >='A' && PlateNumber.charAt(i) <='Z'){
                         isValidLetters=true;
-                        System.out.printf("%s","first if ",++checker);
                     }
                     else{
-                        System.out.println("GOT BREAK HERE1");
                         isValidLetters=false;
                         break;
                     }
                     if(PlateNumber.charAt(j) >= '0' && PlateNumber.charAt(j) <= '9'){
                         isValidNumbers=true;
-                        System.out.printf("%s","Second ");
                     }
                     else{
                         isValidNumbers=false;
-                        System.out.println("GOT BREAK HERE2");
                         break;
                         
                     }
                 }
             }
-            System.out.println("it got here");
+
             if(isValidLetters && isValidNumbers){
                 return PlateNumber;
+            }else{
+                System.out.println("Please kindly provide a correct Plate Number example: SSSNNNN where S=LETTER AND N=number: ");
             }
         }
     }

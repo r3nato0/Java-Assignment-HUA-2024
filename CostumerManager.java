@@ -49,7 +49,19 @@ public class CostumerManager{
         String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
         costumersList.add(new Costumers(CostumerFIrstName,CostumerSurrname,address,Email));
     }
-
+    public static void AddNewCostumer(){
+        String CostumerFirstName = UserInterface.StringInput("Enter The First name of the Costumer: ");
+        String CostumerLastName = UserInterface.StringInput("Enter The Last name of the Costumer: ");
+        String address = UserInterface.InputTypeAdress("Type Costumers Adress: ");
+        String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
+        Costumers costumer = new Costumers(CostumerFirstName,CostumerLastName,address,Email);
+        System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n","The Costumer Was Added Successfully",
+        "Costumer ID: ",costumer.getId(),
+        "Costumer First Name: ",costumer.getName(),
+        " Costumer Last Name: ",costumer.getSurname(),
+        "Costumer's Address: ",costumer.getAddress(),
+        " Costumer's Email: ",costumer.getEmail());
+    }
 
 
 
