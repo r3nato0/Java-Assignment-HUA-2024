@@ -19,99 +19,84 @@ public class OrdersHome extends Orders{
         this.Orderid = super.getOrderid();
         this.Status = super.getStatus();
         this.OrderTime = super.getOrderDateTime();
-        this.CostumerName = costumer.getName();
-        this.CostumerSurrname = costumer.getSurname();
-        this.DriverName = Driver.getName();
-        this.DriverLastName = Driver.getSurname();
-        this.address = costumer.getAddress();
+        this.CostumerName = super.getCostumerFirstName();
+        this.CostumerSurrname = super.getCostumerSurrname();
+        this.DriverName = super.getDriverFirstName();
+        this.DriverLastName = super.getCostumerSurrname();
+        this.address = super.getAddress();
         this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
         costumer.clearBucket();
         
 
     }
 
+
+
+    //GETTERS
     public String getStatus(){
         return super.getStatus();
     }
-
-    public void setStatusPending(){
-        super.setStatusPending();
-    }
-    
-    public void setStatusCompleted(){
-        super.setStatusCompleted();
-    }
-
     public String getOrderDateTime(){
         return  super.getOrderDateTime();
     }
-
-    public void setOrderTime(String OrderTime){
-        super.setOrderDateTime(OrderTime);
-    }
-    
     public Integer getOrderId(){
         return super.getOrderid();
     }
-
-    public String getCostumerName() {
-        return this.CostumerName;
+    
+    public String getCostumerFirstName() {
+        return super.getCostumerFirstName();
     }
-
-    public void setCostumerName(String CostumerName) {
-        this.CostumerName = CostumerName;
-    }
-
     public String getCostumerSurrname() {
-        return this.CostumerSurrname;
+        return super.getCostumerSurrname();
     }
-
-    public void setCostumerSurrname(String CostumerSurrname) {
-        this.CostumerSurrname = CostumerSurrname;
+    public String getDriverFirstName() {
+        return super.getCostumerFirstName();
     }
-
-    public String getDriverName() {
-        return this.DriverName;
-    }
-
-    public void setDriverName(String DriverName) {
-        this.DriverName = DriverName;
-    }
-
     public String getDriverLastName() {
-        return this.DriverLastName;
+        return super.getDriverSurrname();
     }
-
-    public void setDriverLastName(String DriverLastName) {
-        this.DriverLastName = DriverLastName;
-    }
-
-
     public String getAddress() {
-        return this.address;
+        return super.getAddress();
     }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-
-    public void setStatus(String Status) {
-        this.Status = Status;
-    }
-
     public BucketShop getCostumersBucket() {
         return this.CostumersBucket;
     }
-
-    public void setCostumersBucket(BucketShop CostumersBucket) {
-        this.CostumersBucket = CostumersBucket;
-    }
-
     public List<ProductsInBucket> getProductsInOrder() {
         return this.ItemsBought;
     }
 
+    //SETTERS
+    public void setStatusPending(){
+        super.setStatusPending();
+    }
+    public void setStatusCompleted(){
+        super.setStatusCompleted();
+    }
+    public void setOrderTime(String OrderTime){
+        super.setOrderDateTime(OrderTime);
+    }
+    
+    public void setCostumerName(String CostumerName) {
+        this.CostumerName = CostumerName;
+    }
+    public void setCostumerSurrname(String CostumerSurrname) {
+        this.CostumerSurrname = CostumerSurrname;
+    }
+    public void setDriverName(String DriverName) {
+        this.DriverName = DriverName;
+    }
+    public void setDriverLastName(String DriverLastName) {
+        this.DriverLastName = DriverLastName;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public void setStatus(String Status) {
+        this.Status = Status;
+    }
+    public void setCostumersBucket(BucketShop CostumersBucket) {
+        this.CostumersBucket = CostumersBucket;
+    }
     public void setProductsInOrder(List<ProductsInBucket> ItemsBought) {
         this.ItemsBought = ItemsBought;
     }

@@ -75,7 +75,7 @@ public static void printAllOrders() {
         if (order instanceof OrdersHome) {
             OrdersHome ordersHome = (OrdersHome) order;
             Integer orderId = ordersHome.getOrderId();
-            String CostumerFullName = ordersHome.getCostumerName() + " " + ordersHome.getCostumerSurrname();
+            String CostumerFullName = ordersHome.getCostumerFirstName() + " " + ordersHome.getCostumerSurrname();
             List<ProductsInBucket> productsInOrder = ordersHome.getProductsInOrder();
             String Address = ordersHome.getAddress();
             //customer details first
