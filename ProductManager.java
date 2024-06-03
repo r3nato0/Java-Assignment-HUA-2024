@@ -8,14 +8,15 @@ public class ProductManager{
 
 
     public static void CreateDefaultProducts(){
-        CategoryList.add("Grooming & Hygiene");
-        CategoryList.add("Cleaning & Household Items");
+        CategoryList.add("hygiene item");
+        CategoryList.add("detergent");
         CategoryList.add("Drinks");
+        CategoryList.add("Food");
         productList.add(new Products("AIM Family Protection Herbal Toothpaste 75ml", CategoryList.get(0), "AIM ", 10));
-        productList.add(new Products("Oral-B Pro 3 3500 Cross Action Electric Toothbrush", CategoryList.get(0), "Oral-B ", 5));
+        productList.add(new Products("Oral-B Pro 3 Cross Action Electric Toothbrush", CategoryList.get(0), "Oral-B ", 5));
         productList.add(new Products("Cif General Purpose Cleansing Cream 500ml", CategoryList.get(1), "Cif ", 4));
-        productList.add(new Products("Swaz Professional General Purpose Cleaning Liquid 4lt", CategoryList.get(1), "Swaz", 2));
-        productList.add(new Products("Amita Peach fruit drink 1000ml", "Drinks", CategoryList.get(2), 12));
+        productList.add(new Products("Swaz Professional General Purpose Cleaning Liquid 4lt", CategoryList.get(2), "Swaz", 2));
+        productList.add(new Products("Amita Peach fruit drink 1000ml", "Drinks", CategoryList.get(3), 12));
     }
 
     public static Integer GetSelectedProductsQuantity(Products SelectedProduct){
@@ -96,4 +97,15 @@ public class ProductManager{
         return barcode;
         }
     
+        
+    public static Products GetProductById(Integer id){
+        Products SelectedProduct=null;
+        for(Products product : productList){
+            if(product.getId()==id){
+                SelectedProduct = product;
+                break;
+            }
+        }
+        return SelectedProduct;
+    }
 }

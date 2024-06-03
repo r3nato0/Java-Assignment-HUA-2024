@@ -8,5 +8,6 @@ public class CreateDefaultData{
         DriverManager.CreateDefaultDrivers();
         CostumerManager.CreateDefaultCostumers();
         LockerManager.CreateDefaultLockers();
+        OrderManager.CreateDefaultOrders();
     }
 }

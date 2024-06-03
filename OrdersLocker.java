@@ -6,53 +6,62 @@ public class OrdersLocker extends Orders{
     private String CostumerSurrname;
     private String DriverName;
     private String DriverLastName;
-    private String DateTime;
+    private String OrderTime;
     private String address;
-    private String Status;
+    private String StatusOrder;
     private BucketShop CostumersBucket;
     private List<ProductsInBucket> ItemsBought;
     private Integer CompartmentNumber;
+    private String Status;
 
 
-    public OrdersLocker(Integer OrderId,Costumers costumer, Drivers Driver,Lockers locker,EachCompartmentOfLockers compartment) {
-        super(OrderId,costumer, Driver);
+    public OrdersLocker(Costumers costumer, Drivers Driver,Lockers locker,EachCompartmentOfLockers compartment) {
+        super(costumer, Driver);
+        this.Orderid = super.getOrderid();
+        this.Status = super.getStatus();
         this.CostumerName = costumer.getName();
         this.CostumerSurrname = costumer.getSurname();
         this.DriverName = Driver.getName();
         this.DriverLastName = Driver.getSurname();
         this.address = locker.getAddress();
         this.CompartmentNumber = compartment.getLockerNumber();
-        this.Status = costumer.getAddress();
+        this.StatusOrder = costumer.getAddress();
         this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
         costumer.clearBucket();
-
+        compartment.setStatusUnavailable();
+        compartment.setOrderId(super.getOrderid()); 
+        this.OrderTime = super.getOrderDateTime();
+    
     }
 
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Order ID: ").append(getOrderId()).append("\n");
-        sb.append("Customer Name: ").append(CostumerName).append("\n");
-        sb.append("Customer Surname: ").append(CostumerSurrname).append("\n");
-        sb.append("Driver Name: ").append(DriverName).append("\n");
-        sb.append("Driver Last Name: ").append(DriverLastName).append("\n");
-        sb.append("Date & Time: ").append(DateTime).append("\n");
-        sb.append("Address: ").append(address).append("\n");
-        sb.append("Status: ").append(Status).append("\n");
-        sb.append("Products Bought:\n");
-        for (ProductsInBucket product : ItemsBought) {
-            sb.append("  - ").append(product.getName()).append(", Quantity: ").append(product.getQuantity()).append("\n");
-            // Add more details of the product if needed
-        }
-        return sb.toString();
+    
+
+
+    public String getStatus(){
+        return super.getStatus();
     }
 
+    public void setStatusPending(){
+        super.setStatusPending();
+    }
 
+    public void setStatusCompleted(){
+        super.setStatusCompleted();
+    }
+
+    public String getOrderTime(){
+        return this.OrderTime;
+    }
+
+    public void setOrderTime(String OrderTime){
+        super.setOrderDateTime(OrderTime);
+    }
 
     public Integer getCompartmentNumber(){
         return this.CompartmentNumber;
     }
+
 
 
     public Integer getOrderId(){
@@ -91,14 +100,6 @@ public class OrdersLocker extends Orders{
         this.DriverLastName = DriverLastName;
     }
 
-    public String getDateTime() {
-        return this.DateTime;
-    }
-
-    public void setDateTime(String DateTime) {
-        this.DateTime = DateTime;
-    }
-
     public String getAddress() {
         return this.address;
     }
@@ -107,12 +108,12 @@ public class OrdersLocker extends Orders{
         this.address = address;
     }
 
-    public String getStatus() {
-        return this.Status;
+    public String getStatusOrder() {
+        return this.StatusOrder;
     }
 
-    public void setStatus(String Status) {
-        this.Status = Status;
+    public void setStatusOrder(String StatusOrder) {
+        this.StatusOrder = StatusOrder;
     }
 
     public BucketShop getCostumersBucket() {

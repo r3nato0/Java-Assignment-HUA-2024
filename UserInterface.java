@@ -235,10 +235,10 @@ public class UserInterface{
             String input = scanner.nextLine();
             if (input.length() == 1) {
                 char c = input.charAt(0);
-                if(c==1){
+                if(c=='1'){
                     return 1;
                 }
-                if(c==2){
+                if(c=='2'){
                     return 2;
                 }
             } else {

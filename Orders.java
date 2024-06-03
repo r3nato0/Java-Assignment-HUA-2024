@@ -1,6 +1,5 @@
 
 
-import java.util.List;
 
 public class Orders{
         protected static Integer nextId = 001;
@@ -8,15 +7,36 @@ public class Orders{
         private Costumers costumer;
         private Drivers Driver;
         private String OrderDateTime;
+        private String Status;
 
-
-        public Orders(Integer OrderId,Costumers costumer, Drivers Driver){
+        public Orders(Costumers costumer, Drivers Driver){
             this.Orderid=nextId++;
             this.costumer = costumer;
             this.Driver = Driver;
-
+            this.OrderDateTime = OrderManager.CurrentDateTime();
+            this.Status = "Pending";
         }
 
+
+    public String getStatus(){
+        return this.Status;
+    }
+
+    public void setStatusPending(){
+        this.Status = "Pending";
+    }
+
+    public void setStatusCompleted(){
+        this.Status = "Completed";
+    }
+
+    public String getOrderDateTime(){
+        return this.OrderDateTime;
+    }
+
+    public void setOrderDateTime(String OrderDateTime){
+        this.OrderDateTime = OrderDateTime;
+    }
 
     public Integer getOrderid() {
         return this.Orderid;
@@ -43,12 +63,5 @@ public class Orders{
         this.Driver = Driver;
     }
 
-    public String getOrderDateTime() {
-        return this.OrderDateTime;
-    }
-
-    public void setOrderDateTime(String OrderDateTime) {
-        this.OrderDateTime = OrderDateTime;
-    }
     
 }

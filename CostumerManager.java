@@ -45,8 +45,8 @@ public class CostumerManager{
         String CostumerFIrstName = CostumerFullName.substring(0, SpacePos);
         String CostumerSurrname = CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
         System.out.printf("The Costumer's Name does not exist, continuing with the rest of the fields: ");
-        String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
-        String Email = UserInterface.InputTypeEmail("Type Drivers Email: ");
+        String address = UserInterface.InputTypeAdress("Type Costumers Adress: ");
+        String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
         costumersList.add(new Costumers(CostumerFIrstName,CostumerSurrname,address,Email));
     }
 
@@ -56,7 +56,7 @@ public class CostumerManager{
 
     public static void CreateDefaultCostumers(){
         costumersList.add(new Costumers("Maria","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
-        costumersList.add(new Costumers("Izabela","Georgioy","Zionos 25","mariageorgioy@gmail.com"));
+        costumersList.add(new Costumers("Izabel","Georgioy","Zionos 25","izabelageorgioy@gmail.com"));
     }
 
 

@@ -6,7 +6,7 @@ public class OrdersHome extends Orders{
     private String CostumerSurrname;
     private String DriverName;
     private String DriverLastName;
-    private String DateTime;
+    private String OrderTime;
     private String address;
     private String Status;
     private BucketShop CostumersBucket;
@@ -14,38 +14,42 @@ public class OrdersHome extends Orders{
 
 
 
-    public OrdersHome(Integer OrderId,Costumers costumer, Drivers Driver) {
-        super(OrderId,costumer, Driver);
+    public OrdersHome(Costumers costumer, Drivers Driver) {
+        super(costumer, Driver);
+        this.Orderid = super.getOrderid();
+        this.Status = super.getStatus();
+        this.OrderTime = super.getOrderDateTime();
         this.CostumerName = costumer.getName();
         this.CostumerSurrname = costumer.getSurname();
         this.DriverName = Driver.getName();
         this.DriverLastName = Driver.getSurname();
         this.address = costumer.getAddress();
-        this.Status = costumer.getAddress();
         this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
         costumer.clearBucket();
+        
+
     }
 
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Order ID: ").append(getOrderId()).append("\n");
-        sb.append("Customer Name: ").append(CostumerName).append("\n");
-        sb.append("Customer Surname: ").append(CostumerSurrname).append("\n");
-        sb.append("Driver Name: ").append(DriverName).append("\n");
-        sb.append("Driver Last Name: ").append(DriverLastName).append("\n");
-        sb.append("Date & Time: ").append(DateTime).append("\n");
-        sb.append("Address: ").append(address).append("\n");
-        sb.append("Status: ").append(Status).append("\n");
-        sb.append("Products Bought:\n");
-        for (ProductsInBucket product : ItemsBought) {
-            sb.append("  - ").append(product.getName()).append(", Quantity: ").append(product.getQuantity()).append("\n");
-            // Add more details of the product if needed
-        }
-        return sb.toString();
+    public String getStatus(){
+        return super.getStatus();
     }
 
+    public void setStatusPending(){
+        super.setStatusPending();
+    }
+    
+    public void setStatusCompleted(){
+        super.setStatusCompleted();
+    }
+
+    public String getOrderDateTime(){
+        return  super.getOrderDateTime();
+    }
+
+    public void setOrderTime(String OrderTime){
+        super.setOrderDateTime(OrderTime);
+    }
+    
     public Integer getOrderId(){
         return super.getOrderid();
     }
@@ -82,13 +86,6 @@ public class OrdersHome extends Orders{
         this.DriverLastName = DriverLastName;
     }
 
-    public String getDateTime() {
-        return this.DateTime;
-    }
-
-    public void setDateTime(String DateTime) {
-        this.DateTime = DateTime;
-    }
 
     public String getAddress() {
         return this.address;
@@ -98,9 +95,6 @@ public class OrdersHome extends Orders{
         this.address = address;
     }
 
-    public String getStatus() {
-        return this.Status;
-    }
 
     public void setStatus(String Status) {
         this.Status = Status;
