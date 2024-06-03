@@ -70,7 +70,7 @@ public class LockerManager{
         }
 
         if (FreeCompartments.isEmpty()) {
-            return null; // this will never be true becouse we will always call first the method: getRandomCompartmentOfLocker, just adding it for good practise
+            return null; // this will never be true becouse we will always call first the method: getRandomFreeLocker, just adding it for good practice
         }
 
         Integer RandomNumbCompartment = random.nextInt(FreeCompartments.size());
@@ -80,5 +80,23 @@ public class LockerManager{
 
 
         return compartment;
+    }
+
+    public static void AddNewLocker(){
+        String LockerAddress = UserInterface.InputTypeAdress("Please type in the Locker's Address");
+        Integer LockerSpaces = UserInterface.InputTypeIntegerNoLimit("Please Provide The Locker's Free Spaces:");
+        Lockers locker = new Lockers(LockerAddress, LockerSpaces);
+        System.out.printf("%s\n %s %d\n %s %s\n %s %d","The Locker has been Created successfuly",
+        "Locker's ID: " , locker.getLockerId(),
+        "Locker's Adress: ",locker.getAddress(),
+        "Locker's spaces: ",locker.getSpaces());
+        LockersList.add(locker);
+    }
+
+    public static void PrintAllLockers(){
+        for (Lockers locker:LockersList){
+            System.out.println(locker.getLockerId());
+            System.out.println(locker.getAddress());
+        }
     }
 }

@@ -309,7 +309,9 @@ public class UserInterface{
             if(!input.isEmpty()){
                 try {
                     number = Integer.parseInt(input);
-                    isNumb=true;
+                    if(number > 0){
+                        isNumb=true;
+                    }
                 } catch (NumberFormatException e) {
                     isNumb=false;
                     System.out.println("Only numbers allowed, try again: ");

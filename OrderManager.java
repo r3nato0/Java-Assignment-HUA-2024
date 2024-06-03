@@ -149,8 +149,6 @@ public static void printAllOrders() {
         
         Drivers SelectedDriverSecond = DriverManager.GetCurrentDriverByFullName("Anthoni Tsouklas"); 
         Costumers SelectedCostumerSecond = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
-        System.out.println(SelectedDriverSecond.getDriverid());
-        System.out.println(SelectedCostumerSecond.getCostumerid());
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
             Products product = ProductManager.GetProductById(i);
@@ -174,8 +172,6 @@ public static void printAllOrders() {
         
         Drivers SelectedDriverForth = DriverManager.GetCurrentDriverByFullName("Anthoni Tsouklas"); 
         Costumers SelectedCostumerForth = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
-        System.out.println(SelectedDriverForth.getDriverid());
-        System.out.println(SelectedCostumerForth.getCostumerid());
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
             Products product = ProductManager.GetProductById(i);

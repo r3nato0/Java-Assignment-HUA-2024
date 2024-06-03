@@ -1,14 +1,13 @@
-import java.sql.Driver;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 
 public class Main {
 
 
     public static void main(String[] args) {
-        CreateDefaultData.CreateDefaultInstances();
-        OrderManager.printAllOrders();
-        DriverManager.AddNewDriver();
+       CreateDefaultData.CreateDefaultInstances();
+       LockerManager.PrintAllLockers();
+       LockerManager.AddNewLocker();
+       LockerManager.PrintAllLockers();
+      
     }
 }

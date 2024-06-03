@@ -3,7 +3,7 @@ import java.util.List;
 
 
 public class Lockers {
-    private Integer nextid = 1;
+    private static Integer nextid = 1;
     private Integer LockerId;
     private String address;
     private List<String> status = new ArrayList<>(List.of("Unavailable","Free"));
@@ -14,6 +14,7 @@ public class Lockers {
     public Lockers(String address, int Spaces) {
         this.LockerId = nextid++;
         this.address = address;
+        this.Spaces=Spaces;
         this.compartmentsOfLocker = new ArrayList<>();
         for(int i=1;i<=Spaces;i++){
             this.compartmentsOfLocker.add(new EachCompartmentOfLockers(this, status.get(1), i));
