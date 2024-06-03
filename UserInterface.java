@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Scanner;
 // rerourcses used : 
 // https://www.javatpoint.com/java-int-to-string
@@ -126,7 +127,7 @@ public class UserInterface{
         } 
     }
 
-    public static Integer InputTypeNumber(String message) {
+    public static Integer InputTypeNumberSingle(String message) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(message);
         while (true) {
@@ -255,6 +256,72 @@ public class UserInterface{
         } else {
             return str;
         }
+    }
+
+    //all characters are alowed
+    public static String InputTypeAllCharactersAllowed(String Message){
+        System.out.println(Message);
+        Scanner scanner = new Scanner(System.in);
+        String ProductName = scanner.nextLine();
+        return ProductName;
+
+    }
+
+    public static  Integer InputTypeProductCategory(List<String> CategoryList){
+        Integer number=null;
+        Scanner scanner = new Scanner(System.in);
+        for(int i =1 ; i <= CategoryList.size();i++){
+            System.out.println("Press " + i + " To seelect Category: " + CategoryList.get(i-1) );
+        }
+        boolean isNumb = true;
+        while (true) {
+
+        String Selection = scanner.nextLine();   
+            if(!Selection.isEmpty()){
+                try {
+                    number = Integer.parseInt(Selection);
+                    if(number>=1 && number<=CategoryList.size()){
+                        isNumb=true;
+
+                    }
+                    else{
+                        isNumb=false;
+                        System.out.println("please provide a number from 1 until " + CategoryList.size());
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("please provide a number from 1 until " + CategoryList.size());
+                    isNumb=false;
+                }
+            }else{
+                System.out.println("please provide a number from 1 until " + CategoryList.size());
+            }
+            if(isNumb){
+                return number;
+            }
+        }   
+
+    }
+    public static Integer InputTypeIntegerNoLimit(String Message){
+        Integer number=null;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(Message);
+        boolean isNumb = false;
+        while (true) {
+            String input = scanner.nextLine();
+            if(!input.isEmpty()){
+                try {
+                    number = Integer.parseInt(input);
+                    isNumb=true;
+                } catch (NumberFormatException e) {
+                    isNumb=false;
+                    System.out.println("Only numbers allowed, try again: ");
+                }
+            }
+            if(isNumb){
+                break;
+            }
+        }
+        return number;
     }
 }
 

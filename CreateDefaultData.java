@@ -1,8 +1,5 @@
 public class CreateDefaultData{
 
-
-
-
     public static void CreateDefaultInstances(){
         ProductManager.CreateDefaultProducts();
         DriverManager.CreateDefaultDrivers();
