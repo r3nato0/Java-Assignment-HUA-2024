@@ -1,7 +1,7 @@
+import java.util.ArrayList;
+import java.util.List;
 
-
-
-public class Orders{
+public abstract class Orders{
         protected static Integer nextId = 1;
         protected Integer Orderid;
         private Costumers costumer;
@@ -11,35 +11,47 @@ public class Orders{
         private String DriverFirstName;
         private String DriverLastName;
         private String CostumersFirstName;
-        private String CostumerSurrname;
+        private String CostumerLastName;
         private String Address;
-
+        private Integer costumerId;
+        private List<Rating> rating;
+        private List<ProductsInBucket> ItemsBought;
+        private BucketShop CostumersBucket;
+        
 
 
         public Orders(Costumers costumer, Drivers Driver){
             this.Orderid=nextId++;
             this.costumer = costumer;
             this.Driver = Driver;
+            this.costumerId = costumer.getCostumerid();
             this.CostumersFirstName = costumer.getName();
-            this.CostumerSurrname = costumer.getSurname();
+            this.CostumerLastName = costumer.getSurname();
             this.DriverFirstName = Driver.getName();
             this.DriverLastName = Driver.getSurname();
             this.OrderDateTime = OrderManager.CurrentDateTime();
             this.Status = "Pending";
-            this.Address = costumer.getAddress();
+            this.rating = new ArrayList<>();
+            rating.add(new Rating(this));
+            this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
+            costumer.clearBucket();
 
         }
 
+    public List<ProductsInBucket> getProductsInOrder() {
+        return this.ItemsBought;
+    }
+    public void setProductsInOrder(List<ProductsInBucket> ItemsBought) {
+        this.ItemsBought = ItemsBought;
+    }
+
 
     //GETTERS
-    public String getAddress(){
-        return this.Address;
-    }
     public String getCostumerFirstName(){
         return this.CostumersFirstName;
     }
-    public String getCostumerSurrname(){
-        return this.CostumerSurrname;
+    public String GetCostumerLastName(){
+        return this.CostumerLastName;
     }
     public String getStatus(){
         return this.Status;
@@ -63,14 +75,25 @@ public class Orders{
     public String getDriverSurrname(){
         return this.DriverLastName;
     }
+    public Integer getCostumerId(){
+        return this.costumerId;
+    }
+    public String getCostumerFullName(){
+        return this.CostumersFirstName + " " + this.CostumerLastName;
+    }
+    public String getDriverFullName(){
+        return this.DriverFirstName + " " + this.DriverLastName;
+    }
+
+
 
 
     //SETTERS
     public void setCostumerFirstName(String CostumersFirstName){
         this.CostumersFirstName = CostumersFirstName;
     }
-    public void setCostumerSurrname(String CostumerSurrname){
-        this.CostumerSurrname = CostumerSurrname;
+    public void setCostumerLastName(String CostumerLastName){
+        this.CostumerLastName = CostumerLastName;
     }
     public void setDriverFirstName(String DriverFirstName){
         this.DriverFirstName = DriverFirstName; 
@@ -82,7 +105,7 @@ public class Orders{
     public void setNewCostumer(Costumers costumer){
         this.costumer = costumer;
         this.CostumersFirstName = costumer.getName();
-        this.CostumerSurrname = costumer.getSurname();
+        this.CostumerLastName = costumer.getSurname();
 
     }
     public void setStatusPending(){
@@ -109,6 +132,14 @@ public class Orders{
         this.Driver = Driver;
         this.DriverFirstName = Driver.getName();
         this.DriverLastName= Driver.getSurname();
+    }
+
+    
+    public BucketShop getCostumersBucket() {
+        return this.CostumersBucket;
+    }
+    public void setCostumersBucket(BucketShop CostumersBucket) {
+        this.CostumersBucket = CostumersBucket;
     }
 
 }

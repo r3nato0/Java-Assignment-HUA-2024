@@ -1,3 +1,4 @@
+import java.sql.Driver;
 import java.util.List;
 import java.util.Scanner;
 // rerourcses used : 
@@ -322,6 +323,88 @@ public class UserInterface{
             }
         }
         return number;
+    }
+
+    public static Integer SelectAction(Integer Max){
+        Scanner scanner = new Scanner(System.in);
+        Integer SelectedOption;
+
+        String StringNumber = scanner.nextLine();
+        while (true) {
+            System.out.println("Select Option by number: ");
+            try {
+                SelectedOption = Integer.parseInt(StringNumber);
+                if(SelectedOption > 1 && SelectedOption<=Max){
+
+                    break;
+                }
+            } catch (NumberFormatException e) {
+
+                System.out.println("Only numbers allowed, try again: ");
+            }
+        }
+        return SelectedOption;
+
+    }
+
+
+    public static void ShowMenu(){
+        Integer Action = SelectAction(8);
+        System.out.println("1) Add New Driver");
+        System.out.println("2) Add New Customer");
+        System.out.println("3) Add new Locker");
+        System.out.println("4) Add new Order");
+        System.out.println("5)-Admin- Change Order's Driver ");
+        System.out.println("6) -Customer- Change Order's Address(Only HomeOrders)");
+        System.out.println("7) Finish an Order");
+        System.out.println("8) Leave an Review on the order");
+        System.out.println("9)Show Order's Details By ID Or Costumer's Name");
+        System.out.println("10)Show Order's Details With Product's Category and Barcode");
+        System.out.println("11)Show All Orders By Driver and Address(Lockers or HomeAddress)");
+        System.out.println("12)Show Average reviews of Delivery System, And Each Costumer's Lowest and Highest Review rating");
+
+        switch (Action) {
+            case 1:
+                DriverManager.AddNewDriver();
+                break;
+            case 2:
+                CostumerManager.AddNewCostumer();
+                break;
+            case 3:
+                LockerManager.AddNewLocker();
+                break;
+            case 4:
+                OrderManager.Create();
+                break;
+            case 5:
+                OrderManager.ChangeDriver();
+                break;
+            // case 6:
+            //     OrderManager.ChangeOrdersAddress();
+            //     break;
+            // case 7:
+            //     OrderManager.FinishOrder();
+            //     break;
+            // case 8:
+            //     OrderManager.LeaveReview();
+            //     break;
+            // case 9:
+            //     OrderManager.ShowOrdersDetailsByIdandCostumer();
+            //     break;
+            // case 10:
+            //     OrderManager.ShowOrdersByProduct();
+            //     break;
+            // case 11:
+            //     OrderManager.ShowAllOrdersByDriverAddress();
+            //     break;
+            // case 12:
+            //    OrderManager.ShowAverageReviews();
+            //     break;
+
+
+            default:
+                break;
+        }
     }
 }
 

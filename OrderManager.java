@@ -75,8 +75,8 @@ public static void printAllOrders() {
         if (order instanceof OrdersHome) {
             OrdersHome ordersHome = (OrdersHome) order;
             Integer orderId = ordersHome.getOrderId();
-            String CostumerFullName = ordersHome.getCostumerFirstName() + " " + ordersHome.getCostumerSurrname();
-            String DriverFullName = ordersHome.getDriverFirstName() + " " + ordersHome.getDriverLastName();
+            String CostumerFullName = ordersHome.getCostumerFirstName() + " " + ordersHome.GetCostumerLastName();
+            String DriverFullName = ordersHome.getDriverFirstName() + " " + ordersHome.getDriverSurrname();
             List<ProductsInBucket> productsInOrder = ordersHome.getProductsInOrder();
             String Address = ordersHome.getAddress();
             //customer details first
@@ -101,11 +101,11 @@ public static void printAllOrders() {
         if (order instanceof OrdersLocker) {
             OrdersLocker orderslocker = (OrdersLocker) order;
             Integer orderId = orderslocker.getOrderId();
-            String CostumerFullName = orderslocker.getCostumerName() + " " + orderslocker.getCostumerSurrname();
+            String CostumerFullName = orderslocker.getCostumerFirstName() + " " + orderslocker.GetCostumerLastName();
             List<ProductsInBucket> productsInOrder = orderslocker.getProductsInOrder();
             String Address = orderslocker.getAddress();
             Integer CompartmentNumber = orderslocker.getCompartmentNumber();
-            String DriverFullName = orderslocker.getDriverFirstName() + " " + orderslocker.getDriverLastName();
+            String DriverFullName = orderslocker.getDriverFirstName() + " " + orderslocker.getDriverSurrname();
             // Print customer details first
             if (!productsInOrder.isEmpty()) {
                 ProductsInBucket firstProduct = productsInOrder.get(0);
@@ -139,7 +139,7 @@ public static void printAllOrders() {
 
         //Creating HomeOrders
         Drivers SelectedDriver = DriverManager.GetCurrentDriverByFullName("Renato Nake"); 
-        Costumers SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName("Maria Georgioy");
+        Costumers SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy");
         for(int i =1;i <=2;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
             Products product = ProductManager.GetProductById(i);
@@ -160,7 +160,7 @@ public static void printAllOrders() {
         AllOrdersList.add(NewOrderHome);
         //Creating LockerOrders
         Drivers SelectedDriverThird = DriverManager.GetCurrentDriverByFullName("Renato Nake"); 
-        Costumers SelectedCostumerThird = CostumerManager.GetCurrentCostumerByFullName("Maria Georgioy");
+        Costumers SelectedCostumerThird = CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy");
         for(int i =1;i <=2;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
             Products product = ProductManager.GetProductById(i);
