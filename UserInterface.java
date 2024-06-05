@@ -323,7 +323,7 @@ public class UserInterface{
         return number;
     }
 
-    public static Integer SelectAction(Integer Max){
+    public static Integer SelectNumber(Integer Max){
         Scanner scanner = new Scanner(System.in);
         Integer SelectedOption;
 
@@ -361,7 +361,7 @@ public class UserInterface{
         System.out.println("10)Show Order's Details With Product's Category and Barcode");
         System.out.println("11)Show All Orders By Driver and Address(Lockers or HomeAddress)");
         System.out.println("12)Show Average reviews of Delivery System, And Each Costumer's Lowest and Highest Review rating");
-        Integer Action = SelectAction(7);
+        Integer Action = SelectNumber(8);
         switch (Action) {
             case 1:
                 DriverManager.AddNewDriver();
@@ -391,9 +391,9 @@ public class UserInterface{
                 OrderManager.CompleteOrder();
                 ShowMenu();
                 break;
-            // case 8:
-            //     OrderManager.LeaveReview();
-            //     break;
+            case 8:
+                OrderManager.LeaveReview();
+                break;
             // case 9:
             //     OrderManager.ShowOrdersDetailsByIdandCostumer();
             //     break;

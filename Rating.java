@@ -1,27 +1,36 @@
 
 public class Rating{
+    private Integer nextid=1;
+    private Integer RatingID;
     private String CostumerFullName;
-    private String CostumerRating;
+    private Integer CostumerRating;
     private Integer Costumerid;
     private String status;
 
 
     public Rating(Orders order){
+        this.RatingID = nextid++;
         this.CostumerFullName =  order.getCostumerFullName();
         this.Costumerid = order.getCostumerId();
         this.status = order.getStatus();
         this.CostumerRating = null;
     }
 
+    public Integer getRatingId(){
+        return this.RatingID;
+    }
+    public void setRatingId(Integer RatingID){
+        this.RatingID=RatingID;
+    }
 
     public String getCostumerFullName(){
         return this.CostumerFullName;
     }
-    public String getCostumerRating() {
+    public Integer getCostumerRating() {
         return this.CostumerRating;
     }
 
-    public void setCostumerRating(String CostumerRating) {
+    public void setCostumerRating(Integer CostumerRating) {
         this.CostumerRating = CostumerRating;
     }
 

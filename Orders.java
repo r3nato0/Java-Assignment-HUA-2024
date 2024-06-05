@@ -16,7 +16,7 @@ public abstract class Orders{
         private static List<Rating> ratinglist =  new ArrayList<>();;
         private List<ProductsInBucket> ItemsBought;
         private BucketShop CostumersBucket;
-        
+        private Rating CostumerRating;
 
 
         public Orders(Costumers costumer, Drivers Driver){
@@ -30,12 +30,15 @@ public abstract class Orders{
             this.DriverLastName = Driver.getSurname();
             this.OrderDateTime = OrderManager.CurrentDateTime();
             this.Status = "Pending";
-            ratinglist.add(new Rating(this));
+            this.CostumerRating = new Rating(this);
+            ratinglist.add(CostumerRating);
             this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
             costumer.clearBucket();
 
         }
 
+
+        
     public List<ProductsInBucket> getProductsInOrder() {
         return this.ItemsBought;
     }
@@ -45,6 +48,30 @@ public abstract class Orders{
 
     public static List<Rating> getOrdersRating(){
         return ratinglist;
+    }
+
+    public Integer getRatingID(){
+        return CostumerRating.getRatingId();
+    }
+
+    public void setRatingId(Integer RatingId){
+        CostumerRating.setRatingId(RatingId);
+    }
+
+
+
+
+    public void setRating(Integer Rating){
+        if(this.Status.equals("Completed")){
+            CostumerRating.setCostumerRating(Rating);
+        }
+        else{
+            System.out.println("The Order is still Pending, cannot Leave A Review");
+        }
+    }
+
+    public Integer getRating(){
+        return CostumerRating.getCostumerRating();
     }
 
     //GETTERS
@@ -111,11 +138,13 @@ public abstract class Orders{
     }
     public void setStatusPending(){
         this.Status = "Pending";
+        CostumerRating.setStatus("Pending");
     }
 
 
     public void setStatusCompleted(){
         this.Status = "Completed";
+        CostumerRating.setStatus("Completed");
     }
     public void setOrderDateTime(String OrderDateTime){
         this.OrderDateTime = OrderDateTime;

@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class OrderManager{
@@ -79,9 +82,10 @@ public class OrderManager{
 
 public static void printAllOrders() {
     // header
-    System.out.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
-    System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity");
-    System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
+    System.out.println("-----------------------------------------------------------------------------------------------------------------------Order In the costumer's Address");
+    System.out.println();
+    System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status","Rating");
+    System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");
 
     for (Orders order : AllOrdersList) {
         if (order instanceof OrdersHome) {
@@ -91,23 +95,37 @@ public static void printAllOrders() {
             String DriverFullName = ordersHome.getDriverFirstName() + " " + ordersHome.getDriverSurrname();
             List<ProductsInBucket> productsInOrder = ordersHome.getProductsInOrder();
             String Address = ordersHome.getAddress();
+            String Status = ordersHome.getStatus();
+            Integer rating = ordersHome.getRating();
+            String Rating;
+            if (rating == null&& ordersHome.getStatus().equals("Completed")) {
+                Rating = "Not Rated yet!";
+                }else if (rating == null&& ordersHome.getStatus().equals("Pending")){
+                    Rating = "Order Not finished";
+                }
+                 else {
+                Rating = String.valueOf(rating);
+                }
             //customer details first
             if (!productsInOrder.isEmpty()) {
                 ProductsInBucket firstProduct = productsInOrder.get(0);
                 
-                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d\n", orderId, CostumerFullName,DriverFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
+                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s %-10s \n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status,Rating);
 
                 // remaining products
                 for (int i = 1; i < productsInOrder.size(); i++) {
                     ProductsInBucket product = productsInOrder.get(i);
-                    System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10d\n", "", "","","", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
+                    System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10d \n", "", "","","", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
                 }
             }
-            System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");}
+            
         }
-            System.out.println();
-            System.out.println();
-            System.out.println("------------------------------------------------------------------------------------------------------Orders In the Locker Address");
+        System.out.println();
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------Order In the Locker's Address");
+        System.out.println();
+        System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status","Rating");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");;
 
     for (Orders order : AllOrdersList) {
         if (order instanceof OrdersLocker) {
@@ -118,11 +136,22 @@ public static void printAllOrders() {
             String Address = orderslocker.getAddress();
             Integer CompartmentNumber = orderslocker.getCompartmentNumber();
             String DriverFullName = orderslocker.getDriverFirstName() + " " + orderslocker.getDriverSurrname();
+            String Status = orderslocker.getStatus();
+            Integer rating = orderslocker.getRating();
+            String Rating;
+            if (rating == null&& orderslocker.getStatus().equals("Completed")) {
+                Rating = "Not Rated yet!";
+                }else if (rating == null&& orderslocker.getStatus().equals("Pending")){
+                    Rating = "Order Not finished";
+                }
+                 else {
+                Rating = String.valueOf(rating);
+                }
             // Print customer details first
             if (!productsInOrder.isEmpty()) {
                 ProductsInBucket firstProduct = productsInOrder.get(0);
                 
-                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d\n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity());
+                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s %-10s\n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status,Rating);
                 System.out.printf("%-10s %-20s %-20s %-25s ", "","","","Compartment: " + CompartmentNumber);
                 // Print remaining products
                 for (int i = 1; i < productsInOrder.size(); i++) {
@@ -130,7 +159,7 @@ public static void printAllOrders() {
                     System.out.printf("%-20s %-10d\n", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
                 }
             }
-            System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
+            System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");}
         }
     }
 
@@ -150,33 +179,36 @@ public static void printAllOrders() {
     public static void CreateDefaultOrders(){
 
         //Creating HomeOrders
-        Drivers SelectedDriver = DriverManager.GetCurrentDriverByFullName("Renato Nake"); 
-        Costumers SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy");
-        for(int i =1;i <=2;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
-            Products product = ProductManager.GetProductById(i);
-            SelectedCostumer.addProductToBucket(product, 2);
-        }
-        OrdersHome NewOrderHome = new OrdersHome(SelectedCostumer, SelectedDriver);
+        //"First Order"
+        Products product = ProductManager.GetProductById(1);
+        CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy").addProductToBucket(product, 2);
+        OrdersHome NewOrderHome = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy"), 
+        DriverManager.GetCurrentDriverByFullName("Renato Nake"));
+        
+
+
 
         
-        Drivers SelectedDriverSecond = DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"); 
-        Costumers SelectedCostumerSecond = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
+        //"Second Order"
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
-
-            Products product = ProductManager.GetProductById(i);
-            SelectedCostumerSecond.addProductToBucket(product, 1);
+            Products productSecond = ProductManager.GetProductById(i);
+            CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy").addProductToBucket(productSecond, 1);
         }
-        OrdersHome NewOrderHomeSecond = new OrdersHome(SelectedCostumerSecond, SelectedDriverSecond);
-        AllOrdersList.add(NewOrderHomeSecond);
+        OrdersHome NewOrderHomeSecond = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy"),
+        DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"));
+        NewOrderHome.setStatusCompleted();
+        AllOrdersList.add(NewOrderHomeSecond); //adding them to the list
         AllOrdersList.add(NewOrderHome);
+
+
         //Creating LockerOrders
         Drivers SelectedDriverThird = DriverManager.GetCurrentDriverByFullName("Renato Nake"); 
         Costumers SelectedCostumerThird = CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy");
         for(int i =1;i <=2;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
-            Products product = ProductManager.GetProductById(i);
-            SelectedCostumerThird.addProductToBucket(product, 2);
+            Products productThird = ProductManager.GetProductById(i);
+            SelectedCostumerThird.addProductToBucket(productThird, 2);
         }
         Lockers RandomLocker = LockerManager.getRandomFreeLocker();
         EachCompartmentOfLockers RandomCompartment = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
@@ -187,14 +219,18 @@ public static void printAllOrders() {
         Costumers SelectedCostumerForth = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
-            Products product = ProductManager.GetProductById(i);
-            SelectedCostumerForth.addProductToBucket(product, 1);
+            Products productForth = ProductManager.GetProductById(i);
+            SelectedCostumerForth.addProductToBucket(productForth, 1);
         }
         Lockers RandomLockerSecond = LockerManager.getRandomFreeLocker();
         EachCompartmentOfLockers RandomCompartmentSecond = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
         OrdersLocker OrdersLockerSecond = new OrdersLocker(SelectedCostumerForth, SelectedDriverForth,RandomLockerSecond,RandomCompartmentSecond);
         AllOrdersList.add(OrdersLockerFirst);
         AllOrdersList.add(OrdersLockerSecond);
+        OrdersLockerSecond.setStatusCompleted();
+        OrdersLockerSecond.setCompartmentAvailable();
+        OrdersLockerSecond.LockerAddSpace();
+
 
     }
 
@@ -277,26 +313,42 @@ public static void printAllOrders() {
         Orders order = SelectOrder();
         if(order instanceof OrdersHome ){
             OrdersHome ordersHome = (OrdersHome) order;
-            ordersHome.setStatusCompleted();
+            String status = ordersHome.getStatus();
+            if(status.equals("Completed")){
+                System.out.println("The order has already been completed");
+            }else{
+                ordersHome.setStatusCompleted();
+                System.out.println("The Order Has been Completed!");
+                PrintOrder(order);
+            }
 
         }else{
             OrdersLocker OrdersLocker = (OrdersLocker) order;
-            OrdersLocker.setStatusCompleted();
-            OrdersLocker.setCompartmentAvailable();
-            OrdersLocker.LockerAddSpace();
+            String status = OrdersLocker.getStatus();
+            if(status.equals("Completed")){
+                System.out.println("The order has already been completed");
+            }else{
+                OrdersLocker.setStatusCompleted();
+                OrdersLocker.setCompartmentAvailable();
+                OrdersLocker.LockerAddSpace();
+                System.out.println("The Order Has been Completed!");
+                PrintOrder(order);
+            }
+
         }
-        System.out.println("The Order Has been Completed!");
-        PrintOrder(order);
+
         
 
     }
 
 
+
     public static void PrintOrder(Orders order){
             if (order instanceof OrdersHome) {
-                System.out.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
-                System.out.printf("%-10s %-20s %-20s %-25s %-20s  %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status");
-                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
+                System.out.println("-----------------------------------------------------------------------------------------------------------------------Order In the costumer's Address");
+                System.out.println();
+                System.out.printf("%-10s %-20s %-20s %-25s %-20s  %-10s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status","Rating");
+                System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");
                 OrdersHome SelectedOrder = (OrdersHome) order;
                 Integer orderId = SelectedOrder.getOrderId();
                 String CostumerFullName = SelectedOrder.getCostumerFirstName() + " " + SelectedOrder.GetCostumerLastName();
@@ -304,11 +356,21 @@ public static void printAllOrders() {
                 List<ProductsInBucket> productsInOrder = SelectedOrder.getProductsInOrder();
                 String Address = SelectedOrder.getAddress();
                 String Status = SelectedOrder.getStatus();
+                Integer rating = SelectedOrder.getRating();
+                String Rating;
+                if (rating == null&& SelectedOrder.getStatus().equals("Completed")) {
+                    Rating = "Not Rated yet!";
+                    }else if (rating == null&& SelectedOrder.getStatus().equals("Pending")){
+                        Rating = "Order Not finished";
+                    }
+                     else {
+                    Rating = String.valueOf(rating);
+                    }
                 //customer details first
                 if (!productsInOrder.isEmpty()) {
                     ProductsInBucket firstProduct = productsInOrder.get(0);
                     
-                    System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s\n", orderId, CostumerFullName,DriverFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status);
+                    System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s %-10s\n", orderId, CostumerFullName,DriverFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status,Rating);
     
                     // remaining products
                     for (int i = 1; i < productsInOrder.size(); i++) {
@@ -316,11 +378,12 @@ public static void printAllOrders() {
                         System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10d\n", "", "","","", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
                     }
                 }
-                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
+                System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");}
             else{
-                System.out.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
-                System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status");
-                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
+                System.out.println("--------------------------------------------------------------------------------------------------------------------------Order In the Locker's Address");
+                System.out.println();
+                System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status","Rating");
+                System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");
                 OrdersLocker orderslocker = (OrdersLocker) order;
                 Integer orderId = orderslocker.getOrderId();
                 String CostumerFullName = orderslocker.getCostumerFirstName() + " " + orderslocker.GetCostumerLastName();
@@ -329,11 +392,21 @@ public static void printAllOrders() {
                 Integer CompartmentNumber = orderslocker.getCompartmentNumber();
                 String DriverFullName = orderslocker.getDriverFirstName() + " " + orderslocker.getDriverSurrname();
                 String Status = orderslocker.getStatus();
+                Integer rating = orderslocker.getRating();
+                String Rating;
+                if (rating == null&& orderslocker.getStatus().equals("Completed")) {
+                Rating = "Not Rated yet!";
+                }else if (rating == null&& orderslocker.getStatus().equals("Pending")){
+                    Rating = "Order Not finished";
+                }
+                 else {
+                Rating = String.valueOf(rating);
+                }
                 // Print customer details first
                 if (!productsInOrder.isEmpty()) {
                     ProductsInBucket firstProduct = productsInOrder.get(0);
                     
-                    System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s\n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status);
+                    System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s %-10s\n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status,Rating);
                     System.out.printf("%-10s %-20s %-20s %-25s ", "","","","Compartment: " + CompartmentNumber);
                     // Print remaining products
                     for (int i = 1; i < productsInOrder.size(); i++) {
@@ -341,7 +414,32 @@ public static void printAllOrders() {
                         System.out.printf("%-20s %-10d\n", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
                     }
                 }
-                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
+                System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");}
 
         }
+
+        public static void LeaveReview(){
+            
+            Orders order = SelectOrder();
+
+            if(order.getStatus().equals("Completed") && order.getRating()==null){
+                Integer RatingNumb = UserInterface.SelectNumber(10);
+                order.setRating(RatingNumb);
+                System.out.println("Thank you for rating our service");
+                
+            }else if(order.getStatus().equals("Completed") && order.getRating()!=null){
+                System.out.println("The Order Has already been rated, do you wish to change the rating?");
+                boolean ChangeRating = UserInterface.InputTypeBoolean("Type Yes/y/yes/YES for yes and N/no/NO/No for no");
+                if(ChangeRating){
+                    Integer RatingNumb = UserInterface.SelectNumber(10);
+                    order.setRating(RatingNumb);
+                    System.out.println("The rating of the order was succesfully changed");
+                }
+            }else{
+                System.out.println("The order is still Pending, cannot Rate the order now");
+            }
+
+
+        }
+
     }
