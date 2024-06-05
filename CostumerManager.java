@@ -41,7 +41,6 @@ public class CostumerManager{
         Integer SpacePos = CostumerFullName.indexOf(" ");
         String CostumerFIrstName = CostumerFullName.substring(0, SpacePos);
         String CostumerLastName = CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
-        System.out.printf("The Costumer's Name does not exist, continuing with the rest of the fields: ");
         String address = UserInterface.InputTypeAdress("Type Costumers Adress: ");
         String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
         costumersList.add(new Costumers(CostumerFIrstName,CostumerLastName,address,Email));

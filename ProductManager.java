@@ -36,11 +36,12 @@ public class ProductManager{
         return SelectedQuantity;
     }
 
+
     public static Products GetProductByNameORId(){
         printTableProducts();
         System.out.println("For Reference look the product's table above!");
         System.out.println("Start with name: and then the product name OR id: and then the product id" );
-
+        Scanner scanner = new Scanner(System.in);
         Products SelectedProduct=null;
         //System.out.println(Message);
         String CommandByname = "name:";
@@ -48,30 +49,50 @@ public class ProductManager{
         boolean isValid=false;
         while (true) {
             System.out.printf("Select Product name:/id: ");
-            Scanner scanner = new Scanner(System.in);
             String Selection = scanner.nextLine();
             if (Selection.startsWith(CommandByname)){
                 String ProductName = Selection.substring(5, Selection.length());
                 for (Products product:productList){
-                    if(product.getName().equalsIgnoreCase(ProductName)){
-                        System.out.println("test");
+                    if(product.getName().equalsIgnoreCase(ProductName) ){
                         isValid=true;
                         SelectedProduct=product;
                         break;}}                    }
 
-            if (Selection.startsWith(CommandById)){
-                String ProductId = Selection.substring(CommandById.length(), Selection.length());
-                for(Products product:productList){
-                    if(product.getId()==Integer.parseInt(ProductId)){
-                        isValid=true;
-                        SelectedProduct=product;
-                        break;}}                }
-            
-            if(isValid){
+                        if (Selection.startsWith(CommandById)) {
+                            try {
+                                String ProductId = Selection.substring(CommandById.length());
+                                int parsedProductId = Integer.parseInt(ProductId);
+                        
+                                boolean found = false;
+                                for (Products product : productList) {
+                                    if (product.getId() == parsedProductId) {
+                                        isValid = true;
+                                        SelectedProduct = product;
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                        
+                                if (!found) {
+                                    // Handle case where no product matches the given ID
+                                    System.out.println("No product found with the given ID.");
+                                }
+                            } catch (NumberFormatException e) {
+                                // Handle the case where ProductId is not a valid integer
+                                System.out.println("Invalid product ID format.");
+                            }}
+
+            if(isValid ){
                 return SelectedProduct;}
             else{
-                System.out.println("Please specify the search criteria " + "name:" + "or" + "id: (example: name:ProductName id:ProductId)2" );
-                System.out.println("No such product Avaiable!");}}}
+                System.out.println("Please specify the search criteria " + "name:" + "or" + "id: (example: name:ProductName id:ProductId)" );
+            }
+        }
+    }
+
+
+
+
 
 
     public static void printTableProducts() {

@@ -32,23 +32,33 @@ public class OrderManager{
 
         SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); 
         SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName(CostumerFullName);
-
+        
         while (true) {
             Products product = ProductManager.GetProductByNameORId();
-            Integer quantity = ProductManager.GetSelectedProductsQuantity(product);
+            if(product.getAvailableQuantity()>0){
+                Integer quantity = ProductManager.GetSelectedProductsQuantity(product);
             
-            SelectedCostumer.addProductToBucket(product, quantity);
+                SelectedCostumer.addProductToBucket(product, quantity);
+            }else{
+                System.out.println("The product has 0 avaiable quantity,please select another prodduct");
+            }
             
             boolean addAnotherProduct = UserInterface.InputTypeBoolean("Add another product to the bucket;  ");
+
             if (!addAnotherProduct) {
                 break;
             }
         }
-        
+        if (SelectedCostumer.getProductsInBucket().size()==0){
+            System.out.println("The Costumer does not want any other product, the order has been canceled,returning to Main Menu");
+            UserInterface.ShowMenu();
+        }
         Integer HomeOrLocker = UserInterface.InputTypeLockerORHome("Press 1 to ship to the Costumers Adress,Press 2 to ship to A Locker Location");
         if(HomeOrLocker == 1){
             OrdersHome NewOrderHome = new OrdersHome(SelectedCostumer, SelectedDriver);
             AllOrdersList.add(NewOrderHome);
+            System.out.println("The order has been created successfully, Details of the order:");
+            PrintOrder(NewOrderHome);
         }
         else{
             RandomLocker = LockerManager.getRandomFreeLocker();
@@ -56,6 +66,8 @@ public class OrderManager{
                 RandomCompartment = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
                 OrdersLocker OrdersLocker = new OrdersLocker(SelectedCostumer, SelectedDriver,RandomLocker,RandomCompartment);
                 AllOrdersList.add(OrdersLocker);
+                System.out.println("The order has been created successfully, Details of the order:");
+                PrintOrder(OrdersLocker);
 
             }else{
                 System.out.println("There are no Empty Lockers at the moments, sorry the order has been canceled");
@@ -194,6 +206,8 @@ public static void printAllOrders() {
             if(DriverManager.CheckDriverExists(DriverName)){
                 Drivers driver = DriverManager.GetCurrentDriverByFullName(DriverName);
                 SelectedOrder.setNewDriver(driver);
+                System.out.println("The Driver Has Been Changed");
+                PrintOrder(SelectedOrder);
                 break;
             }else{
                 System.out.println("That Driver Does Not Exist");
@@ -231,19 +245,29 @@ public static void printAllOrders() {
 }
 
     public static void ChangeOrdersAddress(){
+        boolean isvalid = false;
+        OrdersHome ordersHome=null;
+        String NewAddress=null;
+        boolean TryAgain = true;
+        while (TryAgain) {
         Orders order = SelectOrder();
-        boolean TryAgain = false;
-        while (!TryAgain) {
-        String NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
         if (order instanceof OrdersHome) {
-                OrdersHome ordersHome = (OrdersHome) order;
-                ordersHome.setAddress(NewAddress);
+                ordersHome = (OrdersHome) order;
+                NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
+                isvalid = true;
                 break;}
         else{
                 System.out.println("The order you selected is a Locker Order, the address cannot be changed, sorry");
                 TryAgain = UserInterface.InputTypeBoolean("Try Again? type (y/yes/Y/YES) for yes or (N/n/no/NO) for no");
                 
+
+                
             }
+        }
+        if(isvalid){
+            ordersHome.setAddress(NewAddress);
+            System.out.println("The Order's Address has been changed: ");
+            PrintOrder(ordersHome);
         }
     }
 
@@ -261,8 +285,8 @@ public static void printAllOrders() {
             OrdersLocker.setCompartmentAvailable();
             OrdersLocker.LockerAddSpace();
         }
-        PrintOrder(order);
         System.out.println("The Order Has been Completed!");
+        PrintOrder(order);
         
 
     }

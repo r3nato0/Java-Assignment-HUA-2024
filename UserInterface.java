@@ -385,9 +385,11 @@ public class UserInterface{
                 break;
             case 6:
                 OrderManager.ChangeOrdersAddress();
+                ShowMenu();
                 break;
             case 7:
                 OrderManager.CompleteOrder();
+                ShowMenu();
                 break;
             // case 8:
             //     OrderManager.LeaveReview();
