@@ -361,7 +361,7 @@ public class UserInterface{
         System.out.println("10)Show Order's Details With Product's Category and Barcode");
         System.out.println("11)Show All Orders By Driver and Address(Lockers or HomeAddress)");
         System.out.println("12)Show Average reviews of Delivery System, And Each Costumer's Lowest and Highest Review rating");
-        Integer Action = SelectNumber(8);
+        Integer Action = SelectNumber(12);
         switch (Action) {
             case 1:
                 DriverManager.AddNewDriver();
@@ -393,19 +393,20 @@ public class UserInterface{
                 break;
             case 8:
                 OrderManager.LeaveReview();
+                ShowMenu();
                 break;
             // case 9:
             //     OrderManager.ShowOrdersDetailsByIdandCostumer();
             //     break;
-            // case 10:
-            //     OrderManager.ShowOrdersByProduct();
-            //     break;
+            case 10:
+                OrderManager.ProductsBoughtSummary();
+                break;
             // case 11:
             //     OrderManager.ShowAllOrdersByDriverAddress();
             //     break;
-            // case 12:
-            //    OrderManager.ShowAverageReviews();
-            //     break;
+            case 12:
+               OrderManager.ShowAverageReviews();
+                break;
 
 
             default:

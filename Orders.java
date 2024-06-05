@@ -17,7 +17,7 @@ public abstract class Orders{
         private List<ProductsInBucket> ItemsBought;
         private BucketShop CostumersBucket;
         private Rating CostumerRating;
-
+        private Integer costumerid;
 
         public Orders(Costumers costumer, Drivers Driver){
             this.Orderid=nextId++;
@@ -28,17 +28,27 @@ public abstract class Orders{
             this.CostumerLastName = costumer.getSurname();
             this.DriverFirstName = Driver.getName();
             this.DriverLastName = Driver.getSurname();
+            this.costumerid = costumer.getId(); // will help for the ratins part
             this.OrderDateTime = OrderManager.CurrentDateTime();
             this.Status = "Pending";
             this.CostumerRating = new Rating(this);
-            ratinglist.add(CostumerRating);
+
             this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
             costumer.clearBucket();
 
         }
 
 
-        
+    public Integer getCostumersID(){
+        return this.costumerId;
+    }
+
+    public static List<Rating> getratinglist(){
+        return ratinglist;
+    }
+
+
+
     public List<ProductsInBucket> getProductsInOrder() {
         return this.ItemsBought;
     }
@@ -170,6 +180,8 @@ public abstract class Orders{
     public void setCostumersBucket(BucketShop CostumersBucket) {
         this.CostumersBucket = CostumersBucket;
     }
+
+    
 
 
 

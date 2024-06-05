@@ -1,5 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.text.StyledEditorKit.BoldAction;
 
@@ -198,6 +203,8 @@ public static void printAllOrders() {
         OrdersHome NewOrderHomeSecond = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy"),
         DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"));
         NewOrderHome.setStatusCompleted();
+        NewOrderHomeSecond.setStatusCompleted();
+        NewOrderHome.setRating(10);
         AllOrdersList.add(NewOrderHomeSecond); //adding them to the list
         AllOrdersList.add(NewOrderHome);
 
@@ -230,6 +237,8 @@ public static void printAllOrders() {
         OrdersLockerSecond.setStatusCompleted();
         OrdersLockerSecond.setCompartmentAvailable();
         OrdersLockerSecond.LockerAddSpace();
+        OrdersLockerSecond.setRating(5);
+
 
 
     }
@@ -419,13 +428,13 @@ public static void printAllOrders() {
         }
 
         public static void LeaveReview(){
-            
             Orders order = SelectOrder();
-
+            System.out.println("Rate between 1 and 10: ");
             if(order.getStatus().equals("Completed") && order.getRating()==null){
                 Integer RatingNumb = UserInterface.SelectNumber(10);
                 order.setRating(RatingNumb);
                 System.out.println("Thank you for rating our service");
+                PrintOrder(order);
                 
             }else if(order.getStatus().equals("Completed") && order.getRating()!=null){
                 System.out.println("The Order Has already been rated, do you wish to change the rating?");
@@ -434,6 +443,7 @@ public static void printAllOrders() {
                     Integer RatingNumb = UserInterface.SelectNumber(10);
                     order.setRating(RatingNumb);
                     System.out.println("The rating of the order was succesfully changed");
+                    PrintOrder(order);
                 }
             }else{
                 System.out.println("The order is still Pending, cannot Rate the order now");
@@ -442,4 +452,93 @@ public static void printAllOrders() {
 
         }
 
+        
+public static void ShowAverageReviews() {
+    double avg = 0.0;
+    List<Orders> ratedOrders = new ArrayList<>();
+    Set<String> customerNames = new HashSet<>(); // so we dont get duplicates we wil use set, source : https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/java/util/Set.html
+    List<Integer> customerHighestR = new ArrayList<>();
+    List<Integer> customerLowestR = new ArrayList<>();
+
+    // we get the 
+    for (Orders order : AllOrdersList) {
+        if (order.getStatus().equals("Completed") && order.getRating() != null) {
+            ratedOrders.add(order);
+            customerNames.add(order.getCostumerFullName()); 
+        }
     }
+
+    // Calculate highest and lowest rating for each customer
+    for (String customerName : customerNames) {
+        int highest = -1; // the rating cant be lower than 1 or bigger than 10, so we use this values 
+        int lowest = 11;
+        for (Orders order : ratedOrders) {
+            if (order.getCostumerFullName().equals(customerName)) {
+                int rating = order.getRating();
+                if (rating > highest) {
+                    highest = rating;
+                }
+                if (rating < lowest) {
+                    lowest = rating;
+                }
+            }
+        }
+        customerHighestR.add(highest);
+        customerLowestR.add(lowest);
+    }
+
+    // Getting the average
+    if (!ratedOrders.isEmpty()) {
+        for (Orders order : ratedOrders) {
+            avg += order.getRating();
+        }
+        avg /= ratedOrders.size();
+    }
+
+    //print results
+    int index = 0;
+    for (String customerName : customerNames) {
+        System.out.printf("%s with Highest Rating of %d and Lowest Rating of %d%n", customerName, customerHighestR.get(index), customerLowestR.get(index));
+        index++;
+    }
+
+    //print average
+    System.out.printf("Average Rating: %.2f%n", avg);
+
+    //we clear the arrays
+    ratedOrders.clear();
+    customerNames.clear();
+    customerHighestR.clear();
+    customerLowestR.clear();
+
+
+}
+
+public static void ProductsBoughtSummary() {
+    List<String> productSummary = new ArrayList<>();
+    List<String> productsCategory = new ArrayList<>();
+    List<String> productsBarcode = new ArrayList<>();
+    List<ProductsInBucket> productsBought = new ArrayList<>();
+
+    for (Orders order : AllOrdersList) {
+        List<ProductsInBucket> itemsBought = order.getProductsInOrder();
+        productsBought.addAll(itemsBought);
+    }
+
+    // Process the productsBought list to fill productSummary, productsCategory, and productsBarcode
+    for (ProductsInBucket productInBucket : productsBought) {
+        productSummary.add(productInBucket.getProductName());
+        productsCategory.add(productInBucket.getProductCategory());
+        // Assuming you have a method to get the barcode, if applicable
+        // productsBarcode.add(productInBucket.getProductBarcode());
+    }
+
+    // Print or return the summaries
+    System.out.println("Product Summary: " + productSummary);
+    System.out.println("Products Category: " + productsCategory);
+    System.out.println("Products Barcode: " + productsBarcode);
+}
+}
+
+
+    
