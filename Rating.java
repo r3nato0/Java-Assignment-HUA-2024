@@ -1,36 +1,22 @@
 
 public class Rating{
-    private String CostumerFirstName;
-    private String CostumerLastName;
+    private String CostumerFullName;
     private String CostumerRating;
     private Integer Costumerid;
     private String status;
 
 
     public Rating(Orders order){
-        this.CostumerFirstName =  order.getCostumerFirstName();
-        this.CostumerLastName =  order.GetCostumerLastName();
+        this.CostumerFullName =  order.getCostumerFullName();
         this.Costumerid = order.getCostumerId();
         this.status = order.getStatus();
         this.CostumerRating = null;
     }
 
-    public String getCostumerFirstName() {
-        return this.CostumerFirstName;
-    }
 
-    public void setCostumerFirstName(String CostumerFirstName) {
-        this.CostumerFirstName = CostumerFirstName;
+    public String getCostumerFullName(){
+        return this.CostumerFullName;
     }
-
-    public String getCostumerLastName() {
-        return this.CostumerLastName;
-    }
-
-    public void setCostumerLastName(String CostumerLastName) {
-        this.CostumerLastName = CostumerLastName;
-    }
-
     public String getCostumerRating() {
         return this.CostumerRating;
     }

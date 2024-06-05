@@ -4,16 +4,35 @@ public class OrdersLocker extends Orders{
     private Integer CompartmentNumber;
     private String address;
     private Lockers locker;
-
+    private EachCompartmentOfLockers compartment;
 
     public OrdersLocker(Costumers costumer, Drivers Driver,Lockers locker,EachCompartmentOfLockers compartment) {
         super(costumer, Driver);
         this.address = locker.getAddress();
+        this.locker = locker;
         this.CompartmentNumber = compartment.getLockerNumber();
+        this.compartment =compartment;
         compartment.setStatusUnavailable();
+        locker.setminusOneSpace();
         compartment.setOrderId(super.getOrderId()); 
     
     }
+
+
+
+    public EachCompartmentOfLockers getCompartment(){
+        return this.compartment;
+    }
+
+    public void LockerAddSpace(){
+        locker.setAddOneSpace();
+    }
+
+
+    public void setCompartmentAvailable(){
+        compartment.setStatusAvailable();
+    }
+
 
     public Integer getCompartmentNumber() {
         return this.CompartmentNumber;

@@ -67,7 +67,7 @@ public class OrderManager{
 
 public static void printAllOrders() {
     // header
-    System.err.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
+    System.out.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
     System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity");
     System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
 
@@ -229,4 +229,95 @@ public static void printAllOrders() {
         return SelectedOrder;
     
 }
-}
+
+    public static void ChangeOrdersAddress(){
+        Orders order = SelectOrder();
+        boolean TryAgain = false;
+        while (!TryAgain) {
+        String NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
+        if (order instanceof OrdersHome) {
+                OrdersHome ordersHome = (OrdersHome) order;
+                ordersHome.setAddress(NewAddress);
+                break;}
+        else{
+                System.out.println("The order you selected is a Locker Order, the address cannot be changed, sorry");
+                TryAgain = UserInterface.InputTypeBoolean("Try Again? type (y/yes/Y/YES) for yes or (N/n/no/NO) for no");
+                
+            }
+        }
+    }
+
+
+
+    public static void CompleteOrder(){
+        Orders order = SelectOrder();
+        if(order instanceof OrdersHome ){
+            OrdersHome ordersHome = (OrdersHome) order;
+            ordersHome.setStatusCompleted();
+
+        }else{
+            OrdersLocker OrdersLocker = (OrdersLocker) order;
+            OrdersLocker.setStatusCompleted();
+            OrdersLocker.setCompartmentAvailable();
+            OrdersLocker.LockerAddSpace();
+        }
+        PrintOrder(order);
+        System.out.println("The Order Has been Completed!");
+        
+
+    }
+
+
+    public static void PrintOrder(Orders order){
+            if (order instanceof OrdersHome) {
+                System.out.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
+                System.out.printf("%-10s %-20s %-20s %-25s %-20s  %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status");
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
+                OrdersHome SelectedOrder = (OrdersHome) order;
+                Integer orderId = SelectedOrder.getOrderId();
+                String CostumerFullName = SelectedOrder.getCostumerFirstName() + " " + SelectedOrder.GetCostumerLastName();
+                String DriverFullName = SelectedOrder.getDriverFirstName() + " " + SelectedOrder.getDriverSurrname();
+                List<ProductsInBucket> productsInOrder = SelectedOrder.getProductsInOrder();
+                String Address = SelectedOrder.getAddress();
+                String Status = SelectedOrder.getStatus();
+                //customer details first
+                if (!productsInOrder.isEmpty()) {
+                    ProductsInBucket firstProduct = productsInOrder.get(0);
+                    
+                    System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s\n", orderId, CostumerFullName,DriverFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status);
+    
+                    // remaining products
+                    for (int i = 1; i < productsInOrder.size(); i++) {
+                        ProductsInBucket product = productsInOrder.get(i);
+                        System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10d\n", "", "","","", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
+                    }
+                }
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
+            else{
+                System.out.println("--------------------------------------------------------------------------------------------------Orders In the costumer's Address");
+                System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status");
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");
+                OrdersLocker orderslocker = (OrdersLocker) order;
+                Integer orderId = orderslocker.getOrderId();
+                String CostumerFullName = orderslocker.getCostumerFirstName() + " " + orderslocker.GetCostumerLastName();
+                List<ProductsInBucket> productsInOrder = orderslocker.getProductsInOrder();
+                String Address = orderslocker.getAddress();
+                Integer CompartmentNumber = orderslocker.getCompartmentNumber();
+                String DriverFullName = orderslocker.getDriverFirstName() + " " + orderslocker.getDriverSurrname();
+                String Status = orderslocker.getStatus();
+                // Print customer details first
+                if (!productsInOrder.isEmpty()) {
+                    ProductsInBucket firstProduct = productsInOrder.get(0);
+                    
+                    System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s\n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status);
+                    System.out.printf("%-10s %-20s %-20s %-25s ", "","","","Compartment: " + CompartmentNumber);
+                    // Print remaining products
+                    for (int i = 1; i < productsInOrder.size(); i++) {
+                        ProductsInBucket product = productsInOrder.get(i);
+                        System.out.printf("%-20s %-10d\n", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
+                    }
+                }
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------");}
+
+        }
+    }

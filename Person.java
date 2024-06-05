@@ -1,4 +1,4 @@
-public class  Person{
+public abstract class  Person{
     private static int nextId = 1;
     private int PersonId;
     private String Name;

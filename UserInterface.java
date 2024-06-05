@@ -192,8 +192,6 @@ public class UserInterface{
             if ((Input.length() >= 3) && (Separator != -1) && (Separator < Input.length()-1)){
                 StreetAdress = Input.substring(0, Separator);
                 StreetNumber = Input.substring(Separator+1, Input.length());
-                System.out.println(StreetAdress);
-                System.out.println(StreetNumber);
             }
             if (StreetAdress.matches("[a-zA-Z]+")) {
                 isValidStreetAdress = true;
@@ -329,9 +327,10 @@ public class UserInterface{
         Scanner scanner = new Scanner(System.in);
         Integer SelectedOption;
 
-        String StringNumber = scanner.nextLine();
+    
         while (true) {
-            System.out.println("Select Option by number: ");
+            
+            String StringNumber = scanner.nextLine();
             try {
                 SelectedOption = Integer.parseInt(StringNumber);
                 if(SelectedOption > 1 && SelectedOption<=Max){
@@ -349,7 +348,7 @@ public class UserInterface{
 
 
     public static void ShowMenu(){
-        Integer Action = SelectAction(8);
+        System.out.println("Choose by typing number");
         System.out.println("1) Add New Driver");
         System.out.println("2) Add New Customer");
         System.out.println("3) Add new Locker");
@@ -362,29 +361,34 @@ public class UserInterface{
         System.out.println("10)Show Order's Details With Product's Category and Barcode");
         System.out.println("11)Show All Orders By Driver and Address(Lockers or HomeAddress)");
         System.out.println("12)Show Average reviews of Delivery System, And Each Costumer's Lowest and Highest Review rating");
-
+        Integer Action = SelectAction(7);
         switch (Action) {
             case 1:
                 DriverManager.AddNewDriver();
+                ShowMenu();
                 break;
             case 2:
                 CostumerManager.AddNewCostumer();
+                ShowMenu();
                 break;
             case 3:
                 LockerManager.AddNewLocker();
+                ShowMenu();
                 break;
             case 4:
                 OrderManager.Create();
+                ShowMenu();
                 break;
             case 5:
                 OrderManager.ChangeDriver();
+                ShowMenu();
                 break;
-            // case 6:
-            //     OrderManager.ChangeOrdersAddress();
-            //     break;
-            // case 7:
-            //     OrderManager.FinishOrder();
-            //     break;
+            case 6:
+                OrderManager.ChangeOrdersAddress();
+                break;
+            case 7:
+                OrderManager.CompleteOrder();
+                break;
             // case 8:
             //     OrderManager.LeaveReview();
             //     break;

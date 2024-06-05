@@ -29,6 +29,8 @@ public class BucketShop {
     public List<ProductsInBucket> getProductsBucket() {
         return this.customerBucket;
     }
+
+    
     public void clearBucket() {
         customerBucket.clear();
     }

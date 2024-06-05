@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Orders{
-        protected static Integer nextId = 1;
-        protected Integer Orderid;
+        private static Integer nextId = 1;
+        private Integer Orderid;
         private Costumers costumer;
         private Drivers Driver;
         private String OrderDateTime;
@@ -12,9 +12,8 @@ public abstract class Orders{
         private String DriverLastName;
         private String CostumersFirstName;
         private String CostumerLastName;
-        private String Address;
         private Integer costumerId;
-        private List<Rating> rating;
+        private static List<Rating> ratinglist =  new ArrayList<>();;
         private List<ProductsInBucket> ItemsBought;
         private BucketShop CostumersBucket;
         
@@ -31,8 +30,7 @@ public abstract class Orders{
             this.DriverLastName = Driver.getSurname();
             this.OrderDateTime = OrderManager.CurrentDateTime();
             this.Status = "Pending";
-            this.rating = new ArrayList<>();
-            rating.add(new Rating(this));
+            ratinglist.add(new Rating(this));
             this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
             costumer.clearBucket();
 
@@ -45,6 +43,9 @@ public abstract class Orders{
         this.ItemsBought = ItemsBought;
     }
 
+    public static List<Rating> getOrdersRating(){
+        return ratinglist;
+    }
 
     //GETTERS
     public String getCostumerFirstName(){
@@ -56,9 +57,7 @@ public abstract class Orders{
     public String getStatus(){
         return this.Status;
     }
-    public Integer getOrderId() {
-        return this.Orderid;
-    }
+
     public String getOrderDateTime(){
         return this.OrderDateTime;
     }
@@ -85,7 +84,9 @@ public abstract class Orders{
         return this.DriverFirstName + " " + this.DriverLastName;
     }
 
-
+    public Integer getOrderId(){
+        return this.Orderid;
+    }
 
 
     //SETTERS
@@ -134,7 +135,6 @@ public abstract class Orders{
         this.DriverLastName= Driver.getSurname();
     }
 
-    
     public BucketShop getCostumersBucket() {
         return this.CostumersBucket;
     }
@@ -142,4 +142,8 @@ public abstract class Orders{
         this.CostumersBucket = CostumersBucket;
     }
 
+
+
 }
+
+
