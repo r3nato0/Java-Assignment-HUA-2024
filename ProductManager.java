@@ -5,7 +5,7 @@ import java.util.Random;
 import java.util.Scanner;
 public class ProductManager{
     private static List<Products> productList = new ArrayList<>();
-   private static List<String> CategoryList = new ArrayList<>(Arrays.asList("hygiene item", "detergent", "Drinks","Food"));
+   private static List<String> CategoryList = new ArrayList<>(Arrays.asList("hygiene", "detergent", "Drinks","Food"));
 
 
 
@@ -143,4 +143,26 @@ public class ProductManager{
 
     }
 
+
+    // we will return a string for some error handling in case the product for some reason has no barcode
+    public static String getBarcodeByName(String Name) {
+        for (Products product : productList) {
+            if (product.getName().equals(Name)) {
+                return String.valueOf(product.getBarcode());
+            }
+        }
+        // the error handling
+        return "This product has no barcode for some reason!";
+    }
+
+        
+        public static String getCategoryByName(String Name) {
+            for (Products product : productList) {
+                if (product.getName().equals(Name)) {
+                    return product.getCategory();
+                }
+            }
+            // some error handling
+            return "This product has no barcode for some reason!";
+        }
 }

@@ -5,7 +5,7 @@ public class ProductsInBucket {
     private String ProductCategory;
     private Integer Productid;
     private String ProductBrand;
-
+    private Long barcode;
 
     public ProductsInBucket(Products product, int quantity) {
         this.Productid = product.getId();
@@ -13,8 +13,15 @@ public class ProductsInBucket {
         this.ProductCategory = product.getCategory();
         this.ProductBrand = product.getBrand();
         this.quantity = quantity;
+        this.barcode=product.getBarcode();
     }
 
+
+    public Long getBarcode(){
+    return this.barcode;
+
+
+    }
     public String getName() {
         return this.ProductName;
     }

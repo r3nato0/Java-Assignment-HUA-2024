@@ -50,7 +50,7 @@ public abstract class Orders{
 
 
     public List<ProductsInBucket> getProductsInOrder() {
-        return this.ItemsBought;
+        return ItemsBought;
     }
     public void setProductsInOrder(List<ProductsInBucket> ItemsBought) {
         this.ItemsBought = ItemsBought;

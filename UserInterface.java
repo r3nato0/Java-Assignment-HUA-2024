@@ -400,6 +400,7 @@ public class UserInterface{
             //     break;
             case 10:
                 OrderManager.ProductsBoughtSummary();
+                ShowMenu();
                 break;
             // case 11:
             //     OrderManager.ShowAllOrdersByDriverAddress();
