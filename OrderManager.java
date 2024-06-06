@@ -3,14 +3,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Iterator;
-
-
+import java.sql.Driver;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class OrderManager{
     private static List<Orders> AllOrdersList = new ArrayList<>();
     private final static Integer MaxProductsPrintLength = 15; // Just a Limit of characters from products name to get printed, will be passed to UserInterface.PrintOnly(Name,Max...)
     
+
+    public static List<Orders> GetAllOrdersList(){
+        return AllOrdersList;
+    }
 
     public static void Create() {
         Lockers RandomLocker;
@@ -523,16 +526,11 @@ public static void ProductsBoughtSummary() {
         List<ProductsInBucket> itemsBought = order.getProductsInOrder();
         productsBought.addAll(itemsBought); // then use addll to store all the elements
     }
-
-
-
     // later we get from the aboive list all the name to the set (unique names stored only)
     for (ProductsInBucket productInBucket : productsBought) {
         productName.add(productInBucket.getProductName());
         productCategory.add(ProductManager.getCategoryByName(productInBucket.getProductName())); // will store only the Category's of each product once
     }
-
-
     // next we will use the Iterator of the set https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/java/util/Set.html as shown,
     Iterator<String> iterator = productName.iterator();
     while (iterator.hasNext()) {
@@ -546,15 +544,13 @@ public static void ProductsBoughtSummary() {
 
         }
         productsquantity.add(counter); // we finish with the first element, (that means we iterated all the productsbought that has the same name as the set)
-
-
     }
     // now we have a set with unique names and a productsquantity list that have same size, but also at the same places the name and quantity bought for each.
 
 
+
+
     // we will use a method to get from the name the barcode and category
-
-
     System.out.println("-----------------------------------------------------------------------------------------------------------Product's Bought Summary By Barcode");
     System.out.println(); // an empty line.
     
@@ -594,8 +590,8 @@ public static void ProductsBoughtSummary() {
         productsquantity.add(counter); 
 
     }
-    //we are done, now we print them
 
+    //we are done, now we print them
     System.out.println("-----------------------------------------------------------------------------------------------------------Product's Bought Summary By Category");
     Integer IndexCategory = 0; // and index that will help witht he iteration of the productquantity loop
     Integer TotalCategory = 0; // will store the total quantitys number
@@ -616,6 +612,71 @@ public static void ProductsBoughtSummary() {
 
 
 } 
+public static void ShowDriverOrdes() {
+    //HEADER OF THE PRINT
+    System.out.println();
+    System.out.printf(" %-25s %-25s %-25s %-25s %-25s %-25s | %-15s\n","Driver's ID",
+    "Driver's Name","PendingHomOrders",
+    "CompletedHomOrders","PendingLockersOrders",
+    "CompletedLockersOrders","Total Per Driver");
+    System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+    Integer AllOrderCount =0;
+    Integer PendingHomeOrdersTotal = 0;
+    Integer CompletedHomeOrdersTotal =0;
+    Integer PendingLockersOrdersTotal =0 ;
+    Integer CompletedLockersOrdersTotal=0;
+
+    for (Drivers driver : DriverManager.getDriverList()) {
+        Integer PendingHomeOrders = 0;
+        Integer CompletedHomeOrders = 0;
+        Integer PendingLockersOrders = 0;
+        Integer CompletedLockersOrders = 0;
+        Integer TotalperDriver=0;
+        for (Orders orders : AllOrdersList) {
+            if (orders.getDriverFullName().equals(driver.getDriverFullName())) {
+                if (orders.getStatus().equals("Pending")) {
+                    if (orders instanceof OrdersHome) {
+                        PendingHomeOrders++;
+                    } else if (orders instanceof OrdersLocker) {
+                        PendingLockersOrders++;
+                    }
+                } else if (orders.getStatus().equals("Completed")) {
+                    if (orders instanceof OrdersHome) {
+                        CompletedHomeOrders++;
+                    } else if (orders instanceof OrdersLocker) {
+                        CompletedLockersOrders++;
+                    }
+                }
+            }
+        }
+        PendingHomeOrdersTotal+=PendingHomeOrders;
+        CompletedHomeOrdersTotal+=CompletedHomeOrders;
+        PendingLockersOrdersTotal+=PendingLockersOrders;
+        CompletedLockersOrdersTotal+=CompletedLockersOrders;
+        TotalperDriver=PendingHomeOrders+CompletedHomeOrders+PendingLockersOrders+CompletedLockersOrders;
+        AllOrderCount+=TotalperDriver;
+        //i will not show drivers that have no orders,(my though processis that if there are for example 100 drivers, there is no need to show the ones without orders)
+        if(TotalperDriver>0){
+            System.out.printf(" %-25d %-25s %-25d %-25d %-25d %-25d | %-25d\n",driver.getDriverid(), driver.getDriverFullName(),  PendingHomeOrders,
+            CompletedHomeOrders,
+            PendingLockersOrders,
+            CompletedLockersOrders,TotalperDriver);
+        }
+    }
+    if(AllOrderCount>0){
+        System.out.println();
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf(" %-25s %-25s %-25d %-25d %-25d %-25d | %-25d\n","Total Of All Orders:","--------",PendingHomeOrdersTotal,CompletedHomeOrdersTotal,
+        PendingLockersOrdersTotal,CompletedLockersOrdersTotal,AllOrderCount);
+        System.out.println();
+    }else{
+        System.out.println("There are no Orders Places yet");
+    }
+
+}
+    
+
 }
 
 

@@ -402,9 +402,9 @@ public class UserInterface{
                 OrderManager.ProductsBoughtSummary();
                 ShowMenu();
                 break;
-            // case 11:
-            //     OrderManager.ShowAllOrdersByDriverAddress();
-            //     break;
+            case 11:
+                OrderManager.ShowDriverOrdes();
+                break;
             case 12:
                OrderManager.ShowAverageReviews();
                 break;

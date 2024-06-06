@@ -4,6 +4,13 @@ public class DriverManager{
     private static List<Drivers> driverList = new ArrayList<>();
 
 
+
+    public static List<Drivers> getDriverList(){
+        return driverList;
+    }
+
+
+
     public static Drivers GetCurrentDriverByFullName( String DriverFullName){
         //this method will return the object in case that object has the "data" parametere as data in its fields
         Drivers SelectedDriver=null;
@@ -81,4 +88,9 @@ public class DriverManager{
         "Driver's AFM: ",Driver.getDriverAFM(),
         " Driver's PLateNumber: ",Driver.getPlateNumber());
     }
+
+    //we will pass as parameters the search criteria ,First parameter the status we search, and second parameter the instance of the order
+
+
+
 }

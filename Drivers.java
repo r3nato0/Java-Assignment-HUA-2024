@@ -17,6 +17,10 @@ public class Drivers extends  Person{
         return super.getName();
     }
 
+    public String getDriverFullName(){
+        return super.getName()+ " "  + super.getSurname();
+    }
+
     public String getSurname(){
         return super.getSurname();
     }
