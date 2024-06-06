@@ -19,9 +19,9 @@ public class ProductsInBucket {
 
     public Long getBarcode(){
     return this.barcode;
-
-
     }
+
+    
     public String getName() {
         return this.ProductName;
     }
