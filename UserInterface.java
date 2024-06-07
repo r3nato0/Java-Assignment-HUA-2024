@@ -226,7 +226,7 @@ public class UserInterface{
             }
         }
     }
-    public static Integer InputTypeLockerORHome(String Message){
+    public static String InputTypeLockerORHome(String Message){
         Scanner scanner = new Scanner(System.in);
         System.out.println(Message);
         while (true) {
@@ -234,10 +234,10 @@ public class UserInterface{
             if (input.length() == 1) {
                 char c = input.charAt(0);
                 if(c=='1'){
-                    return 1;
+                    return Constants.DELIVERYHOME;
                 }
-                if(c=='2'){
-                    return 2;
+                else if(c=='2'){
+                    return Constants.LOCKERDELIVERY;
                 }
             } else {
                 System.out.println("Please enter (1) For Costumers Home Address Or (2) For A locker Delivery:");

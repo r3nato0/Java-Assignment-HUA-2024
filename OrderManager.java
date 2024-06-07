@@ -3,6 +3,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Iterator;
+import java.sql.Driver;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class OrderManager{
@@ -17,103 +18,43 @@ public class OrderManager{
 
    public static void CreateSecond() {
         
-        Drivers SelectedDriver;
-        String DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
-        if (DriverManager.CheckDriverExists(DriverFullName)){
-            System.out.printf("The Driver allready Exsits, the rest of the fields are filled accordingly %n");
-
-        }
-        else{
-            System.out.println("The Driver does not exits, Creating new Entry");
-            DriverManager.NotFoundAddNew(DriverFullName); // Other Filleds are prompted and filled via the NotFoundAddNew Method
-        }
-
-        SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); 
-
-
-        Integer HomeOrLocker = UserInterface.InputTypeLockerORHome("Press : 1) to ship to the Costumers Adress\nPress : 2) to ship to A Locker Location");
-
-
-        //In case of Mismatch on the Driver and Delivery Methods
+        List<String> ActionRecorder=null;
+        String HomeOrLocker = UserInterface.InputTypeLockerORHome("Press : 1) For Home delivery\nPress : 2) For Lockers Delivery");
+        Drivers SelectedDriver=null;
+        String DriverFullName;
         while (true) {
-        //No problem we pass
-        if(HomeOrLocker==1 && (SelectedDriver.getType().equals(Constants.DELIVERYHOME) || SelectedDriver.getType().equals(Constants.HOMEANDLOCKER)) ){
-            break;
-        //No problem we pass
-        }else if(HomeOrLocker==2 && (SelectedDriver.getType().equals(Constants.LOCKERDELIVERY) || SelectedDriver.getType().equals(Constants.HOMEANDLOCKER))){
-            break;
-
-
-        //There is a Missmatch
-        }else{
-            //We get the type of the order the costumer wants in a string
-            String Type ;
-            if(HomeOrLocker==1){
-                Type=Constants.DELIVERYHOME;
-
+            DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
+            boolean DriverOld=DriverManager.CheckDriverExists(DriverFullName);
+            if (DriverOld){
+                if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equals(HomeOrLocker)){
+                    System.out.println("The Driver allready Exsits. The rest of the fields are filled accordingly %n");
+                    System.out.println("The Selected Driver also does "+HomeOrLocker);
+                    
+                    break;
+                }else{
+                    System.out.println("Driver Exists but does not do the type of delivery you selected");
+                    System.out.println("Select Another ");
+                }
+    
             }
             else{
-                Type=Constants.LOCKERDELIVERY;
-            }
-
-            //We let him choose Options to fix the problem
-            System.out.println("The Selected Driver does Deliveries to " + SelectedDriver.getType() + " " + "And you Choose delivery to " + Type );
-            System.out.println("In that case Before we procced we need to");
-            System.out.println();
-            System.out.println("1) Change The Order Type accordingly to the driver");
-            System.out.println("2) Add New Driver Accordinly to the order's Delivery Method");
-            Integer Option;
-
-
-            //If there are no Driver that do the type of delivery the user selected, we dont show this option
-            if(DriverManager.DriverByTypeExists(Type)){
-                System.out.println("3) Change The Driver to one that support the Delivery type");
-                Option= UserInterface.SelectNumber(3);  // the number represents the max options
-            }else{
-                Option= UserInterface.SelectNumber(2);
-            }
-
-
-
-            System.out.println();
-
-
-            //1) Change The Order Type accordingly to the driver
-            if (Option==1){
-                if( Type.equals(Constants.DELIVERYHOME)){
-                    HomeOrLocker=2;
-                }else{
-                    HomeOrLocker=1;
-                }
-
-            //2) Add New Driver Accordinly to the order's Delivery Method
-            }else if(Option==2){
-                String DriverFirstName = UserInterface.StringInput("Enter The First name of the Driver: ");
-                String DriverLastName = UserInterface.StringInput("Enter The Last name of the Driver: ");
-                String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
-                String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
-                Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
-                String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
-                Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber,HomeOrLocker);//The constructor takes Integer and converts the type accordingly
-                System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s" ,"The Driver Was Added Successfully",
-                "Driver ID: ",Driver.getId(),
-                "Driver First Name: ",Driver.getName(),
-                " Driver Last Name: ",Driver.getSurname(),
-                "Driver's Address: ",Driver.getAddress(),
-                " Driver's Email: ",Driver.getEmail(),
-                "Driver's AFM: ",Driver.getDriverAFM(),
-                " Driver's PLateNumber: ",Driver.getPlateNumber());
-            //3) Change The Driver to one that support the Delivery type
-            }else{
-                SelectedDriver = DriverManager.SelectDriver(Type);
-            }
-
+                System.out.println("The Driver does not exits, Creating new Entry");
+                ActionRecorder = DriverManager.NotFoundAddNew(DriverFullName,HomeOrLocker); // Other Filleds are prompted and filled via the NotFoundAddNew Method
+                break;
+            }            
         }
 
+        if(ActionRecorder!=null){
+            if((ActionRecorder.size()==2)){
+                HomeOrLocker = ActionRecorder.get(1);
+            }else{
+                DriverFullName = ActionRecorder.get(0);
+            }
+            }
+        SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName);
+        
 
-        }
-
-
+        System.out.println(SelectedDriver.getName());
 
         //Costumer Selection Part
         Costumers SelectedCostumer;
@@ -157,7 +98,7 @@ public class OrderManager{
 
 
         //Delivery to Home
-        if(HomeOrLocker == 1){
+        if(HomeOrLocker.equals(Constants.DELIVERYHOME)){
             OrdersHome NewOrderHome = new OrdersHome(SelectedCostumer, SelectedDriver);
             AllOrdersList.add(NewOrderHome);
             System.out.println("The order has been created successfully, Details of the order:");

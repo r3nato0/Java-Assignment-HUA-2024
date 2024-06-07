@@ -42,9 +42,9 @@ public class DriverManager{
 
 
     public static void CreateDefaultDrivers(){
-        driverList.add(new Drivers("Renato","Nake","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946",1));
-        driverList.add(new Drivers("George","Papadopoylos","dimitrakopoulou 105","georgepapadopoylos@gmail.com",13231021,"IZN5236",1));
-        driverList.add(new Drivers("Anthoni","Mantellos","Hrakleous 70","AMantellos@gmail.com",17231021,"IZN5236",1));
+        driverList.add(new Drivers("Renato","Nake","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946",Constants.DELIVERYHOME));
+        driverList.add(new Drivers("George","Papadopoylos","dimitrakopoulou 105","georgepapadopoylos@gmail.com",13231021,"IZN5236",Constants.LOCKERDELIVERY));
+        driverList.add(new Drivers("Anthoni","Mantellos","Hrakleous 70","AMantellos@gmail.com",17231021,"IZN5236",Constants.HOMEANDLOCKER));
         }
 
     public static void printTableDrivers() {
@@ -57,7 +57,9 @@ public class DriverManager{
                 System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAdress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
             }
         }
-    public static void NotFoundAddNew(String DriverFullName){
+    public static List<String> NotFoundAddNew(String DriverFullName,String OrderType){
+        List<String> ActionRecorder=new ArrayList<>();
+        String ReturnValue=null;
         Integer SpacePos = DriverFullName.indexOf(" ");
         String DriverFirstName = DriverFullName.substring(0, SpacePos);
         String DriverLastName = DriverFullName.substring(SpacePos+1, DriverFullName.length());
@@ -65,11 +67,91 @@ public class DriverManager{
         String DriversEmail = UserInterface.InputTypeEmail("Type Drivers Email: ");
         Integer DriverSAFM =UserInterface.InputTypeAFM("Type Drivers AFM: ");
         String DriversPlateNumber = UserInterface.InputTypePlateNumber("Type Drivers PlateNumber: ");
-        System.out.printf("%s %s\n %s\n %s\n","Choose By Typing :","1)For Home Deliveries","2)locker Deliveries","3)Home & Locker Deliveries");
-        Integer DriversType = UserInterface.SelectNumber(3);
-        driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,DriversType));
+        System.out.println("Choose the Driver's Category for the Orders");
+        if(OrderType.equals(Constants.DELIVERYHOME)){
+            System.out.printf(" %s %s %s %s\n %s \n","Press 1) To Put Driver to ",Constants.DELIVERYHOME," Category. Recomended since you choose: ",OrderType,"Press 2) To Put Driver to LockerDelivery Category");
+        }else{//Now we Will Handle MissMatch of Driver and Order delivery option
+            System.out.printf(" %s\n %s %s %s %s\n ","Press 1) To Put Drivers to HomeDelivery Category",
+            "Press 2) To Put Driver to ",Constants.LOCKERDELIVERY," Category. Recomended since you choose: ",OrderType);
+        }
+        System.out.printf("%s %s %s\n"," Press 3) To Put Driver to ", Constants.HOMEANDLOCKER, "Category. (Recommended) ");
+        String DriversType = UserInterface.InputTypeLockerORHome("");
+        
+        if(OrderType.equals(Constants.DELIVERYHOME)&& (DriversType.equals(Constants.DELIVERYHOME) || DriversType.equals(Constants.HOMEANDLOCKER))){
+            driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,DriversType));
+            System.out.println("Driver Added Sucesfully, continuing with order");
+        }
+        else if(OrderType.equals(Constants.LOCKERDELIVERY)&&(DriversType.equals(Constants.LOCKERDELIVERY) || DriversType.equals(Constants.HOMEANDLOCKER))){
+            driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,DriversType));
+            System.out.println("Driver Added Sucesfully, continuing with order");
+        }else{//MissMatch Will be Sorted Here
+            System.out.println("You had chosen "+OrderType+ " But you are trying to add Driver to a different category ");
+            System.out.println("Before We continue we need to sort this MissMatch. Your option are listed bellow");
+            System.out.println(" 1)Change Driver to "+OrderType+ " and continue with order.");
+            System.out.println(" 2)Change Order to "+DriversType+ " and continue with order.");
+            System.out.println(" 3)Abort adding this driver, and create a new one With the same Order type category");
+            Integer Option;
+            if(getCounterByType(OrderType)>0){
+                System.out.println(" 4)Select a different Driver from the list");
+                Option=UserInterface.SelectNumber(4);
+            }
+            else{
+                Option=UserInterface.SelectNumber(3);
+            }
+            switch (Option) {
+
+                case 1:
+                driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,OrderType));
+                ActionRecorder.add(DriverFirstName);
+                    break;
+
+
+                case 2:
+                    driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,OrderType));
+                    ActionRecorder.add(DriverFirstName);
+                    if(OrderType.equals(Constants.DELIVERYHOME)){
+                        ActionRecorder.add(Constants.LOCKERDELIVERY);
+                    }else if(OrderType.equals(Constants.LOCKERDELIVERY)){
+                        ActionRecorder.add(Constants.DELIVERYHOME);
+                    }
+                    break;
+
+
+
+                case 3:
+                    String NewDriverFullName =  AddNewDriverFromNewOrder(OrderType);
+                    ActionRecorder.add(NewDriverFullName);
+                    break;
+                case 4:
+                    String SelectedDriverFullName = SelectDriver(OrderType);
+                    ActionRecorder.add(SelectedDriverFullName);
+                    break;
+            }
+            
+
+        }
+        return ActionRecorder;
     }
 
+    public static String AddNewDriverFromNewOrder(String OrderType){
+        String DriverFirstName = UserInterface.StringInput("Enter The First name of the Driver: ");
+        String DriverLastName = UserInterface.StringInput("Enter The Last name of the Driver: ");
+        String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
+        String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
+        Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
+        String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
+        System.out.printf("%s %s\n %s\n %s\n","Choose By Typing :","1)For Home Deliveries","2)locker Deliveries","3)Home & Locker Deliveries");
+        Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber,OrderType);
+        System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s" ,"The Driver Was Added Successfully",
+        "Driver ID: ",Driver.getId(),
+        "Driver First Name: ",Driver.getName(),
+        " Driver Last Name: ",Driver.getSurname(),
+        "Driver's Address: ",Driver.getAddress(),
+        " Driver's Email: ",Driver.getEmail(),
+        "Driver's AFM: ",Driver.getDriverAFM(),
+        " Driver's PLateNumber: ",Driver.getPlateNumber());
+        return DriverFirstName+ " "+ DriverLastName;
+    }
     public static void AddNewDriver(){
         String DriverFirstName = UserInterface.StringInput("Enter The First name of the Driver: ");
         String DriverLastName = UserInterface.StringInput("Enter The Last name of the Driver: ");
@@ -78,8 +160,20 @@ public class DriverManager{
         Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
         String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
         System.out.printf("%s %s\n %s\n %s\n","Choose By Typing :","1)For Home Deliveries","2)locker Deliveries","3)Home & Locker Deliveries");
-        Integer DriversType = UserInterface.SelectNumber(3);
-        Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber,DriversType);
+        Integer SelectDeliveryType = UserInterface.SelectNumber(3);
+        String TYPE="";
+        switch (SelectDeliveryType) {
+            case 1:
+                TYPE=Constants.DELIVERYHOME;
+                break;
+            case 2:
+                TYPE=Constants.LOCKERDELIVERY;
+                break;
+            case 3:
+                TYPE=Constants.HOMEANDLOCKER;
+                break;
+        }
+        Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber,TYPE);
         System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s" ,"The Driver Was Added Successfully",
         "Driver ID: ",Driver.getId(),
         "Driver First Name: ",Driver.getName(),
@@ -89,12 +183,11 @@ public class DriverManager{
         "Driver's AFM: ",Driver.getDriverAFM(),
         " Driver's PLateNumber: ",Driver.getPlateNumber());
     }
-
     //we will pass as parameters the search criteria ,First parameter the status we search, and second parameter the instance of the order
 
-    public static Drivers  SelectDriver(String Type){
+    public static String  SelectDriver(String Type){
         Drivers Selecteddriver;
-        System.out.println("Only Drivers That Support the elivery Method are shown and able to get selected!");
+        System.out.println("Only Drivers That Support the Delivery Method are shown and able to get selected!");
         System.out.printf("%-5s %-17s %-20s %-30s %-20s %-19s %-10s %-20s%n ", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
         for(Drivers driver:driverList){
             if(driver.getType().equals(Type) || driver.getType().equals(Constants.HOMEANDLOCKER)){
@@ -118,7 +211,7 @@ public class DriverManager{
 
             
         }
-        return Selecteddriver;
+        return Selecteddriver.getDriverFullName();
     }
 
     public static boolean DriverByTypeExists(String Type){
