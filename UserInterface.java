@@ -333,7 +333,7 @@ public class UserInterface{
             String StringNumber = scanner.nextLine();
             try {
                 SelectedOption = Integer.parseInt(StringNumber);
-                if(SelectedOption > 1 && SelectedOption<=Max){
+                if(SelectedOption > 0 && SelectedOption<=Max){
 
                     break;
                 }
@@ -365,34 +365,42 @@ public class UserInterface{
         switch (Action) {
             case 1:
                 DriverManager.AddNewDriver();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 2:
                 CostumerManager.AddNewCostumer();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 3:
                 LockerManager.AddNewLocker();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 4:
-                OrderManager.Create();
+                OrderManager.CreateSecond();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 5:
                 OrderManager.ChangeDriver();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 6:
                 OrderManager.ChangeOrdersAddress();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 7:
                 OrderManager.CompleteOrder();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 8:
                 OrderManager.LeaveReview();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             // case 9:
@@ -400,13 +408,18 @@ public class UserInterface{
             //     break;
             case 10:
                 OrderManager.ProductsBoughtSummary();
+                pressAnyKeyToContinue();
                 ShowMenu();
                 break;
             case 11:
                 OrderManager.ShowDriverOrdes();
+                pressAnyKeyToContinue();
+                ShowMenu();
                 break;
             case 12:
                OrderManager.ShowAverageReviews();
+               pressAnyKeyToContinue();
+               ShowMenu();
                 break;
 
 
@@ -414,5 +427,11 @@ public class UserInterface{
                 break;
         }
     }
+    public static void pressAnyKeyToContinue() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Press any key to continue...");
+        scanner.nextLine();
+    }
+    
 }
 

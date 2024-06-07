@@ -3,7 +3,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Iterator;
-import java.sql.Driver;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class OrderManager{
@@ -15,11 +14,109 @@ public class OrderManager{
         return AllOrdersList;
     }
 
-    public static void Create() {
-        Lockers RandomLocker;
-        EachCompartmentOfLockers RandomCompartment;
-        Costumers SelectedCostumer;
+
+   public static void CreateSecond() {
+        
         Drivers SelectedDriver;
+        String DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
+        if (DriverManager.CheckDriverExists(DriverFullName)){
+            System.out.printf("The Driver allready Exsits, the rest of the fields are filled accordingly %n");
+
+        }
+        else{
+            System.out.println("The Driver does not exits, Creating new Entry");
+            DriverManager.NotFoundAddNew(DriverFullName); // Other Filleds are prompted and filled via the NotFoundAddNew Method
+        }
+
+        SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); 
+
+
+        Integer HomeOrLocker = UserInterface.InputTypeLockerORHome("Press : 1) to ship to the Costumers Adress\nPress : 2) to ship to A Locker Location");
+
+
+        //In case of Mismatch on the Driver and Delivery Methods
+        while (true) {
+        //No problem we pass
+        if(HomeOrLocker==1 && (SelectedDriver.getType().equals("HomeDelivery") || SelectedDriver.getType().equals("Home&Locker")) ){
+            break;
+        //No problem we pass
+        }else if(HomeOrLocker==2 && (SelectedDriver.getType().equals("LockerDelivery") || SelectedDriver.getType().equals("Home&Locker"))){
+            break;
+
+
+        //There is a Missmatch
+        }else{
+            //We get the type of the order the costumer wants in a string
+            String Type ;
+            if(HomeOrLocker==1){
+                Type="HomeDelivery";
+
+            }
+            else{
+                Type="LockerDelivery";
+            }
+
+            //We let him choose Options to fix the problem
+            System.out.println("The Selected Driver does Deliveries to " + SelectedDriver.getType() + " " + "And you Choose delivery to " + Type );
+            System.out.println("In that case Before we procced we need to");
+            System.out.println();
+            System.out.println("1) Change The Order Type accordingly to the driver");
+            System.out.println("2) Add New Driver Accordinly to the order's Delivery Method");
+            Integer Option;
+
+
+            //If there are no Driver that do the type of delivery the user selected, we dont show this option
+            if(DriverManager.DriverByTypeExists(Type)){
+                System.out.println("3) Change The Driver to one that support the Delivery type");
+                Option= UserInterface.SelectNumber(3);  // the number represents the max options
+            }else{
+                Option= UserInterface.SelectNumber(2);
+            }
+
+
+
+            System.out.println();
+
+
+            //1) Change The Order Type accordingly to the driver
+            if (Option==1){
+                if( Type.equals("HomeDelivery")){
+                    HomeOrLocker=2;
+                }else{
+                    HomeOrLocker=1;
+                }
+
+            //2) Add New Driver Accordinly to the order's Delivery Method
+            }else if(Option==2){
+                String DriverFirstName = UserInterface.StringInput("Enter The First name of the Driver: ");
+                String DriverLastName = UserInterface.StringInput("Enter The Last name of the Driver: ");
+                String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
+                String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
+                Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
+                String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
+                Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber,HomeOrLocker);//The constructor takes Integer and converts the type accordingly
+                System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s" ,"The Driver Was Added Successfully",
+                "Driver ID: ",Driver.getId(),
+                "Driver First Name: ",Driver.getName(),
+                " Driver Last Name: ",Driver.getSurname(),
+                "Driver's Address: ",Driver.getAddress(),
+                " Driver's Email: ",Driver.getEmail(),
+                "Driver's AFM: ",Driver.getDriverAFM(),
+                " Driver's PLateNumber: ",Driver.getPlateNumber());
+            //3) Change The Driver to one that support the Delivery type
+            }else{
+                SelectedDriver = DriverManager.SelectDriver(Type);
+            }
+
+        }
+
+
+        }
+
+
+
+        //Costumer Selection Part
+        Costumers SelectedCostumer;
         String CostumerFullName =UserInterface.InputTypeStringWithSpace("Please Provide the full name of the Costumer (upper cases will be ignored)  (example: nikos papadopoylos): ");
         if(CostumerManager.CheckCostumerExists(CostumerFullName)){
             System.out.printf("The Costumer allready Exsits, the rest of the fields are filled accordingly %n");
@@ -28,19 +125,12 @@ public class OrderManager{
             System.out.println("The Costumer does not exits, Creating new Entry");
             CostumerManager.NotFoundAddNew(CostumerFullName); // Other Fildes are prompted and filled via the NotFoundAddNew Method
         }
-
-        String DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
-        if (DriverManager.CheckDriverExists(DriverFullName)){
-            System.out.printf("The Driver allready Exsits, the rest of the fields are filled accordingly %n");
-        }
-        else{
-            System.out.println("The Driver does not exits, Creating new Entry");
-            DriverManager.NotFoundAddNew(DriverFullName); // Other Filleds are prompted and filled via the NotFoundAddNew Method
-        }
-
-        SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); 
         SelectedCostumer = CostumerManager.GetCurrentCostumerByFullName(CostumerFullName);
         
+
+
+        //Selection of Products part
+        // The exercises requires 2 product bought max, i did it for unmetered amount
         while (true) {
             Products product = ProductManager.GetProductByNameORId();
             if(product.getAvailableQuantity()>0){
@@ -54,21 +144,32 @@ public class OrderManager{
             boolean addAnotherProduct = UserInterface.InputTypeBoolean("Add another product to the bucket;  ");
 
             if (!addAnotherProduct) {
-                break;
+                break;//user want no other products, we continue
             }
         }
+
+
+        // a Case where the first product the costumer wants has 0 quantity, but he also does not wish any other product to buy
         if (SelectedCostumer.getProductsInBucket().size()==0){
-            System.out.println("The Costumer does not want any other product, the order has been canceled,returning to Main Menu");
+            System.out.println("The Costumer does not want any product, the order has been canceled,returning to Main Menu");
             UserInterface.ShowMenu();
         }
-        Integer HomeOrLocker = UserInterface.InputTypeLockerORHome("Press 1 to ship to the Costumers Adress,Press 2 to ship to A Locker Location");
+
+
+        //Delivery to Home
         if(HomeOrLocker == 1){
             OrdersHome NewOrderHome = new OrdersHome(SelectedCostumer, SelectedDriver);
             AllOrdersList.add(NewOrderHome);
             System.out.println("The order has been created successfully, Details of the order:");
             PrintOrder(NewOrderHome);
         }
+
+
+        //Delivery to lockers
+
         else{
+            Lockers RandomLocker;
+            EachCompartmentOfLockers RandomCompartment;
             RandomLocker = LockerManager.getRandomFreeLocker();
             if(RandomLocker!=null){
                 RandomCompartment = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
@@ -76,11 +177,10 @@ public class OrderManager{
                 AllOrdersList.add(OrdersLocker);
                 System.out.println("The order has been created successfully, Details of the order:");
                 PrintOrder(OrdersLocker);
-
             }else{
-                System.out.println("There are no Empty Lockers at the moments, sorry the order has been canceled");
-            }
-        }
+                System.out.println("There are no avaiable Lockers, The order has been canceled");
+            }}
+
 
 }
 
@@ -244,19 +344,85 @@ public static void printAllOrders() {
     }
 
     public static void ChangeDriver(){
-        Orders SelectedOrder = OrderManager.SelectOrder();
+        //First We need to make sure there are Pending Order
+        //We need to make sure that there are Drivers that do the type of delivery
+        //Choosing the same driver for the Change of DriverOrder is unecessary, so it will not be allowed
+        Orders SelectedOrder=null;
+        System.out.println("Showing Only Pending Orders that can be changed"); //There is no need to show all orders, in case there are 100 orders or example it would become annoying
+        System.out.println();
+        boolean PendingOrders=false;
+        for(Orders order: AllOrdersList){
+            if(order.getStatus().equals("Pending")){
+                PrintOrder(order); //printing the pending order
+                PendingOrders=true;
+            }
+        }
 
-        while (true) {
+
+        while (PendingOrders) {
+            SelectedOrder = SelectOrder();
+            if(SelectedOrder.getStatus().equals("Pending")){  // we select and order from above
+                break;
+            }
+            else{
+                System.out.println("The Selected Order has been completed, Please only select from the Pending Orders above"); // in case the user uses an id of an order that has been completed, even tho is not shown above
+            }
+        }
+
+
+        String TypeOrder;
+
+        if(SelectedOrder instanceof OrdersHome){
+            TypeOrder="HomeDelivery";
+        }else{
+            TypeOrder="LockerDelivery";
+        } // we get the order type, we could have used a getter from the order, but i think this way is better
+
+        
+        boolean loopCompleted = false; // in case there are no drivers with The OrderType Selected // we print in the end that the there are no avaiable drivers to select
+        Integer ShowDriverCounter=1;
+        while (PendingOrders && (DriverManager.getCounterByType(TypeOrder)>1)) {
+            if(ShowDriverCounter==1){
+                System.out.println("----------------------------------------------------------------------------------------------------------------------------------Showing Only Drivers That can do "+TypeOrder);
+                System.out.printf("%-5s %-17s %-20s %-25s %-35s %-10s %-20s %-20s \n", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
+                System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+                for(Drivers drivers:DriverManager.getDriverList()){
+                    if((drivers.getType().equals(TypeOrder)|| drivers.getType().equals("Home&Locker"))&& (!SelectedOrder.getDriverFullName().equals(drivers.getDriverFullName()))){
+                        System.out.printf("%-5d %-17s %-20s %-25s %-35s %-10d %-20s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAdress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
+                    }
+                }
+                System.out.println("Select Driver, Look The Abode drivers For reference.\n");
+                System.out.println();
+                ShowDriverCounter++;
+            }
+
+
             String DriverName = UserInterface.InputTypeStringWithSpace("Type the Drivers Full name :");
             if(DriverManager.CheckDriverExists(DriverName)){
                 Drivers driver = DriverManager.GetCurrentDriverByFullName(DriverName);
-                SelectedOrder.setNewDriver(driver);
-                System.out.println("The Driver Has Been Changed");
-                PrintOrder(SelectedOrder);
-                break;
+                if((driver.getType().equals(TypeOrder)|| driver.getType().equals("Home&Locker"))&& (!SelectedOrder.getDriverFullName().equals(driver.getDriverFullName()))){
+                    SelectedOrder.setNewDriver(driver);
+                    PrintOrder(SelectedOrder);
+                    System.out.println();
+                    System.out.println("The Driver Has Been Changed");
+                    loopCompleted=true;
+                    break;
+                }else if ((SelectedOrder.getDriverFullName().equals(driver.getDriverFullName()))){
+                    System.out.println("You gave the name of the Current Driver, Select another one");
+                }else{
+                    System.out.println("The Driver cannot be selected he does "+ TypeOrder);
+                }
             }else{
                 System.out.println("That Driver Does Not Exist");
             }
+            
+        }
+
+        if(!PendingOrders){
+            System.out.println("All Orders have been completed");
+        }else if (!loopCompleted){
+            System.out.println("There are no drivers avaiable that can do "+ TypeOrder + " Except the current one");
+            System.out.println("Returning to Menu");
         }
         
     }
@@ -266,8 +432,8 @@ public static void printAllOrders() {
         Orders SelectedOrder=null;
         boolean ValidOrder =false;
         Integer OrderId;
-        OrderManager.printAllOrders();
-        System.out.println("Printing all orders for reference");
+
+
         while (true) {
             OrderId = UserInterface.InputTypeIntegerNoLimit("Please type the number id of the order:");
             if(OrderId<=AllOrdersList.size()){

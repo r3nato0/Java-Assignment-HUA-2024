@@ -3,22 +3,39 @@ public class Drivers extends  Person{
     private int Driverid;
     private int DriverAFM;
     private String PlateNumber;
-    
+    private String Type;
 
-    public Drivers(String Name,String Surname,String Address,String Email,int DriverAFM , String PlateNumber){
+    public Drivers(String Name,String Surname,String Address,String Email,int DriverAFM , String PlateNumber,Integer Select){ //pass 1,2 or 3 in Select and the type driver will be filled acordingly inside the
         super(Name,Surname,Address,Email);
         this.Driverid = nextId++;
         this.DriverAFM = DriverAFM;
         this.PlateNumber= PlateNumber;
-        
+        if(Select==1){
+            Type="HomeDelivery";
+        }else if (Select==2){
+            Type="LockerDelivery";
+
+        }else if( Select==3){
+            Type="Home&Locker";
+        }
     }
 
+
+    public String getType(){
+        return this.Type;
+    }
+
+    public void getType(String Type){
+        this.Type = Type;
+    }
+
+    
     public String getName(){
         return super.getName();
     }
 
     public String getDriverFullName(){
-        return super.getName()+ " "  + super.getSurname();
+        return super.getName()+ " " + super.getSurname();
     }
 
     public String getSurname(){
