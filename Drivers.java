@@ -11,12 +11,12 @@ public class Drivers extends  Person{
         this.DriverAFM = DriverAFM;
         this.PlateNumber= PlateNumber;
         if(Select==1){
-            Type="HomeDelivery";
+            Type=Constants.DELIVERYHOME;
         }else if (Select==2){
-            Type="LockerDelivery";
+            Type=Constants.LOCKERDELIVERY;
 
         }else if( Select==3){
-            Type="Home&Locker";
+            Type=Constants.HOMEANDLOCKER;
         }
     }
 

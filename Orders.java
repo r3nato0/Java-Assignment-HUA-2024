@@ -28,9 +28,10 @@ public abstract class Orders{
             this.CostumerLastName = costumer.getSurname();
             this.DriverFirstName = Driver.getName();
             this.DriverLastName = Driver.getSurname();
+
             this.costumerid = costumer.getId(); // will help for the ratins part
             this.OrderDateTime = OrderManager.CurrentDateTime();
-            this.Status = "Pending";
+            this.Status = Constants.PENDING;
             this.CostumerRating = new Rating(this);
 
             this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
@@ -72,7 +73,7 @@ public abstract class Orders{
 
 
     public void setRating(Integer Rating){
-        if(this.Status.equals("Completed")){
+        if(this.Status.equals(Constants.COMPLETED)){
             CostumerRating.setCostumerRating(Rating);
         }
         else{
@@ -147,14 +148,14 @@ public abstract class Orders{
 
     }
     public void setStatusPending(){
-        this.Status = "Pending";
-        CostumerRating.setStatus("Pending");
+        this.Status = Constants.PENDING;
+        CostumerRating.setStatus(Constants.PENDING);
     }
 
 
     public void setStatusCompleted(){
-        this.Status = "Completed";
-        CostumerRating.setStatus("Completed");
+        this.Status = Constants.COMPLETED;
+        CostumerRating.setStatus(Constants.COMPLETED);
     }
     public void setOrderDateTime(String OrderDateTime){
         this.OrderDateTime = OrderDateTime;

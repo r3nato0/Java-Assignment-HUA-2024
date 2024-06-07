@@ -97,7 +97,7 @@ public class DriverManager{
         System.out.println("Only Drivers That Support the elivery Method are shown and able to get selected!");
         System.out.printf("%-5s %-17s %-20s %-30s %-20s %-19s %-10s %-20s%n ", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
         for(Drivers driver:driverList){
-            if(driver.getType().equals(Type) || driver.getType().equals("Home&Locker")){
+            if(driver.getType().equals(Type) || driver.getType().equals(Constants.HOMEANDLOCKER)){
                 System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",driver.getDriverid(),driver.getName(),driver.getSurname(),driver.getAdress(),driver.getEmail(),driver.getDriverAFM(),driver.getPlateNumber(),driver.getType());
             }
         }
@@ -106,7 +106,7 @@ public class DriverManager{
             String DriversFullName = UserInterface.InputTypeStringWithSpace("Select The Driver by typing the full name as Shown Above");
             boolean Exists = CheckDriverExists(DriversFullName);
             Selecteddriver = GetCurrentDriverByFullName(DriversFullName);
-            if(Exists && (Selecteddriver.getType().equals(Type)||Selecteddriver.getType().equals("Home&Locker"))){
+            if(Exists && (Selecteddriver.getType().equals(Type)||Selecteddriver.getType().equals(Constants.HOMEANDLOCKER))){
                 System.out.println("The Driver Succesfuly Selected");
                 break;
             }else if(!Exists){
@@ -124,7 +124,7 @@ public class DriverManager{
     public static boolean DriverByTypeExists(String Type){
         boolean isValid = false;
         for(Drivers driver:driverList){
-            if (driver.getType().equals(Type)||driver.getType().equals("Home&Locker")){
+            if (driver.getType().equals(Type)||driver.getType().equals(Constants.HOMEANDLOCKER)){
                 isValid = true;
                 break;
             }
@@ -134,7 +134,7 @@ public class DriverManager{
     public static Integer getCounterByType(String Type){
         Integer Counter = 0;
         for(Drivers driver:driverList){
-            if (driver.getType().equals(Type)||driver.getType().equals("Home&Locker")){
+            if (driver.getType().equals(Type)||driver.getType().equals(Constants.HOMEANDLOCKER)){
                 Counter+=1;
 
             }

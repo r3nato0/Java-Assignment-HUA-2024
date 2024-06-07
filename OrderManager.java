@@ -37,10 +37,10 @@ public class OrderManager{
         //In case of Mismatch on the Driver and Delivery Methods
         while (true) {
         //No problem we pass
-        if(HomeOrLocker==1 && (SelectedDriver.getType().equals("HomeDelivery") || SelectedDriver.getType().equals("Home&Locker")) ){
+        if(HomeOrLocker==1 && (SelectedDriver.getType().equals(Constants.DELIVERYHOME) || SelectedDriver.getType().equals(Constants.HOMEANDLOCKER)) ){
             break;
         //No problem we pass
-        }else if(HomeOrLocker==2 && (SelectedDriver.getType().equals("LockerDelivery") || SelectedDriver.getType().equals("Home&Locker"))){
+        }else if(HomeOrLocker==2 && (SelectedDriver.getType().equals(Constants.LOCKERDELIVERY) || SelectedDriver.getType().equals(Constants.HOMEANDLOCKER))){
             break;
 
 
@@ -49,11 +49,11 @@ public class OrderManager{
             //We get the type of the order the costumer wants in a string
             String Type ;
             if(HomeOrLocker==1){
-                Type="HomeDelivery";
+                Type=Constants.DELIVERYHOME;
 
             }
             else{
-                Type="LockerDelivery";
+                Type=Constants.LOCKERDELIVERY;
             }
 
             //We let him choose Options to fix the problem
@@ -80,7 +80,7 @@ public class OrderManager{
 
             //1) Change The Order Type accordingly to the driver
             if (Option==1){
-                if( Type.equals("HomeDelivery")){
+                if( Type.equals(Constants.DELIVERYHOME)){
                     HomeOrLocker=2;
                 }else{
                     HomeOrLocker=1;
@@ -203,9 +203,9 @@ public static void printAllOrders() {
             String Status = ordersHome.getStatus();
             Integer rating = ordersHome.getRating();
             String Rating;
-            if (rating == null&& ordersHome.getStatus().equals("Completed")) {
+            if (rating == null&& ordersHome.getStatus().equals(Constants.COMPLETED)) {
                 Rating = "Not Rated yet!";
-                }else if (rating == null&& ordersHome.getStatus().equals("Pending")){
+                }else if (rating == null&& ordersHome.getStatus().equals(Constants.PENDING)){
                     Rating = "Order Not finished";
                 }
                  else {
@@ -244,9 +244,9 @@ public static void printAllOrders() {
             String Status = orderslocker.getStatus();
             Integer rating = orderslocker.getRating();
             String Rating;
-            if (rating == null&& orderslocker.getStatus().equals("Completed")) {
+            if (rating == null&& orderslocker.getStatus().equals(Constants.COMPLETED)) {
                 Rating = "Not Rated yet!";
-                }else if (rating == null&& orderslocker.getStatus().equals("Pending")){
+                }else if (rating == null&& orderslocker.getStatus().equals(Constants.PENDING)){
                     Rating = "Order Not finished";
                 }
                  else {
@@ -352,7 +352,7 @@ public static void printAllOrders() {
         System.out.println();
         boolean PendingOrders=false;
         for(Orders order: AllOrdersList){
-            if(order.getStatus().equals("Pending")){
+            if(order.getStatus().equals(Constants.PENDING)){
                 PrintOrder(order); //printing the pending order
                 PendingOrders=true;
             }
@@ -361,7 +361,7 @@ public static void printAllOrders() {
 
         while (PendingOrders) {
             SelectedOrder = SelectOrder();
-            if(SelectedOrder.getStatus().equals("Pending")){  // we select and order from above
+            if(SelectedOrder.getStatus().equals(Constants.PENDING)){  // we select and order from above
                 break;
             }
             else{
@@ -373,9 +373,9 @@ public static void printAllOrders() {
         String TypeOrder;
 
         if(SelectedOrder instanceof OrdersHome){
-            TypeOrder="HomeDelivery";
+            TypeOrder=Constants.DELIVERYHOME;
         }else{
-            TypeOrder="LockerDelivery";
+            TypeOrder=Constants.LOCKERDELIVERY;
         } // we get the order type, we could have used a getter from the order, but i think this way is better
 
         
@@ -387,7 +387,7 @@ public static void printAllOrders() {
                 System.out.printf("%-5s %-17s %-20s %-25s %-35s %-10s %-20s %-20s \n", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
                 System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 for(Drivers drivers:DriverManager.getDriverList()){
-                    if((drivers.getType().equals(TypeOrder)|| drivers.getType().equals("Home&Locker"))&& (!SelectedOrder.getDriverFullName().equals(drivers.getDriverFullName()))){
+                    if((drivers.getType().equals(TypeOrder)|| drivers.getType().equals(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equals(drivers.getDriverFullName()))){
                         System.out.printf("%-5d %-17s %-20s %-25s %-35s %-10d %-20s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAdress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
                     }
                 }
@@ -400,7 +400,7 @@ public static void printAllOrders() {
             String DriverName = UserInterface.InputTypeStringWithSpace("Type the Drivers Full name :");
             if(DriverManager.CheckDriverExists(DriverName)){
                 Drivers driver = DriverManager.GetCurrentDriverByFullName(DriverName);
-                if((driver.getType().equals(TypeOrder)|| driver.getType().equals("Home&Locker"))&& (!SelectedOrder.getDriverFullName().equals(driver.getDriverFullName()))){
+                if((driver.getType().equals(TypeOrder)|| driver.getType().equals(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equals(driver.getDriverFullName()))){
                     SelectedOrder.setNewDriver(driver);
                     PrintOrder(SelectedOrder);
                     System.out.println();
@@ -489,7 +489,7 @@ public static void printAllOrders() {
         if(order instanceof OrdersHome ){
             OrdersHome ordersHome = (OrdersHome) order;
             String status = ordersHome.getStatus();
-            if(status.equals("Completed")){
+            if(status.equals(Constants.COMPLETED)){
                 System.out.println("The order has already been completed");
             }else{
                 ordersHome.setStatusCompleted();
@@ -500,7 +500,7 @@ public static void printAllOrders() {
         }else{
             OrdersLocker OrdersLocker = (OrdersLocker) order;
             String status = OrdersLocker.getStatus();
-            if(status.equals("Completed")){
+            if(status.equals(Constants.COMPLETED)){
                 System.out.println("The order has already been completed");
             }else{
                 OrdersLocker.setStatusCompleted();
@@ -533,9 +533,9 @@ public static void printAllOrders() {
                 String Status = SelectedOrder.getStatus();
                 Integer rating = SelectedOrder.getRating();
                 String Rating;
-                if (rating == null&& SelectedOrder.getStatus().equals("Completed")) {
+                if (rating == null&& SelectedOrder.getStatus().equals(Constants.COMPLETED)) {
                     Rating = "Not Rated yet!";
-                    }else if (rating == null&& SelectedOrder.getStatus().equals("Pending")){
+                    }else if (rating == null&& SelectedOrder.getStatus().equals(Constants.PENDING)){
                         Rating = "Order Not finished";
                     }
                      else {
@@ -569,9 +569,9 @@ public static void printAllOrders() {
                 String Status = orderslocker.getStatus();
                 Integer rating = orderslocker.getRating();
                 String Rating;
-                if (rating == null&& orderslocker.getStatus().equals("Completed")) {
+                if (rating == null&& orderslocker.getStatus().equals(Constants.COMPLETED)) {
                 Rating = "Not Rated yet!";
-                }else if (rating == null&& orderslocker.getStatus().equals("Pending")){
+                }else if (rating == null&& orderslocker.getStatus().equals(Constants.PENDING)){
                     Rating = "Order Not finished";
                 }
                  else {
@@ -596,13 +596,13 @@ public static void printAllOrders() {
         public static void LeaveReview(){
             Orders order = SelectOrder();
             System.out.println("Rate between 1 and 10: ");
-            if(order.getStatus().equals("Completed") && order.getRating()==null){
+            if(order.getStatus().equals(Constants.COMPLETED) && order.getRating()==null){
                 Integer RatingNumb = UserInterface.SelectNumber(10);
                 order.setRating(RatingNumb);
                 System.out.println("Thank you for rating our service");
                 PrintOrder(order);
                 
-            }else if(order.getStatus().equals("Completed") && order.getRating()!=null){
+            }else if(order.getStatus().equals(Constants.COMPLETED) && order.getRating()!=null){
                 System.out.println("The Order Has already been rated, do you wish to change the rating?");
                 boolean ChangeRating = UserInterface.InputTypeBoolean("Type Yes/y/yes/YES for yes and N/no/NO/No for no");
                 if(ChangeRating){
@@ -628,7 +628,7 @@ public static void ShowAverageReviews() {
 
     // we get the 
     for (Orders order : AllOrdersList) {
-        if (order.getStatus().equals("Completed") && order.getRating() != null) {
+        if (order.getStatus().equals(Constants.COMPLETED) && order.getRating() != null) {
             ratedOrders.add(order);
             customerNames.add(order.getCostumerFullName()); 
         }
@@ -782,8 +782,8 @@ public static void ShowDriverOrdes() {
     //HEADER OF THE PRINT
     System.out.println();
     System.out.printf(" %-25s %-25s %-25s %-25s %-25s %-25s | %-15s\n","Driver's ID",
-    "Driver's Name","PendingHomOrders",
-    "CompletedHomOrders","PendingLockersOrders",
+    "Driver's Name",Constants.PENDING,"HomOrders",
+    "CompletedHomOrders",Constants.PENDING,"LockersOrders",
     "CompletedLockersOrders","Total Per Driver");
     System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
@@ -801,13 +801,13 @@ public static void ShowDriverOrdes() {
         Integer TotalperDriver=0;
         for (Orders orders : AllOrdersList) {
             if (orders.getDriverFullName().equals(driver.getDriverFullName())) {
-                if (orders.getStatus().equals("Pending")) {
+                if (orders.getStatus().equals(Constants.PENDING)) {
                     if (orders instanceof OrdersHome) {
                         PendingHomeOrders++;
                     } else if (orders instanceof OrdersLocker) {
                         PendingLockersOrders++;
                     }
-                } else if (orders.getStatus().equals("Completed")) {
+                } else if (orders.getStatus().equals(Constants.COMPLETED)) {
                     if (orders instanceof OrdersHome) {
                         CompletedHomeOrders++;
                     } else if (orders instanceof OrdersLocker) {
