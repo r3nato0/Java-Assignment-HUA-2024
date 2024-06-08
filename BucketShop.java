@@ -22,7 +22,7 @@ public class BucketShop {
 
 
     public void addProductToBucket(Products product, int quantity) {
-        customerBucket.add(new ProductsInBucket(product, quantity));
+        customerBucket.add(new ProductsInBucket(product, quantity,this.costumers));
     }
 
     // Method to get the list of products in the bucket

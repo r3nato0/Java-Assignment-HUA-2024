@@ -48,13 +48,14 @@ public class OrderManager{
             if((ActionRecorder.size()==2)){
                 HomeOrLocker = ActionRecorder.get(1);
             }else{
+                System.out.println(ActionRecorder.get(0));
                 DriverFullName = ActionRecorder.get(0);
+                
             }
             }
+
         SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName);
         
-
-        System.out.println(SelectedDriver.getName());
 
         //Costumer Selection Part
         Costumers SelectedCostumer;
@@ -664,7 +665,7 @@ public static void ProductsBoughtSummary() {
     Integer Index = 0; // and index that will help witht he iteration of the productquantity loop
     Integer Total = 0; // will store the total quantitys number
     // we will iterate every name from the set product name, get the name, and from that the barcode and the category, and the total quantities we have
-    System.out.printf(" %-20s %-20s %-20s\n","ProductName","ProductBarcode","Product's Total Quantity Bought");
+    System.out.printf(" %-20s %-20s %-20s %-20s\n","CostumersName","ProductName","ProductBarcode","Product's Total Quantity Bought");
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
     System.out.println();
     Iterator<String> iteratorSecond = productName.iterator();
@@ -716,16 +717,19 @@ public static void ProductsBoughtSummary() {
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
     System.out.printf(" %-20s %-30d \n","Total:",Total);
     System.out.println();
-
+    for (ProductsInBucket productInBucket : productsBought) {
+        System.out.println(productInBucket.getCostumersFullName());
+        System.out.println(productInBucket.getProductName());
+    }
 
 } 
 public static void ShowDriverOrdes() {
     //HEADER OF THE PRINT
     System.out.println();
-    System.out.printf(" %-25s %-25s %-25s %-25s %-25s %-25s | %-15s\n","Driver's ID",
-    "Driver's Name",Constants.PENDING,"HomOrders",
-    "CompletedHomOrders",Constants.PENDING,"LockersOrders",
-    "CompletedLockersOrders","Total Per Driver");
+    System.out.printf(" %-25s %-25s %-25s %-25s %-25s %-25s %-25s | %-15s\n","Driver's ID","DriverCategory",
+    "Driver's Name","Pending Home Orders","Completed Home Orders",
+    "Pending Lockers Orders","Completed Lockers Orders",
+    "Total Per Driver");
     System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
     Integer AllOrderCount =0;
@@ -765,7 +769,7 @@ public static void ShowDriverOrdes() {
         AllOrderCount+=TotalperDriver;
         //i will not show drivers that have no orders,(my though processis that if there are for example 100 drivers, there is no need to show the ones without orders)
         if(TotalperDriver>0){
-            System.out.printf(" %-25d %-25s %-25d %-25d %-25d %-25d | %-25d\n",driver.getDriverid(), driver.getDriverFullName(),  PendingHomeOrders,
+            System.out.printf(" %-25d %-25s %-25s %-25d %-25d %-25d %-25d | %-15d\n",driver.getDriverid(),driver.getType(), driver.getDriverFullName(),  PendingHomeOrders,
             CompletedHomeOrders,
             PendingLockersOrders,
             CompletedLockersOrders,TotalperDriver);
@@ -774,7 +778,7 @@ public static void ShowDriverOrdes() {
     if(AllOrderCount>0){
         System.out.println();
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf(" %-25s %-25s %-25d %-25d %-25d %-25d | %-25d\n","Total Of All Orders:","--------",PendingHomeOrdersTotal,CompletedHomeOrdersTotal,
+        System.out.printf(" %-25s %-25s %-25s %-25d %-25d %-25d %-25d | %-25d\n","Total Of All Orders:","--------","--------",PendingHomeOrdersTotal,CompletedHomeOrdersTotal,
         PendingLockersOrdersTotal,CompletedLockersOrdersTotal,AllOrderCount);
         System.out.println();
     }else{

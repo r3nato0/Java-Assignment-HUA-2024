@@ -33,7 +33,7 @@ public abstract class Orders{
             this.OrderDateTime = OrderManager.CurrentDateTime();
             this.Status = Constants.PENDING;
             this.CostumerRating = new Rating(this);
-
+            
             this.ItemsBought = new ArrayList<>(costumer.getProductsInBucket());
             costumer.clearBucket();
 

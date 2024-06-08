@@ -6,16 +6,20 @@ public class ProductsInBucket {
     private Integer Productid;
     private String ProductBrand;
     private Long barcode;
-
-    public ProductsInBucket(Products product, int quantity) {
+    private Costumers costumer;
+    public ProductsInBucket(Products product, int quantity,Costumers costumer) {
         this.Productid = product.getId();
         this.ProductName = product.getName();
         this.ProductCategory = product.getCategory();
         this.ProductBrand = product.getBrand();
         this.quantity = quantity;
         this.barcode=product.getBarcode();
+        this.costumer=costumer;
     }
 
+    public String getCostumersFullName(){
+        return costumer.getCostumersFullName();
+    }
 
     public Long getBarcode(){
     return this.barcode;

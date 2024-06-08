@@ -1,18 +1,28 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Costumers extends Person {
     private int Costumerid;
     private BucketShop BucketShop;
-
+    private List<Orders> itemsBought;
 
 
     public Costumers(String Name,String Surname,String Address,String Email){
         super(Name,Surname,Address,Email);
         this.Costumerid = super.getId();
         this.BucketShop = new BucketShop(this);
+        // this.itemsBought = new ArrayList<>();
 
     }
 
+
+    // public List<Orders> getItemsBought(){
+    //     return this.itemsBought;
+    // }
+
+    // public void setItemsBought(List<Orders> itemsBought){
+    //     this.itemsBought =itemsBought;
+    // }
 
     
     public BucketShop getBucketShop(){
@@ -25,6 +35,10 @@ public class Costumers extends Person {
 
     public String getSurname(){
         return super.getSurname();
+    }
+
+    public String getCostumersFullName(){
+        return super.getName() +" "+super.getSurname();
     }
     public String getEmail(){
         return super.getEmail();
