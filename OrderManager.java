@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Locale.Category;
 import java.util.Iterator;
 import java.sql.Driver;
 import java.time.LocalDateTime;
@@ -403,20 +404,68 @@ public static void printAllOrders() {
         String NewAddress=null;
         boolean TryAgain = true;
         while (TryAgain) {
-        Orders order = SelectOrder();
-        if (order instanceof OrdersHome) {
-                ordersHome = (OrdersHome) order;
-                NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
-                isvalid = true;
-                break;}
-        else{
-                System.out.println("The order you selected is a Locker Order, the address cannot be changed, sorry");
-                TryAgain = UserInterface.InputTypeBoolean("Try Again? type (y/yes/Y/YES) for yes or (N/n/no/NO) for no");
-                
+        Integer SelectMethod = UserInterface.SelectNumber(2);
+        System.out.println("Enter 1 to Select Order via ID, Enter 2 to Select Order via Costumers Name");
 
-                
+
+        //Selectiong By id
+        if(SelectMethod==1){
+            Orders order = SelectOrder();
+            if (order instanceof OrdersHome && order.getStatus().equals(Constants.PENDING)) {
+                    ordersHome = (OrdersHome) order;
+                    NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
+                    isvalid = true;
+                    ordersHome.setAddress(NewAddress);
+                    break;}
+
+            else if (order instanceof OrdersLocker ){
+                if(order.getStatus().equals(Constants.PENDING))
+                {
+                    System.out.println("The order you selected is a Locker Order, the address cannot be changed, sorry");
+                    TryAgain = UserInterface.InputTypeBoolean("Try Again? type (y/yes/Y/YES) for yes or (N/n/no/NO) for no");
+                }else{
+                    System.out.println("The order you selected is a lockers order but also is completed, either way the address cannot be changed");
+                }                   
+    
             }
+
+
+            //Selection By Costumer's Name
+            }else{
+                String SelectedCostumer = UserInterface.InputTypeStringWithSpace("Type the costumer's Full name");
+                Integer OrdersCounter=0;
+                Orders orderBycostumer=null;
+                for(Orders order:AllOrdersList){
+                    if(order.getDriverFullName().equals(SelectedCostumer) && order.getStatus().equals(Constants.PENDING)&& order instanceof OrdersHome){
+                        ordersHome = (OrdersHome) order;
+                        OrdersCounter++;
+                        
+                    }else if (order.getDriverFullName().equals(SelectedCostumer) && order.getStatus().equals(Constants.PENDING)&& order instanceof OrdersLocker){
+                        
+                    }
+                }
+                if(OrdersCounter==1){
+                    NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
+                    isvalid = true;
+                    ordersHome.setAddress(NewAddress);
+                    break;
+                }else{
+                    ordersHome=null;
+                    for(Orders order:AllOrdersList){
+                        if(order.getDriverFullName().equals(SelectedCostumer) && order.getStatus().equals(Constants.PENDING)&& order instanceof OrdersHome){
+                            PrintOrder(order);
+                        }
+                    }
+                    System.out.println("The costumer Has more than 1 pending orders, Specify by giving the id of the above table:");
+                    Orders Selectedorder;
+                    Integer OrderId= UserInterface.InputTypeNumberSingle("");
+                    for(Orders order:AllOrdersList){
+                        if(order.getOrderId()==OrderId && order.getCostumerFullName().equals(SelectedCostumer)&& order instanceof OrdersHome ){
+                            
+                        }
+                    }
         }
+
         if(isvalid){
             ordersHome.setAddress(NewAddress);
             System.out.println("The Order's Address has been changed: ");
@@ -427,8 +476,25 @@ public static void printAllOrders() {
 
 
     public static void CompleteOrder(){
-        Orders order = SelectOrder();
-        if(order instanceof OrdersHome ){
+        boolean OrderToCompelte=false;
+        Orders order=null;
+        for(Orders orders:AllOrdersList){
+            if (orders.getStatus().equals(Constants.PENDING)){
+                PrintOrder(orders);
+                OrderToCompelte=true;
+            }
+        }
+        
+ 
+        if(OrderToCompelte){
+            System.out.println("Printed all "+ Constants.PENDING +" Orders for reference");
+            order = SelectOrder();
+        }
+        else{
+            System.out.println("All the orders in the system have been completed!");
+        }
+
+        if(OrderToCompelte && order instanceof OrdersHome ){
             OrdersHome ordersHome = (OrdersHome) order;
             String status = ordersHome.getStatus();
             if(status.equals(Constants.COMPLETED)){
@@ -439,7 +505,7 @@ public static void printAllOrders() {
                 PrintOrder(order);
             }
 
-        }else{
+        }else if (OrderToCompelte && order instanceof OrdersLocker ){
             OrdersLocker OrdersLocker = (OrdersLocker) order;
             String status = OrdersLocker.getStatus();
             if(status.equals(Constants.COMPLETED)){
@@ -451,9 +517,7 @@ public static void printAllOrders() {
                 System.out.println("The Order Has been Completed!");
                 PrintOrder(order);
             }
-
         }
-
         
 
     }
@@ -535,30 +599,42 @@ public static void printAllOrders() {
 
         }
 
-        public static void LeaveReview(){
-            Orders order = SelectOrder();
-            System.out.println("Rate between 1 and 10: ");
-            if(order.getStatus().equals(Constants.COMPLETED) && order.getRating()==null){
-                Integer RatingNumb = UserInterface.SelectNumber(10);
-                order.setRating(RatingNumb);
-                System.out.println("Thank you for rating our service");
-                PrintOrder(order);
-                
-            }else if(order.getStatus().equals(Constants.COMPLETED) && order.getRating()!=null){
-                System.out.println("The Order Has already been rated, do you wish to change the rating?");
-                boolean ChangeRating = UserInterface.InputTypeBoolean("Type Yes/y/yes/YES for yes and N/no/NO/No for no");
-                if(ChangeRating){
-                    Integer RatingNumb = UserInterface.SelectNumber(10);
-                    order.setRating(RatingNumb);
-                    System.out.println("The rating of the order was succesfully changed");
-                    PrintOrder(order);
+        public static void LeaveReview() {
+
+            boolean orderExists = false;// will check if an order that can be completed exists
+
+            for (Orders order : AllOrdersList) {
+                if (order.getStatus().equals(Constants.COMPLETED) && order.getRating() == null) {
+                    orderExists = true; //it exists 
+                    PrintOrder(order); //print the valid order(s)
                 }
-            }else{
-                System.out.println("The order is still Pending, cannot Rate the order now");
             }
-
-
+    
+            if (!orderExists) {
+                System.out.println("There are no orders available for rating"); //no orders exists, method ends
+                return;
+            }
+    
+            Orders selectedOrder = SelectOrder();
+    
+            if (selectedOrder == null) {
+                System.out.println("No valid order was selected"); // a simple error handling (there is no point really, just adding it for good practise)
+                return;
+            }
+    
+            if (selectedOrder.getStatus().equals(Constants.COMPLETED) && selectedOrder.getRating() == null) {// prompt for rating
+                System.out.println("Rate between 1 and 10: ");
+                Integer ratingNumber = UserInterface.SelectNumber(10);
+                selectedOrder.setRating(ratingNumber);
+                System.out.println("Thank you for rating our service");
+                PrintOrder(selectedOrder);
+            } else { // order not finished or already rated
+                System.out.println("The order is not eligible for rating.");
+            }
         }
+    
+        
+    
 
     
 public static void ShowAverageReviews() {
@@ -621,78 +697,143 @@ public static void ShowAverageReviews() {
 
 }
 
+    // I will print for every costumer a summary of items bought, first for by barcode and then by category
+    // and in the end i will print from all the orders the total items bought by barcode/category
 public static void ProductsBoughtSummary() {
+
     List<ProductsInBucket> productsBought = new ArrayList<>(); // A list to store all the elements of all products bought
-    Set<String> barcodesPerCostumer = new HashSet<>();
+
+
+    //will use set so i dont store duplicates
+    Set<String> barcodesPerCostumer = new HashSet<>(); 
     Set<String> barcodesALL = new HashSet<>();
+    Set<String> CategoryPerCostumer = new HashSet<>();
+    Set<String> CategoryALL = new HashSet<>();
+
+
+
     // Collect all products bought from all orders
-    System.out.printf("%-30s %-30s %-30s %-30s \n","Costumer's Name","Costumer's Total Orders","Products Bought By Barcode","Quantity");
     for (Orders order : AllOrdersList) {
         List<ProductsInBucket> itemsBought = order.getProductsInOrder();
         productsBought.addAll(itemsBought);
     }
 
-
+    // will clear any values if exist in the sets, before we fill them
+    CategoryALL.clear();
     barcodesALL.clear();
+
+    //for every costumer now
+
     for(Costumers costumer:CostumerManager.getCostumersList()){
-        int totalOrderQuantity = 0;
-        barcodesPerCostumer.clear();
+        Integer totalOrderQuantity = 0;
+
+        //get the name
         String CurrentCostumer=costumer.getCostumersFullName();
-        Integer CurrentCostumerOrdersCount = CostumerManager.getCostumersTotalOrders(costumer.getId());
+        Integer CurrentCostumerOrdersCount = CostumerManager.getCostumersTotalOrders(costumer.getId()); //get the total orders of the costumer
+
+        //clear any previous values of the costumer before (if not the second ...third costumers will have the barcodes/categorys of the costumers before)
+        barcodesPerCostumer.clear();
+        CategoryPerCostumer.clear();
 
 
-        
+
+        //now for every costumer (we are inside the loop)
+        //we will add the barcodes/categorys bought
+        //but also we will add the barcodes/categorys to the sets of all costumers for the final total needed at the end
         for(ProductsInBucket item:productsBought){
-
             //we store all the barcodes to the set(all of them)
             barcodesALL.add(String.valueOf(item.getBarcode()));
-
+            CategoryALL.add(item.getProductCategory());
             //we store the costumers barcode to the set
             if(costumer.getCostumersFullName().equals(item.getCostumersFullName())){
                 barcodesPerCostumer.add(String.valueOf(item.getBarcode()));
             }
+            if(costumer.getCostumersFullName().equals(item.getCostumersFullName())){
+                CategoryPerCostumer.add(item.getProductCategory());
+            }
         }
 
 
 
-
-        System.out.println("--------------------------------------------------------------------------------------------------------------");
-        //for every barcode we will get its quantity bought from the costumer
+        // after we stored the costumers barocodes/categorys we will count their quantitys, first by barcode
         boolean FirstLoop=true;
+        System.out.printf("%-30s %-30s %-30s %-30s \n","Costumer's Name","Costumer's Total Orders","Products Bought By Barcode","Quantity Barcode","Products Bought By Category","Quantity Category");
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
         for(String barcodes:barcodesPerCostumer ){
-            Integer Quantity=0;
+            Integer QuantityBarcode=0;
             for(ProductsInBucket product:productsBought){
                 //if the user has bought the product 
                 if(costumer.getCostumersFullName().equals(product.getCostumersFullName()) && barcodes.equals(String.valueOf(product.getBarcode()))){
-                    Quantity+=product.getQuantity();
+                    QuantityBarcode+=product.getQuantity();
                     totalOrderQuantity+=product.getQuantity();
+
                 }
             }
-
+            // a simple statement that will help for the first print line, and then it will not print the costumers name again or orders total
             if(FirstLoop){
-                System.out.printf("%-30s %-30d %-30s %-30d \n",CurrentCostumer,CurrentCostumerOrdersCount,barcodes,Quantity);
+                System.out.printf("%-30s %-30d %-30s %-30d \n",CurrentCostumer,CurrentCostumerOrdersCount,barcodes,QuantityBarcode);
                 FirstLoop=false;
+            }else{
+                System.out.printf("%-30s %-30s %-30s %-30d \n","","",barcodes,QuantityBarcode);
+            }}
+
+
+
+
+        //finished by printing the costumers items by barcode bought, now we do the same for the category
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.println();
+        System.out.printf("%-30s %-30s %-30s %-30s \n","Costumer's Name","Costumer's Total Orders","Products Bought By Category","Quantity Category");
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+        boolean FLoop=true; 
+        Integer TotalQuantityCategory=0;
+        for(String Category:CategoryPerCostumer){
+            Integer QuantityCategory=0;
+            for(ProductsInBucket product:productsBought){
+                if(costumer.getCostumersFullName().equals(product.getCostumersFullName()) && Category.equals(product.getProductCategory())){
+                    QuantityCategory+=product.getQuantity();
+                    TotalQuantityCategory+=product.getQuantity();}
+            }
+            
+
+            if(FLoop){
+                System.out.printf("%-30s %-30d %-30s %-30d \n",CurrentCostumer,CurrentCostumerOrdersCount,Category,QuantityCategory);
+                FLoop=false;
             }
             else{
-                System.out.printf("%-30s %-30s %-30s %-30d \n","","",barcodes,Quantity);
+                System.out.printf("%-30s %-30s %-30s %-30d \n","","",Category,QuantityCategory);
             }
-
         }
-        System.out.println("--------------------------------------------------------------------------------------------------------------");
-        System.out.printf("%-30s %-30s %-30s %-30d \n","Totals of Costumer","--------","----------",totalOrderQuantity);
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        //System.out.printf(" %-30d\n ",totalOrderQuantity);
+        
+    //finished by printing the costumers items by category bought
+
+
+
+
+
+    // now we will print their total items bought.
+    System.out.println("--------------------------------------------------------------------------------------------------------------");
+    System.out.printf("%-30s %-30s %-30s %-30d \n","Totals of Costumer","--------","----------",totalOrderQuantity);
+    System.out.println();
+    System.out.println();
+    System.out.println();
+    //System.out.printf(" %-30d\n ",totalOrderQuantity);
+    
     }
 
+    // after the end of the above loop (costumers) we printed all the costumers products bought by barcode and category
+    //what remains now is printing from all the orders the categorys/barcodes bought
+
+
+    //printing all orders summary by barcode
     System.out.println();
     System.out.println();
     Integer TotalCounter=0;
     System.out.printf("---------------------------------------------------------------------------------------------All Orders Totals\n");
     System.out.printf(" %-30s %-30s %-30s\n","Total Orders","Barcodes","Quantity of each");
     System.out.println("--------------------------------------------------------------------------------------------------------------");
-    boolean FirstLoop=true;
+    boolean Ffloop=true;
     for(String barcodes:barcodesALL ){
     Integer Counter=0;
     for(ProductsInBucket product:productsBought){
@@ -701,17 +842,50 @@ public static void ProductsBoughtSummary() {
             TotalCounter+=product.getQuantity();
         }
     }
-    if(FirstLoop){
+    if(Ffloop){
         System.out.printf(" %-30d %-30s %-30d \n",AllOrdersList.size(),barcodes,Counter);
-        FirstLoop=false;
+        Ffloop=false;
     }else{
         System.out.printf(" %-30s %-30s %-30d \n","",barcodes,Counter);
+    }}
+    
+    System.out.println("--------------------------------------------------------------------------------------------------------------");
+    System.out.printf(" %-30s %-30s %-30d \n","Total Products Bought","",TotalCounter);
+    System.out.println();
+    System.out.println();
+
+
+
+    //printing all orders summary by Category, same logic as above
+    System.out.println();
+    System.out.println();
+    Integer TotalCounterCategory=0;
+    System.out.printf("---------------------------------------------------------------------------------------------All Orders Totals\n");
+    System.out.printf(" %-30s %-30s %-30s\n","Total Orders","Category","Quantity of each");
+    System.out.println("--------------------------------------------------------------------------------------------------------------");
+    boolean Floop=true;
+    for(String category:CategoryALL ){
+    Integer CounterCategory=0;
+    for(ProductsInBucket product:productsBought){
+        if(category.equals(product.getProductCategory())){
+            CounterCategory+=product.getQuantity();
+            TotalCounterCategory+=product.getQuantity();
+        }
+    }
+    if(Floop){
+        System.out.printf(" %-30d %-30s %-30d \n",AllOrdersList.size(),category,CounterCategory);
+        Floop=false;
+    }else{
+        System.out.printf(" %-30s %-30s %-30d \n","",category,CounterCategory);
     }
     }
     System.out.println("--------------------------------------------------------------------------------------------------------------");
     System.out.printf(" %-30s %-30s %-30d \n","Total Products Bought","",TotalCounter);
     System.out.println();
     System.out.println();
+
+    // now we printed for every coustumer in case he has an order hes total orders, by barcode and category
+    //and also for all the orders all the products bought by category and barcode.
   
 }
 
@@ -778,7 +952,6 @@ public static void ShowDriverOrdes() {
     }
 
 }
-    
 
 }
 

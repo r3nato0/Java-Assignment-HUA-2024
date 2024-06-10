@@ -336,6 +336,8 @@ public class UserInterface{
                 if(SelectedOption > 0 && SelectedOption<=Max){
 
                     break;
+                }else{
+                    System.out.println("Please Input a valid value");
                 }
             } catch (NumberFormatException e) {
 

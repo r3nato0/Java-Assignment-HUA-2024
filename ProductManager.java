@@ -151,6 +151,19 @@ public class ProductManager{
     }
 
 
+
+    public static String getCategoryByBarcode(String barcode){
+        String category=null;
+        for(Products product:productList){
+            if(barcode.equals(String.valueOf(product.getBarcode()))){
+                category= product.getCategory();
+                break;
+            }
+        }
+        return category;
+    }
+
+
     // we will return a string for some error handling in case the product for some reason has no barcode
     public static String getBarcodeByName(String Name) {
         for (Products product : productList) {
