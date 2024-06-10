@@ -400,77 +400,7 @@ public static void printAllOrders() {
 
     public static void ChangeOrdersAddress(){
         boolean isvalid = false;
-        OrdersHome ordersHome=null;
-        String NewAddress=null;
-        boolean TryAgain = true;
-        while (TryAgain) {
-        Integer SelectMethod = UserInterface.SelectNumber(2);
-        System.out.println("Enter 1 to Select Order via ID, Enter 2 to Select Order via Costumers Name");
-
-
-        //Selectiong By id
-        if(SelectMethod==1){
-            Orders order = SelectOrder();
-            if (order instanceof OrdersHome && order.getStatus().equals(Constants.PENDING)) {
-                    ordersHome = (OrdersHome) order;
-                    NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
-                    isvalid = true;
-                    ordersHome.setAddress(NewAddress);
-                    break;}
-
-            else if (order instanceof OrdersLocker ){
-                if(order.getStatus().equals(Constants.PENDING))
-                {
-                    System.out.println("The order you selected is a Locker Order, the address cannot be changed, sorry");
-                    TryAgain = UserInterface.InputTypeBoolean("Try Again? type (y/yes/Y/YES) for yes or (N/n/no/NO) for no");
-                }else{
-                    System.out.println("The order you selected is a lockers order but also is completed, either way the address cannot be changed");
-                }                   
-    
-            }
-
-
-            //Selection By Costumer's Name
-            }else{
-                String SelectedCostumer = UserInterface.InputTypeStringWithSpace("Type the costumer's Full name");
-                Integer OrdersCounter=0;
-                Orders orderBycostumer=null;
-                for(Orders order:AllOrdersList){
-                    if(order.getDriverFullName().equals(SelectedCostumer) && order.getStatus().equals(Constants.PENDING)&& order instanceof OrdersHome){
-                        ordersHome = (OrdersHome) order;
-                        OrdersCounter++;
-                        
-                    }else if (order.getDriverFullName().equals(SelectedCostumer) && order.getStatus().equals(Constants.PENDING)&& order instanceof OrdersLocker){
-                        
-                    }
-                }
-                if(OrdersCounter==1){
-                    NewAddress = UserInterface.InputTypeAdress("Please Type in The new address:");
-                    isvalid = true;
-                    ordersHome.setAddress(NewAddress);
-                    break;
-                }else{
-                    ordersHome=null;
-                    for(Orders order:AllOrdersList){
-                        if(order.getDriverFullName().equals(SelectedCostumer) && order.getStatus().equals(Constants.PENDING)&& order instanceof OrdersHome){
-                            PrintOrder(order);
-                        }
-                    }
-                    System.out.println("The costumer Has more than 1 pending orders, Specify by giving the id of the above table:");
-                    Orders Selectedorder;
-                    Integer OrderId= UserInterface.InputTypeNumberSingle("");
-                    for(Orders order:AllOrdersList){
-                        if(order.getOrderId()==OrderId && order.getCostumerFullName().equals(SelectedCostumer)&& order instanceof OrdersHome ){
-                            
-                        }
-                    }
-        }
-
-        if(isvalid){
-            ordersHome.setAddress(NewAddress);
-            System.out.println("The Order's Address has been changed: ");
-            PrintOrder(ordersHome);
-        }
+        
     }
 
 
