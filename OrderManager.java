@@ -612,7 +612,6 @@ public static void ShowAverageReviews() {
 
     //print average
     System.out.printf("Average Rating: %.2f%n", avg);
-
     //we clear the arrays
     ratedOrders.clear();
     customerNames.clear();
@@ -622,107 +621,100 @@ public static void ShowAverageReviews() {
 
 }
 
-// we will show in this method the total by barcode and the total by category (items bought)
 public static void ProductsBoughtSummary() {
-    Set<String> productName = new HashSet<>(); // we will use the name to get the id and the barcode of the product, and use set so we store the name once
-    List<Integer> productsquantity = new ArrayList<>();// will hold the quantity of the products for each same index as the set ( even tho tho the set has no indexes, thats the idea)
-    List<ProductsInBucket> productsBought = new ArrayList<>(); // a list that will store all the elements off all the products that where bought
-    Set<String> productCategory = new HashSet<>(); // same as the name set but for the product's Category
-
-    //first we get all the itemsbought to the new list from the allorderslist that stores all orders details
+    List<ProductsInBucket> productsBought = new ArrayList<>(); // A list to store all the elements of all products bought
+    Set<String> barcodesPerCostumer = new HashSet<>();
+    Set<String> barcodesALL = new HashSet<>();
+    // Collect all products bought from all orders
+    System.out.printf("%-30s %-30s %-30s %-30s \n","Costumer's Name","Costumer's Total Orders","Products Bought By Barcode","Quantity");
     for (Orders order : AllOrdersList) {
         List<ProductsInBucket> itemsBought = order.getProductsInOrder();
-        productsBought.addAll(itemsBought); // then use addll to store all the elements
+        productsBought.addAll(itemsBought);
     }
-    // later we get from the aboive list all the name to the set (unique names stored only)
-    for (ProductsInBucket productInBucket : productsBought) {
-        productName.add(productInBucket.getProductName());
-        productCategory.add(ProductManager.getCategoryByName(productInBucket.getProductName())); // will store only the Category's of each product once
-    }
-    // next we will use the Iterator of the set https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/java/util/Set.html as shown,
-    Iterator<String> iterator = productName.iterator();
-    while (iterator.hasNext()) {
-        String element = iterator.next(); // we get the first element 
-        Integer counter=0; // a temporary value that will store the total of the items quantity bought, will be reset for every element
-        for(ProductsInBucket productInBucket : productsBought){
-            if(element.equals(productInBucket.getName())){ // if the element name (from first to last) exists in the productInBucket 
-                counter+=productInBucket.getQuantity(); //we gets its quantity and increase the counter(of quantity)
-                
+
+
+    barcodesALL.clear();
+    for(Costumers costumer:CostumerManager.getCostumersList()){
+        int totalOrderQuantity = 0;
+        barcodesPerCostumer.clear();
+        String CurrentCostumer=costumer.getCostumersFullName();
+        Integer CurrentCostumerOrdersCount = CostumerManager.getCostumersTotalOrders(costumer.getId());
+
+
+        
+        for(ProductsInBucket item:productsBought){
+
+            //we store all the barcodes to the set(all of them)
+            barcodesALL.add(String.valueOf(item.getBarcode()));
+
+            //we store the costumers barcode to the set
+            if(costumer.getCostumersFullName().equals(item.getCostumersFullName())){
+                barcodesPerCostumer.add(String.valueOf(item.getBarcode()));
+            }
+        }
+
+
+
+
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+        //for every barcode we will get its quantity bought from the costumer
+        boolean FirstLoop=true;
+        for(String barcodes:barcodesPerCostumer ){
+            Integer Quantity=0;
+            for(ProductsInBucket product:productsBought){
+                //if the user has bought the product 
+                if(costumer.getCostumersFullName().equals(product.getCostumersFullName()) && barcodes.equals(String.valueOf(product.getBarcode()))){
+                    Quantity+=product.getQuantity();
+                    totalOrderQuantity+=product.getQuantity();
+                }
+            }
+
+            if(FirstLoop){
+                System.out.printf("%-30s %-30d %-30s %-30d \n",CurrentCostumer,CurrentCostumerOrdersCount,barcodes,Quantity);
+                FirstLoop=false;
+            }
+            else{
+                System.out.printf("%-30s %-30s %-30s %-30d \n","","",barcodes,Quantity);
             }
 
         }
-        productsquantity.add(counter); // we finish with the first element, (that means we iterated all the productsbought that has the same name as the set)
-    }
-    // now we have a set with unique names and a productsquantity list that have same size, but also at the same places the name and quantity bought for each.
-
-
-
-
-    // we will use a method to get from the name the barcode and category
-    System.out.println("-----------------------------------------------------------------------------------------------------------Product's Bought Summary By Barcode");
-    System.out.println(); // an empty line.
-    
-    Integer Index = 0; // and index that will help witht he iteration of the productquantity loop
-    Integer Total = 0; // will store the total quantitys number
-    // we will iterate every name from the set product name, get the name, and from that the barcode and the category, and the total quantities we have
-    System.out.printf(" %-20s %-20s %-20s %-20s\n","CostumersName","ProductName","ProductBarcode","Product's Total Quantity Bought");
-    System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
-    System.out.println();
-    Iterator<String> iteratorSecond = productName.iterator();
-    while (iteratorSecond.hasNext()) {
-        String name = iteratorSecond.next(); // we get the first element ,//the barcode will return a string becouse i implemented some error handling. UserInterface.PrintOnly(name, 15) shorts the name to the numb given on second parameter
-        System.out.printf(" %-20s %-20s %-30d\n",UserInterface.PrintOnly(name, 15),ProductManager.getBarcodeByName(name),productsquantity.get(Index) );
-        Total+=productsquantity.get(Index);
-        Index++;
-        }
-    System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
-    System.out.printf(" %-20s %-20s %-30d\n","Total:","-------------",Total);
-    System.out.println();
-    System.out.println();
-
-    //We finish here for the total by barcode, bellow we will do kinda the same but for the category totals
-    //first we can you the same list productquantity like before, so we will clear it
-    productsquantity.clear();
-    // next we aply the same logic as above
-    Iterator<String> iteratorC = productCategory.iterator();
-    while (iteratorC.hasNext()) {
-        String element = iteratorC.next(); 
-        Integer counter=0; 
-        for(ProductsInBucket productInBucket : productsBought){
-            if(element.equals(productInBucket.getProductCategory())){  
-                counter+=productInBucket.getQuantity(); 
-                
-            }
-
-        }
-        productsquantity.add(counter); 
-
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-30s %-30s %-30s %-30d \n","Totals of Costumer","--------","----------",totalOrderQuantity);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        //System.out.printf(" %-30d\n ",totalOrderQuantity);
     }
 
-    //we are done, now we print them
-    System.out.println("-----------------------------------------------------------------------------------------------------------Product's Bought Summary By Category");
-    Integer IndexCategory = 0; // and index that will help witht he iteration of the productquantity loop
-    Integer TotalCategory = 0; // will store the total quantitys number
-    // we will iterate every name from the set product name, get the name, and from that the barcode and the category, and the total quantities we have
-    System.out.printf(" %-20s %-20s \n","ProductCategory","Product's Category Quantity Bought");
-    System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
     System.out.println();
-    Iterator<String> iteratorCategory = productCategory.iterator();
-    while (iteratorCategory.hasNext()) {
-        String Category = iteratorCategory.next(); // we get the first element ,//the barcode will return a string becouse i implemented some error handling. UserInterface.PrintOnly(name, 15) shorts the name to the numb given on second parameter
-        System.out.printf(" %-20s %-20s \n",Category,productsquantity.get(IndexCategory));
-        TotalCategory+=productsquantity.get(IndexCategory);
-        IndexCategory++;
+    System.out.println();
+    Integer TotalCounter=0;
+    System.out.printf("---------------------------------------------------------------------------------------------All Orders Totals\n");
+    System.out.printf(" %-30s %-30s %-30s\n","Total Orders","Barcodes","Quantity of each");
+    System.out.println("--------------------------------------------------------------------------------------------------------------");
+    boolean FirstLoop=true;
+    for(String barcodes:barcodesALL ){
+    Integer Counter=0;
+    for(ProductsInBucket product:productsBought){
+        if(barcodes.equals(String.valueOf(product.getBarcode()))){
+            Counter+=product.getQuantity();
+            TotalCounter+=product.getQuantity();
         }
-    System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
-    System.out.printf(" %-20s %-30d \n","Total:",Total);
-    System.out.println();
-    for (ProductsInBucket productInBucket : productsBought) {
-        System.out.println(productInBucket.getCostumersFullName());
-        System.out.println(productInBucket.getProductName());
     }
+    if(FirstLoop){
+        System.out.printf(" %-30d %-30s %-30d \n",AllOrdersList.size(),barcodes,Counter);
+        FirstLoop=false;
+    }else{
+        System.out.printf(" %-30s %-30s %-30d \n","",barcodes,Counter);
+    }
+    }
+    System.out.println("--------------------------------------------------------------------------------------------------------------");
+    System.out.printf(" %-30s %-30s %-30d \n","Total Products Bought","",TotalCounter);
+    System.out.println();
+    System.out.println();
+  
+}
 
-} 
 public static void ShowDriverOrdes() {
     //HEADER OF THE PRINT
     System.out.println();

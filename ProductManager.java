@@ -5,10 +5,17 @@ import java.util.Random;
 import java.util.Scanner;
 public class ProductManager{
     private static List<Products> productList = new ArrayList<>();
-   private static List<String> CategoryList = new ArrayList<>(Arrays.asList("hygiene", "detergent", "Drinks","Food"));
+    private static List<String> CategoryList = new ArrayList<>(Arrays.asList("hygiene", "detergent", "Drinks","Food"));
 
 
 
+
+
+    public static List<String> getCategoryList(){
+        return CategoryList;
+    }
+
+    
     public static void CreateDefaultProducts(){
         productList.add(new Products("AIM Family Protection Herbal Toothpaste 75ml", CategoryList.get(0), "AIM ", 10));
         productList.add(new Products("Oral-B Pro 3 Cross Action Electric Toothbrush", CategoryList.get(0), "Oral-B ", 5));

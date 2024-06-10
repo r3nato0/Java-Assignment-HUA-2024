@@ -4,6 +4,11 @@ import java.util.List;
 public class CostumerManager{
     private static List<Costumers> costumersList = new ArrayList<>();
 
+
+    public static List<Costumers> getCostumersList(){
+        return costumersList;
+    }
+
     public static Costumers GetCurrentCostumerByFullName( String CostumerFullName){
         Costumers SelectedCostumer = null;
         String FirstName= CostumerFullName.substring(0,CostumerFullName.indexOf(" "));
@@ -79,4 +84,13 @@ public class CostumerManager{
         costumersList.add(new Costumers (name,surname,address,email ));
         }
 
+
+        public static Integer getCostumersTotalOrders(Integer CostumersId){
+            Integer OrdersCounter=0;
+                for (Orders order : OrderManager.GetAllOrdersList()){
+                    if(order.getCostumerId()==CostumersId){
+                        OrdersCounter++;
+                    }
+                }
+            return OrdersCounter; }
 }
