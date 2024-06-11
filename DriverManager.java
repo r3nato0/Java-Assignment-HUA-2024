@@ -45,7 +45,7 @@ public class DriverManager{
         driverList.add(new Drivers("Renato","Nake","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946",Constants.DELIVERYHOME));
         driverList.add(new Drivers("George","Papadopoylos","dimitrakopoulou 105","georgepapadopoylos@gmail.com",13231021,"IZN5236",Constants.LOCKERDELIVERY));
         driverList.add(new Drivers("Anthoni","Mantellos","Hrakleous 70","AMantellos@gmail.com",17231021,"IZN5236",Constants.HOMEANDLOCKER));
-        driverList.add(new Drivers("Renato","Nake","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946",Constants.DELIVERYHOME));
+        driverList.add(new Drivers("Nikos","Alekou","Aglaurou 10","nakerenato@gmail.com",16215021,"YMN4946",Constants.DELIVERYHOME));
         }
 
     public static void printTableDrivers() {

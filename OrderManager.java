@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.Locale.Category;
 import java.util.Iterator;
@@ -399,9 +400,160 @@ public static void printAllOrders() {
 }
 
     public static void ChangeOrdersAddress(){
-        boolean isvalid = false;
+        printAllOrders();
+        System.out.println("Type id: and then the id of the order ");
+        System.out.println("Type name: and then the name of the costumer to search for");
+        Scanner scanner = new Scanner(System.in);
+        String CommandId= "id:";
+        String CommandName= "name:";
+        while (true) {
+            Integer parsedProductId=null;
+            Orders Selectedorder=null;
+            String ProductId=null;
+            boolean isvalid = false;
+            System.out.println();
+            System.out.printf("Type cancel/id:/name: ");
+            String Input=scanner.nextLine();
+
+            //id: command
+            if(Input.equals("cancel")){
+                return;
+            }
+
+
+            if(Input.startsWith(CommandId)){
+                try {
+                    ProductId = Input.substring(CommandId.length());
+                    parsedProductId = Integer.parseInt(ProductId);
+                    
+                    for(Orders order:AllOrdersList){
+                        if(order.getOrderId()==parsedProductId){
+                            Selectedorder=order;
+                            isvalid=true;
+                            break;
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                        System.out.println("Invalid product ID format.");
+                    }}
+
+                    if (!isvalid && parsedProductId!=null) {
+                        System.out.println("No product found with the given ID.");
+
+                    }else if(Selectedorder!=null && Selectedorder instanceof OrdersLocker){
+                        System.out.println("Cannot Change the the Selected Orders Adress, is a LockersOrder");
+                        if(Selectedorder.getStatus().equals(Constants.COMPLETED)){
+                            System.out.println("The order is Also Completed!");
+                        }
+
+                    }else if(Selectedorder!=null && Selectedorder instanceof OrdersHome){
+                        OrdersHome homeorder = (OrdersHome) Selectedorder;
+                        if(homeorder.getStatus().equals(Constants.COMPLETED)){
+                            System.out.println("The order you Selected Has been Completed Cannot Change The Address");
+                        }else{
+                            System.out.printf("Enter New Address: ");
+                            String AddressInput=UserInterface.InputTypeAdress("");
+                            homeorder.setAddress(AddressInput);
+                            System.out.println("The order's Address has been changed Succesfuly");
+                            PrintOrder(homeorder);
+                            break;
+                        }
+                    }
+
+
+            else if (Input.startsWith(CommandName)){
+                String SelectedCostumerName = Input.substring(CommandName.length());
+                List<Orders> CostumerOrders=new ArrayList<>();
+                for(Orders order:AllOrdersList){
+                    if (order.getCostumerFullName().equals(SelectedCostumerName)){
+                        CostumerOrders.add(order);
+                    }
+                }
+
+                //In case the user has one order 
+                if(CostumerOrders.size()==1){
+                    Selectedorder=CostumerOrders.get(0);
+
+                        if (Selectedorder instanceof OrdersLocker){
+                            System.out.println("Cannot change the Address, its a Locker order");
+                            if(Selectedorder.getStatus().equals(Constants.COMPLETED)){
+                                System.out.println("Also the order has been already completed!");
+                            }
+                        }else{
+                            OrdersHome homeorder = (OrdersHome) Selectedorder;
+                            System.out.printf("Enter New Address: ");
+                            String AddressInput=UserInterface.InputTypeAdress("");
+                            homeorder.setAddress(AddressInput);
+                            System.out.println("The order's Address has been changed Succesfuly");
+                            PrintOrder(homeorder);
+                            break;
+                        }
+                    }else if(CostumerOrders.size()>1){
+                        // We Will remove from the list all the Lockers order and the Completed orders
+                        Iterator<Orders> iterator = CostumerOrders.iterator();
+                        while (iterator.hasNext()) {
+                            Orders order = iterator.next();
+                            if (order instanceof OrdersLocker || order.getStatus().equals(Constants.COMPLETED)) {
+                                iterator.remove();
+                            }
+                        }
+
+                        //if after that there is only one order, Then thats the one the user wants
+                        if(CostumerOrders.size()==1){
+                            Selectedorder=CostumerOrders.get(0);
+                            OrdersHome homeorder = (OrdersHome) Selectedorder;
+                            System.out.printf("Enter New Address: ");
+                            String AddressInput=UserInterface.InputTypeAdress("");
+                            homeorder.setAddress(AddressInput);
+                            System.out.println("The order's Address has been changed Succesfuly");
+                            PrintOrder(homeorder);
+                            break;
+
+                        //if after the removes the user has more than one order that he can change the address off
+                        //we need to ask him to select from the orders by id 
+                        }else if(CostumerOrders.size()>1){
+                            for(Orders order:CostumerOrders){
+                                PrintOrder(order);
+                            }
+                            System.out.println("Please Select from the above orders by id, Becouse the user has more than 1 HomeOrders Pending");
+
+                            while (true) {
+                                boolean found = false;
+                                Integer Selection = UserInterface.InputTypeNumberSingle("Order id:");
+                                for(Orders order:CostumerOrders){
+                                    if(order.getOrderId()==Selection){
+                                        Selectedorder=order;
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (found) break;
+                            }
+                            OrdersHome homeorder = (OrdersHome) Selectedorder;
+                            System.out.printf("Enter New Address: ");
+                            String AddressInput=UserInterface.InputTypeAdress("");
+                            homeorder.setAddress(AddressInput);
+                            System.out.println("The order's Address has been changed Succesfuly");
+                            PrintOrder(homeorder);
+                            break;
+
+                        }else{
+                            System.out.println("The User Does not have any HomeOrders Pending so he can Change the Address of");
+                            break;
+                        }
+                    }else{
+                        System.out.println("The User Does not have any HomeOrders Pending so he can Change the Address of");
+                        break;
+                    }
+
+                }else{
+                    System.out.println("Please Type id:number name:CostumerNAME or cancel for cancel");
+                }
+
+                }
+            }
         
-    }
+        
 
 
 
