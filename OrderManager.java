@@ -675,6 +675,7 @@ public static void printAllOrders() {
                         System.out.printf("%-20s %-10d\n", UserInterface.PrintOnly(product.getName(), MaxProductsPrintLength), product.getQuantity());
                     }
                 }
+                System.out.println();
                 System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");}
 
         }

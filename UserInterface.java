@@ -33,9 +33,6 @@ public class UserInterface{
                 System.out.println("Please only enter Characters.");
             }
         }
-    
-    
-        System.out.println(UserInput);
 
         return UserInput;
     }
