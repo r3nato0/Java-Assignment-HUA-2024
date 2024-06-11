@@ -218,10 +218,10 @@ public class UserInterface{
         while (true) {
             System.out.println(Message);
             String Input = scanner.nextLine(); 
-            if (Input.equals("yes") || Input.equals("Yes") || Input.equals("YES") || Input.equals("y") || Input.equals("Y")){
+            if (Input.equalsIgnoreCase("yes") || Input.equalsIgnoreCase("Yes") || Input.equalsIgnoreCase("YES") || Input.equalsIgnoreCase("y") || Input.equalsIgnoreCase("Y")){
                 return true;
             }
-            if (Input.equals("no") || Input.equals("No") || Input.equals("NO") || Input.equals("n")){
+            if (Input.equalsIgnoreCase("no") || Input.equalsIgnoreCase("No") || Input.equalsIgnoreCase("NO") || Input.equalsIgnoreCase("n")){
                 return false;
             }
         }

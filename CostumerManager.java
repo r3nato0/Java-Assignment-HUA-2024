@@ -14,7 +14,7 @@ public class CostumerManager{
         String FirstName= CostumerFullName.substring(0,CostumerFullName.indexOf(" "));
         String LastName= CostumerFullName.substring((CostumerFullName.indexOf(" ")+1),CostumerFullName.length());
         for(Costumers costumer : costumersList){
-            if (FirstName.equals(costumer.getName()) && LastName.equals(costumer.getSurname()) ) {
+            if (FirstName.equalsIgnoreCase(costumer.getName()) && LastName.equalsIgnoreCase(costumer.getSurname()) ) {
                 SelectedCostumer = costumer;
             }
 
@@ -31,7 +31,7 @@ public class CostumerManager{
         String LastName= CostumerFullName.substring(SpacePos+1, CostumerFullName.length());
         System.out.println(CostumerFullName);
         for(Costumers costumer : costumersList){
-            if (FirstName.equals(costumer.getName()) && LastName.equals(costumer.getSurname()) ) {
+            if (FirstName.equalsIgnoreCase(costumer.getName()) && LastName.equalsIgnoreCase(costumer.getSurname()) ) {
                 isValid=true;
                 break;
             }

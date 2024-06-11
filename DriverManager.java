@@ -15,7 +15,7 @@ public class DriverManager{
         String DriverFirstName = DriverFullName.substring(0, SpacePos);
         String DriverLastName = DriverFullName.substring(SpacePos+1, DriverFullName.length());
         for(Drivers driver : driverList){
-            if (DriverFirstName.equals(driver.getName()) && DriverLastName.equals(driver.getSurname())){
+            if (DriverFirstName.equalsIgnoreCase(driver.getName()) && DriverLastName.equalsIgnoreCase(driver.getSurname())){
                 SelectedDriver = driver;
             }
         }
@@ -29,7 +29,7 @@ public class DriverManager{
         String DriverFirstName = DriverFullName.substring(0, SpacePos);
         String DriverLastName = DriverFullName.substring(SpacePos+1, DriverFullName.length());
             for (Drivers driver : driverList) {
-                if (DriverFirstName.equals(driver.getName()) && DriverLastName.equals(driver.getSurname()) ) {
+                if (DriverFirstName.equalsIgnoreCase(driver.getName()) && DriverLastName.equalsIgnoreCase(driver.getSurname()) ) {
                     isValid = true;
                     
                     break;
@@ -66,7 +66,6 @@ public class DriverManager{
         }
     public static List<String> NotFoundAddNew(String DriverFullName,String OrderType){
         List<String> ActionRecorder=new ArrayList<>();
-        String ReturnValue=null;
         Integer SpacePos = DriverFullName.indexOf(" ");
         String DriverFirstName = DriverFullName.substring(0, SpacePos);
         String DriverLastName = DriverFullName.substring(SpacePos+1, DriverFullName.length());
@@ -75,7 +74,7 @@ public class DriverManager{
         Integer DriverSAFM =UserInterface.InputTypeAFM("Type Drivers AFM: ");
         String DriversPlateNumber = UserInterface.InputTypePlateNumber("Type Drivers PlateNumber: ");
         System.out.println("Choose the Driver's Category for the Orders");
-        if(OrderType.equals(Constants.DELIVERYHOME)){
+        if(OrderType.equalsIgnoreCase(Constants.DELIVERYHOME)){
             System.out.printf(" %s %s %s %s\n %s \n","Press 1) To Put Driver to ",Constants.DELIVERYHOME," Category. Recomended since you choose: ",OrderType,"Press 2) To Put Driver to LockerDelivery Category");
         }else{//Now we Will Handle MissMatch of Driver and Order delivery option
             System.out.printf(" %s\n %s %s %s %s\n ","Press 1) To Put Drivers to HomeDelivery Category",
@@ -95,13 +94,13 @@ public class DriverManager{
             return ActionRecorder;
         }
         
-        if(OrderType.equals(Constants.DELIVERYHOME)&& (DriversType.equals(Constants.DELIVERYHOME) || DriversType.equals(Constants.HOMEANDLOCKER))){
+        if(OrderType.equalsIgnoreCase(Constants.DELIVERYHOME)&& (DriversType.equalsIgnoreCase(Constants.DELIVERYHOME) || DriversType.equalsIgnoreCase(Constants.HOMEANDLOCKER))){
             driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,DriversType));
             System.out.println("Driver Added Sucesfully, continuing with order");
             ActionRecorder.add(DriverFullName);
             return ActionRecorder;
         }
-        else if(OrderType.equals(Constants.LOCKERDELIVERY)&&(DriversType.equals(Constants.LOCKERDELIVERY) || DriversType.equals(Constants.HOMEANDLOCKER))){
+        else if(OrderType.equalsIgnoreCase(Constants.LOCKERDELIVERY)&&(DriversType.equalsIgnoreCase(Constants.LOCKERDELIVERY) || DriversType.equalsIgnoreCase(Constants.HOMEANDLOCKER))){
             driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,DriversType));
             System.out.println("Driver Added Sucesfully, continuing with order");
             ActionRecorder.add(DriverFullName);
@@ -131,9 +130,9 @@ public class DriverManager{
                 case 2:
                     driverList.add(new Drivers(DriverFirstName,DriverLastName,address,DriversEmail,DriverSAFM,DriversPlateNumber,OrderType));
                     ActionRecorder.add(DriverFirstName+ " " +DriverLastName);
-                    if(OrderType.equals(Constants.DELIVERYHOME)){
+                    if(OrderType.equalsIgnoreCase(Constants.DELIVERYHOME)){
                         ActionRecorder.add(Constants.LOCKERDELIVERY);
-                    }else if(OrderType.equals(Constants.LOCKERDELIVERY)){
+                    }else if(OrderType.equalsIgnoreCase(Constants.LOCKERDELIVERY)){
                         ActionRecorder.add(Constants.DELIVERYHOME);
                     }
                     break;
@@ -205,7 +204,7 @@ public class DriverManager{
         System.out.println("Only Drivers That Support the Delivery Method are shown and able to get selected!");
         System.out.printf("%-5s %-17s %-20s %-30s %-20s %-19s %-10s %-20s%n ", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
         for(Drivers driver:driverList){
-            if(driver.getType().equals(Type) || driver.getType().equals(Constants.HOMEANDLOCKER)){
+            if(driver.getType().equalsIgnoreCase(Type) || driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER)){
                 System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",driver.getDriverid(),driver.getName(),driver.getSurname(),driver.getAdress(),driver.getEmail(),driver.getDriverAFM(),driver.getPlateNumber(),driver.getType());
             }
         }
@@ -214,7 +213,7 @@ public class DriverManager{
             String DriversFullName = UserInterface.InputTypeStringWithSpace("Select The Driver by typing the full name as Shown Above");
             boolean Exists = CheckDriverExists(DriversFullName);
             Selecteddriver = GetCurrentDriverByFullName(DriversFullName);
-            if(Exists && (Selecteddriver.getType().equals(Type)||Selecteddriver.getType().equals(Constants.HOMEANDLOCKER))){
+            if(Exists && (Selecteddriver.getType().equalsIgnoreCase(Type)||Selecteddriver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))){
                 System.out.println("The Driver Succesfuly Selected");
                 break;
             }else if(!Exists){
@@ -232,7 +231,7 @@ public class DriverManager{
     public static boolean DriverByTypeExists(String Type){
         boolean isValid = false;
         for(Drivers driver:driverList){
-            if (driver.getType().equals(Type)||driver.getType().equals(Constants.HOMEANDLOCKER)){
+            if (driver.getType().equalsIgnoreCase(Type)||driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER)){
                 isValid = true;
                 break;
             }
@@ -242,7 +241,7 @@ public class DriverManager{
     public static Integer getCounterByType(String Type){
         Integer Counter = 0;
         for(Drivers driver:driverList){
-            if (driver.getType().equals(Type)||driver.getType().equals(Constants.HOMEANDLOCKER)){
+            if (driver.getType().equalsIgnoreCase(Type)||driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER)){
                 Counter+=1;
 
             }

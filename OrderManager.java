@@ -3,16 +3,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.Locale.Category;
 import java.util.Iterator;
-import java.sql.Driver;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 public class OrderManager{
     private static List<Orders> AllOrdersList = new ArrayList<>();
     private final static Integer MaxProductsPrintLength = 15; // Just a Limit of characters from products name to get printed, will be passed to UserInterface.PrintOnly(Name,Max...)
     
-
     public static List<Orders> GetAllOrdersList(){
         return AllOrdersList;
     }
@@ -28,7 +25,7 @@ public class OrderManager{
             DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
             boolean DriverOld=DriverManager.CheckDriverExists(DriverFullName);
             if (DriverOld){
-                if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equals(HomeOrLocker)){
+                if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equalsIgnoreCase(HomeOrLocker)){
                     System.out.println("The Driver allready Exsits. The rest of the fields are filled accordingly %n");
                     System.out.println("The Selected Driver also does "+HomeOrLocker);
                     
@@ -101,7 +98,7 @@ public class OrderManager{
 
 
         //Delivery to Home
-        if(HomeOrLocker.equals(Constants.DELIVERYHOME)){
+        if(HomeOrLocker.equalsIgnoreCase(Constants.DELIVERYHOME)){
             OrdersHome NewOrderHome = new OrdersHome(SelectedCostumer, SelectedDriver);
             AllOrdersList.add(NewOrderHome);
             System.out.println("The order has been created successfully, Details of the order:");
@@ -147,9 +144,9 @@ public static void printAllOrders() {
             String Status = ordersHome.getStatus();
             Integer rating = ordersHome.getRating();
             String Rating;
-            if (rating == null&& ordersHome.getStatus().equals(Constants.COMPLETED)) {
+            if (rating == null&& ordersHome.getStatus().equalsIgnoreCase(Constants.COMPLETED)) {
                 Rating = "Not Rated yet!";
-                }else if (rating == null&& ordersHome.getStatus().equals(Constants.PENDING)){
+                }else if (rating == null&& ordersHome.getStatus().equalsIgnoreCase(Constants.PENDING)){
                     Rating = "Order Not finished";
                 }
                  else {
@@ -188,9 +185,9 @@ public static void printAllOrders() {
             String Status = orderslocker.getStatus();
             Integer rating = orderslocker.getRating();
             String Rating;
-            if (rating == null&& orderslocker.getStatus().equals(Constants.COMPLETED)) {
+            if (rating == null&& orderslocker.getStatus().equalsIgnoreCase(Constants.COMPLETED)) {
                 Rating = "Not Rated yet!";
-                }else if (rating == null&& orderslocker.getStatus().equals(Constants.PENDING)){
+                }else if (rating == null&& orderslocker.getStatus().equalsIgnoreCase(Constants.PENDING)){
                     Rating = "Order Not finished";
                 }
                  else {
@@ -212,10 +209,7 @@ public static void printAllOrders() {
         }
     }
 
-    //lybrary used  https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/java/time/format/DateTimeFormatter.html
-    //&& https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/java/time/LocalDateTime.html
-    // will return the current Date And time all together. for the orders fields as String
-    //we also take only the date or only the time, example.substring(0,example.indexof(" ")); and the time example.substring(example.indexof(" ")+1,example.length());
+
     public static String CurrentDateTime(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
         LocalDateTime now = LocalDateTime.now();
@@ -300,7 +294,7 @@ public static void printAllOrders() {
         System.out.println();
         boolean PendingOrders=false;
         for(Orders order: AllOrdersList){
-            if(order.getStatus().equals(Constants.PENDING)){
+            if(order.getStatus().equalsIgnoreCase(Constants.PENDING)){
                 PrintOrder(order); //printing the pending order
                 PendingOrders=true;
             }
@@ -309,7 +303,7 @@ public static void printAllOrders() {
 
         while (PendingOrders) {
             SelectedOrder = SelectOrder();
-            if(SelectedOrder.getStatus().equals(Constants.PENDING)){  // we select and order from above
+            if(SelectedOrder.getStatus().equalsIgnoreCase(Constants.PENDING)){  // we select and order from above
                 break;
             }
             else{
@@ -335,7 +329,7 @@ public static void printAllOrders() {
                 System.out.printf("%-5s %-17s %-20s %-25s %-35s %-10s %-20s %-20s \n", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
                 System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 for(Drivers drivers:DriverManager.getDriverList()){
-                    if((drivers.getType().equals(TypeOrder)|| drivers.getType().equals(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equals(drivers.getDriverFullName()))){
+                    if((drivers.getType().equalsIgnoreCase(TypeOrder)|| drivers.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equalsIgnoreCase(drivers.getDriverFullName()))){
                         System.out.printf("%-5d %-17s %-20s %-25s %-35s %-10d %-20s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAdress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
                     }
                 }
@@ -348,17 +342,17 @@ public static void printAllOrders() {
             String DriverName = UserInterface.InputTypeStringWithSpace("Type the Drivers Full name :");
             if(DriverManager.CheckDriverExists(DriverName)){
                 Drivers driver = DriverManager.GetCurrentDriverByFullName(DriverName);
-                if((driver.getType().equals(TypeOrder)|| driver.getType().equals(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equals(driver.getDriverFullName()))){
+                if((driver.getType().equalsIgnoreCase(TypeOrder)|| driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName()))){
                     SelectedOrder.setNewDriver(driver);
                     PrintOrder(SelectedOrder);
                     System.out.println();
                     System.out.println("The Driver Has Been Changed");
                     loopCompleted=true;
                     break;
-                }else if ((SelectedOrder.getDriverFullName().equals(driver.getDriverFullName()))){
+                }else if ((SelectedOrder.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName()))){
                     System.out.println("You gave the name of the Current Driver, Select another one");
                 }else{
-                    System.out.println("The Driver cannot be selected he does "+ TypeOrder);
+                    System.out.println("The Driver cannot be selected he does "+ driver.getType());
                 }
             }else{
                 System.out.println("That Driver Does Not Exist");
@@ -420,7 +414,7 @@ public static void printAllOrders() {
             String Input=scanner.nextLine();
 
             //id: command
-            if(Input.equals("cancel")){
+            if(Input.equalsIgnoreCase("cancel")){
                 return;
             }
 
@@ -446,13 +440,13 @@ public static void printAllOrders() {
 
                     }else if(Selectedorder!=null && Selectedorder instanceof OrdersLocker){
                         System.out.println("Cannot Change the the Selected Orders Adress, is a LockersOrder");
-                        if(Selectedorder.getStatus().equals(Constants.COMPLETED)){
+                        if(Selectedorder.getStatus().equalsIgnoreCase(Constants.COMPLETED)){
                             System.out.println("The order is Also Completed!");
                         }
 
                     }else if(Selectedorder!=null && Selectedorder instanceof OrdersHome){
                         OrdersHome homeorder = (OrdersHome) Selectedorder;
-                        if(homeorder.getStatus().equals(Constants.COMPLETED)){
+                        if(homeorder.getStatus().equalsIgnoreCase(Constants.COMPLETED)){
                             System.out.println("The order you Selected Has been Completed Cannot Change The Address");
                         }else{
                             System.out.printf("Enter New Address: ");
@@ -469,7 +463,7 @@ public static void printAllOrders() {
                 String SelectedCostumerName = Input.substring(CommandName.length());
                 List<Orders> CostumerOrders=new ArrayList<>();
                 for(Orders order:AllOrdersList){
-                    if (order.getCostumerFullName().equals(SelectedCostumerName)){
+                    if (order.getCostumerFullName().equalsIgnoreCase(SelectedCostumerName)){
                         CostumerOrders.add(order);
                     }
                 }
@@ -480,7 +474,7 @@ public static void printAllOrders() {
 
                         if (Selectedorder instanceof OrdersLocker){
                             System.out.println("Cannot change the Address, its a Locker order");
-                            if(Selectedorder.getStatus().equals(Constants.COMPLETED)){
+                            if(Selectedorder.getStatus().equalsIgnoreCase(Constants.COMPLETED)){
                                 System.out.println("Also the order has been already completed!");
                             }
                         }else{
@@ -497,7 +491,7 @@ public static void printAllOrders() {
                         Iterator<Orders> iterator = CostumerOrders.iterator();
                         while (iterator.hasNext()) {
                             Orders order = iterator.next();
-                            if (order instanceof OrdersLocker || order.getStatus().equals(Constants.COMPLETED)) {
+                            if (order instanceof OrdersLocker || order.getStatus().equalsIgnoreCase(Constants.COMPLETED)) {
                                 iterator.remove();
                             }
                         }
@@ -565,7 +559,7 @@ public static void printAllOrders() {
         boolean OrderToCompelte=false;
         Orders order=null;
         for(Orders orders:AllOrdersList){
-            if (orders.getStatus().equals(Constants.PENDING)){
+            if (orders.getStatus().equalsIgnoreCase(Constants.PENDING)){
                 PrintOrder(orders);
                 OrderToCompelte=true;
             }
@@ -583,7 +577,7 @@ public static void printAllOrders() {
         if(OrderToCompelte && order instanceof OrdersHome ){
             OrdersHome ordersHome = (OrdersHome) order;
             String status = ordersHome.getStatus();
-            if(status.equals(Constants.COMPLETED)){
+            if(status.equalsIgnoreCase(Constants.COMPLETED)){
                 System.out.println("The order has already been completed");
             }else{
                 ordersHome.setStatusCompleted();
@@ -594,7 +588,7 @@ public static void printAllOrders() {
         }else if (OrderToCompelte && order instanceof OrdersLocker ){
             OrdersLocker OrdersLocker = (OrdersLocker) order;
             String status = OrdersLocker.getStatus();
-            if(status.equals(Constants.COMPLETED)){
+            if(status.equalsIgnoreCase(Constants.COMPLETED)){
                 System.out.println("The order has already been completed");
             }else{
                 OrdersLocker.setStatusCompleted();
@@ -625,9 +619,9 @@ public static void printAllOrders() {
                 String Status = SelectedOrder.getStatus();
                 Integer rating = SelectedOrder.getRating();
                 String Rating;
-                if (rating == null&& SelectedOrder.getStatus().equals(Constants.COMPLETED)) {
+                if (rating == null&& SelectedOrder.getStatus().equalsIgnoreCase(Constants.COMPLETED)) {
                     Rating = "Not Rated yet!";
-                    }else if (rating == null&& SelectedOrder.getStatus().equals(Constants.PENDING)){
+                    }else if (rating == null&& SelectedOrder.getStatus().equalsIgnoreCase(Constants.PENDING)){
                         Rating = "Order Not finished";
                     }
                      else {
@@ -661,9 +655,9 @@ public static void printAllOrders() {
                 String Status = orderslocker.getStatus();
                 Integer rating = orderslocker.getRating();
                 String Rating;
-                if (rating == null&& orderslocker.getStatus().equals(Constants.COMPLETED)) {
+                if (rating == null&& orderslocker.getStatus().equalsIgnoreCase(Constants.COMPLETED)) {
                 Rating = "Not Rated yet!";
-                }else if (rating == null&& orderslocker.getStatus().equals(Constants.PENDING)){
+                }else if (rating == null&& orderslocker.getStatus().equalsIgnoreCase(Constants.PENDING)){
                     Rating = "Order Not finished";
                 }
                  else {
@@ -685,39 +679,39 @@ public static void printAllOrders() {
 
         }
 
-        public static void LeaveReview() {
+    public static void LeaveReview() {
 
-            boolean orderExists = false;// will check if an order that can be completed exists
+    boolean orderExists = false;// will check if an order that can be completed exists
 
-            for (Orders order : AllOrdersList) {
-                if (order.getStatus().equals(Constants.COMPLETED) && order.getRating() == null) {
-                    orderExists = true; //it exists 
-                    PrintOrder(order); //print the valid order(s)
-                }
-            }
-    
-            if (!orderExists) {
-                System.out.println("There are no orders available for rating"); //no orders exists, method ends
-                return;
-            }
-    
-            Orders selectedOrder = SelectOrder();
-    
-            if (selectedOrder == null) {
-                System.out.println("No valid order was selected"); // a simple error handling (there is no point really, just adding it for good practise)
-                return;
-            }
-    
-            if (selectedOrder.getStatus().equals(Constants.COMPLETED) && selectedOrder.getRating() == null) {// prompt for rating
-                System.out.println("Rate between 1 and 10: ");
-                Integer ratingNumber = UserInterface.SelectNumber(10);
-                selectedOrder.setRating(ratingNumber);
-                System.out.println("Thank you for rating our service");
-                PrintOrder(selectedOrder);
-            } else { // order not finished or already rated
-                System.out.println("The order is not eligible for rating.");
+    for (Orders order : AllOrdersList) {
+        if (order.getStatus().equalsIgnoreCase(Constants.COMPLETED) && order.getRating() == null) {
+            orderExists = true; //it exists 
+            PrintOrder(order); //print the valid order(s)
             }
         }
+    
+    if (!orderExists) {
+            System.out.println("There are no orders available for rating"); //no orders exists, method ends
+            return;
+        }
+    
+    Orders selectedOrder = SelectOrder();
+    
+    if (selectedOrder == null) {
+            System.out.println("No valid order was selected"); // a simple error handling (there is no point really, just adding it for good practise)
+            return;
+        }
+    
+    if (selectedOrder.getStatus().equalsIgnoreCase(Constants.COMPLETED) && selectedOrder.getRating() == null) {// prompt for rating
+            System.out.println("Rate between 1 and 10: ");
+            Integer ratingNumber = UserInterface.SelectNumber(10);
+            selectedOrder.setRating(ratingNumber);
+            System.out.println("Thank you for rating our service");
+            PrintOrder(selectedOrder);
+        } else { // order not finished or already rated
+            System.out.println("The order is not eligible for rating.");
+        }
+    }
     
         
     
@@ -732,7 +726,7 @@ public static void ShowAverageReviews() {
 
     // we get the 
     for (Orders order : AllOrdersList) {
-        if (order.getStatus().equals(Constants.COMPLETED) && order.getRating() != null) {
+        if (order.getStatus().equalsIgnoreCase(Constants.COMPLETED) && order.getRating() != null) {
             ratedOrders.add(order);
             customerNames.add(order.getCostumerFullName()); 
         }
@@ -743,7 +737,7 @@ public static void ShowAverageReviews() {
         int highest = -1; // the rating cant be lower than 1 or bigger than 10, so we use this values 
         int lowest = 11;
         for (Orders order : ratedOrders) {
-            if (order.getCostumerFullName().equals(customerName)) {
+            if (order.getCostumerFullName().equalsIgnoreCase(customerName)) {
                 int rating = order.getRating();
                 if (rating > highest) {
                     highest = rating;
@@ -782,6 +776,8 @@ public static void ShowAverageReviews() {
 
 
 }
+
+
 
     // I will print for every costumer a summary of items bought, first for by barcode and then by category
     // and in the end i will print from all the orders the total items bought by barcode/category
@@ -831,10 +827,10 @@ public static void ProductsBoughtSummary() {
             barcodesALL.add(String.valueOf(item.getBarcode()));
             CategoryALL.add(item.getProductCategory());
             //we store the costumers barcode to the set
-            if(costumer.getCostumersFullName().equals(item.getCostumersFullName())){
+            if(costumer.getCostumersFullName().equalsIgnoreCase(item.getCostumersFullName())){
                 barcodesPerCostumer.add(String.valueOf(item.getBarcode()));
             }
-            if(costumer.getCostumersFullName().equals(item.getCostumersFullName())){
+            if(costumer.getCostumersFullName().equalsIgnoreCase(item.getCostumersFullName())){
                 CategoryPerCostumer.add(item.getProductCategory());
             }
         }
@@ -849,7 +845,7 @@ public static void ProductsBoughtSummary() {
             Integer QuantityBarcode=0;
             for(ProductsInBucket product:productsBought){
                 //if the user has bought the product 
-                if(costumer.getCostumersFullName().equals(product.getCostumersFullName()) && barcodes.equals(String.valueOf(product.getBarcode()))){
+                if(costumer.getCostumersFullName().equalsIgnoreCase(product.getCostumersFullName()) && barcodes.equalsIgnoreCase(String.valueOf(product.getBarcode()))){
                     QuantityBarcode+=product.getQuantity();
                     totalOrderQuantity+=product.getQuantity();
 
@@ -877,7 +873,7 @@ public static void ProductsBoughtSummary() {
         for(String Category:CategoryPerCostumer){
             Integer QuantityCategory=0;
             for(ProductsInBucket product:productsBought){
-                if(costumer.getCostumersFullName().equals(product.getCostumersFullName()) && Category.equals(product.getProductCategory())){
+                if(costumer.getCostumersFullName().equalsIgnoreCase(product.getCostumersFullName()) && Category.equalsIgnoreCase(product.getProductCategory())){
                     QuantityCategory+=product.getQuantity();
                     TotalQuantityCategory+=product.getQuantity();}
             }
@@ -923,7 +919,7 @@ public static void ProductsBoughtSummary() {
     for(String barcodes:barcodesALL ){
     Integer Counter=0;
     for(ProductsInBucket product:productsBought){
-        if(barcodes.equals(String.valueOf(product.getBarcode()))){
+        if(barcodes.equalsIgnoreCase(String.valueOf(product.getBarcode()))){
             Counter+=product.getQuantity();
             TotalCounter+=product.getQuantity();
         }
@@ -953,7 +949,7 @@ public static void ProductsBoughtSummary() {
     for(String category:CategoryALL ){
     Integer CounterCategory=0;
     for(ProductsInBucket product:productsBought){
-        if(category.equals(product.getProductCategory())){
+        if(category.equalsIgnoreCase(product.getProductCategory())){
             CounterCategory+=product.getQuantity();
             TotalCounterCategory+=product.getQuantity();
         }
@@ -997,14 +993,14 @@ public static void ShowDriverOrdes() {
         Integer CompletedLockersOrders = 0;
         Integer TotalperDriver=0;
         for (Orders orders : AllOrdersList) {
-            if (orders.getDriverFullName().equals(driver.getDriverFullName())) {
-                if (orders.getStatus().equals(Constants.PENDING)) {
+            if (orders.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName())) {
+                if (orders.getStatus().equalsIgnoreCase(Constants.PENDING)) {
                     if (orders instanceof OrdersHome) {
                         PendingHomeOrders++;
                     } else if (orders instanceof OrdersLocker) {
                         PendingLockersOrders++;
                     }
-                } else if (orders.getStatus().equals(Constants.COMPLETED)) {
+                } else if (orders.getStatus().equalsIgnoreCase(Constants.COMPLETED)) {
                     if (orders instanceof OrdersHome) {
                         CompletedHomeOrders++;
                     } else if (orders instanceof OrdersLocker) {

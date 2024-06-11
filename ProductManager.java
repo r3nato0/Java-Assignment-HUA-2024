@@ -158,7 +158,7 @@ public class ProductManager{
     public static String getCategoryByBarcode(String barcode){
         String category=null;
         for(Products product:productList){
-            if(barcode.equals(String.valueOf(product.getBarcode()))){
+            if(barcode.equalsIgnoreCase(String.valueOf(product.getBarcode()))){
                 category= product.getCategory();
                 break;
             }
@@ -170,7 +170,7 @@ public class ProductManager{
     // we will return a string for some error handling in case the product for some reason has no barcode
     public static String getBarcodeByName(String Name) {
         for (Products product : productList) {
-            if (product.getName().equals(Name)) {
+            if (product.getName().equalsIgnoreCase(Name)) {
                 return String.valueOf(product.getBarcode());
             }
         }
@@ -181,7 +181,7 @@ public class ProductManager{
         
         public static String getCategoryByName(String Name) {
             for (Products product : productList) {
-                if (product.getName().equals(Name)) {
+                if (product.getName().equalsIgnoreCase(Name)) {
                     return product.getCategory();
                 }
             }

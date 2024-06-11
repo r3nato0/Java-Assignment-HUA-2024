@@ -73,7 +73,7 @@ public abstract class Orders{
 
 
     public void setRating(Integer Rating){
-        if(this.Status.equals(Constants.COMPLETED)){
+        if(this.Status.equalsIgnoreCase(Constants.COMPLETED)){
             CostumerRating.setCostumerRating(Rating);
         }
         else{

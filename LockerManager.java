@@ -29,7 +29,7 @@ public class LockerManager{
     public static Integer getLockerFreeSpaces(Lockers locker){
         Integer Counter =0;
         for(EachCompartmentOfLockers compartment : locker.getCompartmentsOfLocker()){
-            if(compartment.getStatus().equals("Free")){
+            if(compartment.getStatus().equalsIgnoreCase("Free")){
                 Counter++;
             }
         }
@@ -64,7 +64,7 @@ public class LockerManager{
         List<EachCompartmentOfLockers> FreeCompartments= new ArrayList<>();
         Random random = new Random();
         for(EachCompartmentOfLockers compartment : locker.getCompartmentsOfLocker()){
-            if(compartment.getStatus().equals("Free")){
+            if(compartment.getStatus().equalsIgnoreCase("Free")){
                 FreeCompartments.add(compartment);
             }
         }
