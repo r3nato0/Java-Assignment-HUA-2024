@@ -17,12 +17,15 @@ public class ProductManager{
 
     
     public static void CreateDefaultProducts(){
-        productList.add(new Products("AIM Family Protection Herbal Toothpaste 75ml", CategoryList.get(0), "AIM ", 10));
-        productList.add(new Products("Oral-B Pro 3 Cross Action Electric Toothbrush", CategoryList.get(0), "Oral-B ", 5));
-        productList.add(new Products("Cif General Purpose Cleansing Cream 500ml", CategoryList.get(1), "Cif ", 4));
-        productList.add(new Products("Swaz Professional General Purpose Cleaning Liquid 4lt", CategoryList.get(2), "Swaz", 2));
-        productList.add(new Products("Amita Peach fruit drink 1000ml", "Drinks", CategoryList.get(3), 12));
-    }
+        for (String[] ProductsDATA : Constants.PRODUCTS_DATA) {
+            String name = ProductsDATA[0];
+            String Category = ProductsDATA[1];
+            String brand =ProductsDATA[2];
+            Integer quantity = Integer.parseInt(ProductsDATA[3]);
+            productList.add( new Products (name,Category,brand,quantity));
+        }
+        }
+
 
     public static Integer GetSelectedProductsQuantity(Products SelectedProduct){
         Scanner scanner = new Scanner(System.in);
@@ -81,11 +84,11 @@ public class ProductManager{
                                 }
                         
                                 if (!found) {
-                                    // Handle case where no product matches the given ID
+                        
                                     System.out.println("No product found with the given ID.");
                                 }
                             } catch (NumberFormatException e) {
-                                // Handle the case where ProductId is not a valid integer
+                            
                                 System.out.println("Invalid product ID format.");
                             }}
 

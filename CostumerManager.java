@@ -66,9 +66,14 @@ public class CostumerManager{
 
 
     public static void CreateDefaultCostumers(){
-        costumersList.add(new Costumers("Maria","Papadopoyloy","Zionos 25","mariageorgioy@gmail.com"));
-        costumersList.add(new Costumers("Izabel","Georgioy","Aglayrou 13","izabelageorgioy@gmail.com"));
-    }
+        for (String[] CostumerData : Constants.CUSTOMER_DATA) {
+            String fname = CostumerData[0];
+            String lname = CostumerData[1];
+            String address =CostumerData[2];
+            String email=CostumerData[3];
+            costumersList.add( new Costumers (fname,lname,address,email));
+        }
+        }
 
 
     public static void printTableCostumers() {

@@ -159,7 +159,7 @@ public static void printAllOrders() {
             if (!productsInOrder.isEmpty()) {
                 ProductsInBucket firstProduct = productsInOrder.get(0);
                 
-                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s %-10s \n", orderId, CostumerFullName,DriverFullName,"locker: " + Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status,Rating);
+                System.out.printf("%-10d %-20s %-20s %-25s %-20s %-10d %-10s %-10s \n", orderId, CostumerFullName,DriverFullName,Address,UserInterface.PrintOnly(firstProduct.getName(), MaxProductsPrintLength), firstProduct.getQuantity(),Status,Rating);
 
                 // remaining products
                 for (int i = 1; i < productsInOrder.size(); i++) {
@@ -231,21 +231,25 @@ public static void printAllOrders() {
 
         //"First Order"
         Products product = ProductManager.GetProductById(1);
-        CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy").addProductToBucket(product, 2);
-        OrdersHome NewOrderHome = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy"), 
-        DriverManager.GetCurrentDriverByFullName("Renato Nake"));
+        CostumerManager.GetCurrentCostumerByFullName("maria papadopoyloy").addProductToBucket(product, 2);
+        OrdersHome NewOrderHome = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("maria papadopoyloy"), 
+        DriverManager.GetCurrentDriverByFullName("renato nake"));
         
-
-
+        //"First Order"
+        Products productother = ProductManager.GetProductById(1);
+        CostumerManager.GetCurrentCostumerByFullName("dimitris latsi").addProductToBucket(productother, 1);
+        OrdersHome NewOrderHomeother = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("dimitris latsi"), 
+        DriverManager.GetCurrentDriverByFullName("nikos alekou"));
+        AllOrdersList.add(NewOrderHomeother);
 
         
         //"Second Order"
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
             Products productSecond = ProductManager.GetProductById(i);
-            CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy").addProductToBucket(productSecond, 1);
+            CostumerManager.GetCurrentCostumerByFullName("izabel georgioy").addProductToBucket(productSecond, 1);
         }
-        OrdersHome NewOrderHomeSecond = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy"),
-        DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"));
+        OrdersHome NewOrderHomeSecond = new OrdersHome(CostumerManager.GetCurrentCostumerByFullName("izabel georgioy"),
+        DriverManager.GetCurrentDriverByFullName("anthoni mantellos"));
         NewOrderHome.setStatusCompleted();
         NewOrderHomeSecond.setStatusCompleted();
         NewOrderHome.setRating(10);
@@ -254,8 +258,8 @@ public static void printAllOrders() {
 
 
         //Creating LockerOrders
-        Drivers SelectedDriverThird = DriverManager.GetCurrentDriverByFullName("Renato Nake"); 
-        Costumers SelectedCostumerThird = CostumerManager.GetCurrentCostumerByFullName("Maria Papadopoyloy");
+        Drivers SelectedDriverThird = DriverManager.GetCurrentDriverByFullName("anthoni mantellos"); 
+        Costumers SelectedCostumerThird = CostumerManager.GetCurrentCostumerByFullName("giannhs ntalas");
         for(int i =1;i <=2;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
             Products productThird = ProductManager.GetProductById(i);
@@ -266,8 +270,8 @@ public static void printAllOrders() {
         OrdersLocker OrdersLockerFirst = new OrdersLocker(SelectedCostumerThird, SelectedDriverThird,RandomLocker,RandomCompartment);
 
         
-        Drivers SelectedDriverForth = DriverManager.GetCurrentDriverByFullName("Anthoni Mantellos"); 
-        Costumers SelectedCostumerForth = CostumerManager.GetCurrentCostumerByFullName("Izabel Georgioy");
+        Drivers SelectedDriverForth = DriverManager.GetCurrentDriverByFullName("sofia alekou"); 
+        Costumers SelectedCostumerForth = CostumerManager.GetCurrentCostumerByFullName("dimitris latsi");
         for(int i =2;i <=3;i++){ //getting 2 products, id:1 and id:2, and adding quantity by 2
 
             Products productForth = ProductManager.GetProductById(i);
