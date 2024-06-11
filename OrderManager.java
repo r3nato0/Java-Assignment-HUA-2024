@@ -1035,6 +1035,65 @@ public static void ShowDriverOrdes() {
 
 }
 
+public static void ShowOrdersDetailsByIdOrCostumer() {
+        List<Orders> CostumerOrders = new ArrayList<>();
+        Scanner scanner = new Scanner(System.in);
+        Integer Orderid = null;
+        String CostumerName = null;
+
+        while (true) {
+            System.out.println("Enter an order id or Costumer's Name: ");
+            System.out.println("Or Enter cancel to cancel");
+            String Input = scanner.nextLine();
+
+            if (Input.equalsIgnoreCase("cancel")) {
+                return;
+            }
+
+            try {
+                Orderid = Integer.parseInt(Input);
+                System.out.println("You entered an id. Searching the orders by id...");
+                for (Orders order : AllOrdersList) {
+                    if (order.getOrderId().equals(Orderid)) {
+                        CostumerOrders.add(order);
+                        break;
+                    }
+                }
+            } catch (NumberFormatException e) {
+                CostumerName = Input;
+                for (Orders order : AllOrdersList) {
+                    if (order.getCostumerFullName().equalsIgnoreCase(CostumerName)) {
+                        CostumerOrders.add(order);
+                    }
+                }
+            }
+
+            
+            if (CostumerOrders.isEmpty()) {
+                if (Orderid != null) {
+                    System.out.println("There are no Orders with that id.");
+                } else if (CostumerName != null){
+                    System.out.println("There are no Orders with that Costumer's Name.");
+                }
+                
+                Orderid = null;
+                CostumerName = null;
+                CostumerOrders.clear();
+            } else {
+                
+                break;
+            }
+        }
+
+        if (CostumerOrders.size() > 1) {
+            for (Orders order : CostumerOrders) {
+                PrintOrder(order);
+            }
+        } else if (CostumerOrders.size() == 1) {
+            PrintOrder(CostumerOrders.get(0));
+        }
+    }
+
 }
 
 

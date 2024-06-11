@@ -405,9 +405,11 @@ public class UserInterface{
                 pressAnyKeyToContinue();
                 ShowMenu();
                 break;
-            // case 9:
-            //     OrderManager.ShowOrdersDetailsByIdandCostumer();
-            //     break;
+            case 9:
+                OrderManager.ShowOrdersDetailsByIdOrCostumer();
+                pressAnyKeyToContinue();
+                ShowMenu();
+                break;
             case 10:
                 OrderManager.ProductsBoughtSummary();
                 pressAnyKeyToContinue();
