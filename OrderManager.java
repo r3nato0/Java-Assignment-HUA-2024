@@ -22,7 +22,7 @@ public class OrderManager{
         Drivers SelectedDriver=null;
         String DriverFullName;
         while (true) {
-            DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: nikos papadopoylos): ");
+            DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: FirstName Lastname): ");
             boolean DriverOld=DriverManager.CheckDriverExists(DriverFullName);
             if (DriverOld){
                 if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equalsIgnoreCase(HomeOrLocker)){
@@ -58,7 +58,7 @@ public class OrderManager{
 
         //Costumer Selection Part
         Costumers SelectedCostumer;
-        String CostumerFullName =UserInterface.InputTypeStringWithSpace("Please Provide the full name of the Costumer (upper cases will be ignored)  (example: nikos papadopoylos): ");
+        String CostumerFullName =UserInterface.InputTypeStringWithSpace("Please Provide the full name of the Costumer (upper cases will be ignored)  (example: FirstName Lastname): ");
         if(CostumerManager.CheckCostumerExists(CostumerFullName)){
             System.out.printf("The Costumer allready Exsits, the rest of the fields are filled accordingly %n");
         }
@@ -517,7 +517,7 @@ public static void printAllOrders() {
 
                             while (true) {
                                 boolean found = false;
-                                Integer Selection = UserInterface.InputTypeNumberSingle("Order id:");
+                                Integer Selection = UserInterface.InputTypeNumber("Order id:");
                                 for(Orders order:CostumerOrders){
                                     if(order.getOrderId()==Selection){
                                         Selectedorder=order;

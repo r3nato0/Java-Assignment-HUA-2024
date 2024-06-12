@@ -43,11 +43,14 @@ public class UserInterface{
         Scanner scanner = new Scanner(System.in);
 
         String StringNumber ;
-        System.out.printf("%s",Message);
         while(true){
+            System.out.printf("%s",Message);
             boolean isValid = false;
             StringNumber = scanner.nextLine().trim();
             if( StringNumber.length()==8){
+                //we check if it has a lenght of 8(the length that the number should be)
+                //and also if every number is a digit
+                //if not it breaks from the while loop
                 for (int i=0; i < StringNumber.length();i++){
                     char c = StringNumber.charAt(i);
                     if(Character.isDigit(c)){
@@ -58,8 +61,11 @@ public class UserInterface{
                     }
                 }
             }
+            
             if (isValid){
                 return Integer.parseInt(StringNumber);
+            }else{//in case it broke from the while loop and the input is invalid it will print the bellow message
+                System.out.println("Invalid Input");
             }
     }
 }
@@ -70,75 +76,90 @@ public class UserInterface{
        
         System.out.printf("%s",Message);
         while (true) {
-            String PlateNumber = scanner.nextLine().trim();
-            System.out.println(PlateNumber.length());
+            String PlateNumber = scanner.nextLine().trim(); //triming any whitespaces at the strat or the end of the input
             boolean isValidLetters=false;
             boolean isValidNumbers=false;
             Integer CharsPart = 2;
             Integer NumsPart = 6;
 
             if (PlateNumber.length() == 7){
+                //if there are 7 characters the first 3 are letters and the other are nummbers the boolean values will become true and at the end then
+                // if will break the while loop returning a formated input
                 for (int i =0,j =3;(i <= CharsPart && j <= NumsPart);i++,j++){
-                    if(PlateNumber.charAt(i) >='A' && PlateNumber.charAt(i) <='Z'){
+                    if(((PlateNumber.charAt(i) >='a' && PlateNumber.charAt(i) <='z') ||
+                        (PlateNumber.charAt(i) >='A' && PlateNumber.charAt(i) <='Z')) &&
+                        (PlateNumber.charAt(j) >= '0' && PlateNumber.charAt(j) <= '9'))
+                     {
                         isValidLetters=true;
-                    }
-                    else{
-                        isValidLetters=false;
-                        break;
-                    }
-                    if(PlateNumber.charAt(j) >= '0' && PlateNumber.charAt(j) <= '9'){
                         isValidNumbers=true;
                     }
                     else{
+                        isValidLetters=false;
                         isValidNumbers=false;
                         break;
-                        
+                    }
                     }
                 }
-            }
 
             if(isValidLetters && isValidNumbers){
-                return PlateNumber;
+                //will format the input so the letters are returned in uppercase, it does not matter in any way for comparing strings later, since we use .equalsignorecase, but its a better aproach
+                String formatplatenumber = PlateNumber.substring(0, CharsPart+1).toUpperCase()+PlateNumber.substring(CharsPart+1, PlateNumber.length());
+                System.out.println(formatplatenumber);
+                return formatplatenumber;
             }else{
-                System.out.println("Please kindly provide a correct Plate Number example: SSSNNNN where S=LETTER AND N=number: ");
+                //user did not provide a valid platenumber
+                System.out.println("Please kindly provide a correct Plate Number example: ( 'YMZ4946' 'ymz4946') ");
             }
         }
     }
 
     public static String InputTypeStringWithSpace(String Message){ 
-
+        //will usually be used for a full name String value
         Scanner scanner = new Scanner(System.in);
         String FirstPart="";
         String SecodPart="";
-        System.out.printf("%s",Message);
+        String formatedSecondpart="";
+        //first part is the costumers name
+        //second part is the persons surname
         while (true) {
+            System.out.printf("%s",Message);
             String Input = scanner.nextLine().trim();
-            Integer SpacePos = Input.indexOf(" ");
+            Integer SpacePos = Input.indexOf(" ");//we get the index of the single space character
 
             if ((Input.length()>=3) && (SpacePos!=-1) && (SpacePos< Input.length()-1)){
                 FirstPart = Input.substring(0, SpacePos);
+                //we get the first part without the space
                 SecodPart = Input.substring(SpacePos+1,Input.length());
+                // we get the second part(remainder of the Input) and we trim any remaining whitespace character
+                formatedSecondpart=SecodPart.trim();
             }
-            if (FirstPart.matches("[a-zA-Z]+") && SecodPart.matches("[a-zA-Z]+") ) {
-                return Input;
-            } 
+            //[a-zA-Z] checks if the value is from a-z or A-Z 
+            //https://stackoverflow.com/questions/26722496/regex-difference-between-a-za-z-vs-a-za-z
+            //source that i found this out is above
+            
+            if (FirstPart.matches("[a-zA-Z]+") && formatedSecondpart.matches("[a-zA-Z]+") ) {
+                //we format the name again, since we have removed any space characted and return the firstname part and the second name part that is trimmed
+                return FirstPart+" "+formatedSecondpart;
+            } else{
+                System.out.println("Invalid Input, try again");
+            }
         } 
     }
 
-    public static Integer InputTypeNumberSingle(String message) {
+    public static Integer InputTypeNumber(String message) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(message);
         while (true) {
             String input = scanner.nextLine().trim();
-            if (input.length() == 1) {
+            if (input.length()!=0) {
                 char ch = input.charAt(0);
                 if (ch >= '0' && ch <= '9') {
                     return Integer.parseInt(input);
                 } else {
-                    System.out.println("Please enter a single digit number:");
+                    System.out.println("Invalid Input try again:");
                 }
             } else {
-                System.out.println("Please enter a single digit number:");
+                System.out.println("Invalid Input try again:");
             }
         }
     }
@@ -146,71 +167,101 @@ public class UserInterface{
     public static String InputTypeEmail(String Message) {
         Scanner scanner = new Scanner(System.in);
 
-        System.err.printf("%s", Message);
-
+        System.out.printf("%s", Message);
         while (true) {
-            String Email = scanner.nextLine().trim();
-            
-            // Check for invalid sequences
-            boolean IsValidSequence = (
-                !Email.contains("@.") &&
-                !Email.contains("..") &&
-                !Email.contains(".@") &&
-                !Email.startsWith(".") &&
-                !Email.startsWith("@") &&
-                !Email.endsWith(".") &&
-                !Email.endsWith("@")
-            );
-
-            // Check if email contains exactly one @
-            int atPosition = Email.indexOf('@');
-            boolean validat = atPosition != -1 && Email.indexOf('@', atPosition + 1) == -1;
-
-            // Check if email contains at least one dot after the @
-            boolean ValiddotPOS = atPosition != -1 && Email.indexOf('.', atPosition + 1) != -1;
-
-            // If all conditions are met
-            if (IsValidSequence && ValiddotPOS && validat) {
-                return Email;
+            String email = scanner.nextLine().trim();
+          
+            // forbidden sequences
+            boolean invalidSequence = email.contains("@.") || email.contains("..") ||
+                                      email.contains(".@") || email.startsWith(".") ||
+                                      email.startsWith("@") || email.endsWith(".") ||
+                                      email.endsWith("@");
+          
+            // Check for single "@" and at least one dot after "@"
+            int atPosition = email.indexOf('@');
+            boolean validFormat = atPosition != -1 && email.indexOf('@', atPosition + 1) == -1 &&
+                                  atPosition != -1 && email.indexOf('.', atPosition + 1) != -1;
+          
+            // Check for domain with only dots 
+            String domain = email.substring(atPosition + 1);
+            boolean validDomain = domain.matches("^[^.]+$");  // only dots allowed
+          
+            if (validFormat && !invalidSequence && validDomain) {
+              return email;
             } else {
-                System.err.printf("Invalid email address. Please enter again:  ");
+              System.out.printf("Invalid email address. Please enter again: ");
             }
-        }
+          }
     }
 
     public static String InputTypeAdress(String Message){
+        // i will get an String from the user, then i will get the position of the first number (street number)
+        //i will separate the streen number and the street name
+        // check if they are valid (no characters and no string in the number)
+        //then i will return the input separated by a space
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.printf("%s",Message);
             String Input = scanner.nextLine().trim();
-            String StreetAdress = "" ;
-            String StreetNumber = "";
-            boolean isValidStreetAdress = false;
-            boolean isValidSStreetNumber = false;
-            Integer Separator = Input.indexOf(" ") ;
-            if ((Input.length() >= 3) && (Separator != -1) && (Separator < Input.length()-1)){
-                StreetAdress = Input.substring(0, Separator);
-                StreetNumber = Input.substring(Separator+1, Input.length());
+            String FormatedInput="";
+            String StreetName="";
+            String StreetNumber="";
+            Integer pos=-1;
+            boolean ValidName=false;
+            boolean ValidNumber=false;
+            Integer StreetNumberformated=null;
+
+            // in case user gave a address separating the parts with space, we will remove the space and get address while also triming any access whitespaces
+            if(Input.indexOf(" ")!=-1){
+                FormatedInput =Input.substring(0, Input.indexOf(" ")) + Input.substring(Input.indexOf(" ")+1, Input.length()).trim();
+            }else{
+                FormatedInput=Input;// the user did not give any space
             }
-            if (StreetAdress.matches("[a-zA-Z]+")) {
-                isValidStreetAdress = true;
 
-            } 
-            for(int i =0 ; i < StreetNumber.length();i++){
-                char c = StreetNumber.charAt(i);
-                if(Character.isDigit(c)){
-                    isValidSStreetNumber=true;
-
-                } 
-                else{
-                    break;
+            // we check if there is any number
+            for(int i =0;i<FormatedInput.length();i++)
+            {
+                if(Character.isDigit(FormatedInput.charAt(i))){
+                    pos=i;
+                    break;//we captured the index and break
                 }
             }
-            if(isValidSStreetNumber&& isValidStreetAdress){
-                return Input;
+
+
+            //if the user has given a streenumber we separate the parts
+            if(pos!=-1)
+        {
+            //separate the parts
+            StreetName = FormatedInput.substring(0, pos);
+            StreetNumber = FormatedInput.substring(pos, FormatedInput.length());
+            try {
+                    StreetNumberformated = Integer.parseInt(StreetNumber);
+                    ValidNumber=true;
+            } catch (NumberFormatException e)
+            {
+                    //Nothing to do//
+            }
+        }
+
+
+
+            if(StreetName.matches("[a-zA-Z]+"))
+            {
+                    ValidName=true;
+            }
+
+            if(ValidName && ValidNumber && pos!=-1)
+            {
+
+                return StreetName + " "+ String.valueOf(StreetNumberformated); //we return the address with a space between
+            }
+            else{
+                System.out.println("Invalid address, try again: (example aglaurou 13 or aglarou13)");
             }
         }
     }
+    
+
 
     public static boolean InputTypeBoolean(String Message){
         Scanner scanner = new Scanner(System.in);
