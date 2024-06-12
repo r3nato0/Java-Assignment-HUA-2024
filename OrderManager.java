@@ -720,12 +720,13 @@ public static void printAllOrders() {
     
 public static void ShowAverageReviews() {
     double avg = 0.0;
+    Integer totalRatings=null;
     List<Orders> ratedOrders = new ArrayList<>();
-    Set<String> customerNames = new HashSet<>(); // so we dont get duplicates we wil use set, source : https://docs.oracle.com/javase%2F8%2Fdocs%2Fapi%2F%2F/java/util/Set.html
+    Set<String> customerNames = new HashSet<>(); // so we dont get duplicates we wil use sets
     List<Integer> customerHighestR = new ArrayList<>();
     List<Integer> customerLowestR = new ArrayList<>();
 
-    // we get the 
+    // we get the costumer names
     for (Orders order : AllOrdersList) {
         if (order.getStatus().equalsIgnoreCase(Constants.COMPLETED) && order.getRating() != null) {
             ratedOrders.add(order);
@@ -733,13 +734,15 @@ public static void ShowAverageReviews() {
         }
     }
 
-    // Calculate highest and lowest rating for each customer
+    // calculate highest and lowest rating for each customer
     for (String customerName : customerNames) {
-        int highest = -1; // the rating cant be lower than 1 or bigger than 10, so we use this values 
-        int lowest = 11;
+        Integer highest = -1; // the rating cant be lower than 1 or bigger than 10, so we use this values 
+        Integer lowest = 11;
+        totalRatings=0;
         for (Orders order : ratedOrders) {
             if (order.getCostumerFullName().equalsIgnoreCase(customerName)) {
-                int rating = order.getRating();
+                Integer rating = order.getRating();
+                totalRatings++;
                 if (rating > highest) {
                     highest = rating;
                 }
@@ -752,7 +755,7 @@ public static void ShowAverageReviews() {
         customerLowestR.add(lowest);
     }
 
-    // Getting the average
+    // getting the average
     if (!ratedOrders.isEmpty()) {
         for (Orders order : ratedOrders) {
             avg += order.getRating();
@@ -760,15 +763,22 @@ public static void ShowAverageReviews() {
         avg /= ratedOrders.size();
     }
 
+
+    // printing header
+    System.out.printf("| %-30s | %-30s | %-30s | %-30s \n","Costumer's Name","Total Ratings","Costumer's Highest Rating","Costumer's Lowest Rating");
+    System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
     //print results
     int index = 0;
     for (String customerName : customerNames) {
-        System.out.printf("%s with Highest Rating of %d and Lowest Rating of %d%n", customerName, customerHighestR.get(index), customerLowestR.get(index));
+        System.out.printf("| %-30s | %-30s | %-30d | %-30d \n", customerName,totalRatings, customerHighestR.get(index), customerLowestR.get(index));
         index++;
+        System.out.println();
     }
 
     //print average
-    System.out.printf("Average Rating: %.2f%n", avg);
+    System.out.println("-----------------------------------------------------------------------------------------------------------------------------");
+    System.out.printf("| Average Rating: %.2f |%n", avg);
+    System.out.println("------------------------");
     //we clear the arrays
     ratedOrders.clear();
     customerNames.clear();
