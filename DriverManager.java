@@ -171,7 +171,7 @@ public class DriverManager{
         String DriverLastName = UserInterface.StringInput("Enter The Last name of the Driver: ");
         String address = UserInterface.InputTypeAdress("Type Drivers Adress: ");
         String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
-        Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
+        Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM ( 8 digits):");
         String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
         System.out.printf("%s\n %s\n %s\n %s\n","Choose By Typing :","1)For Home Deliveries","2)locker Deliveries","3)Home & Locker Deliveries");
         Integer SelectDeliveryType = UserInterface.SelectNumber(3);

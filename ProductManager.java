@@ -59,7 +59,7 @@ public class ProductManager{
         boolean isValid=false;
         while (true) {
             System.out.printf("Select Product name:/id: ");
-            String Selection = scanner.nextLine();
+            String Selection = scanner.nextLine().trim();
             if (Selection.startsWith(CommandByname)){
                 String ProductName = Selection.substring(5, Selection.length());
                 for (Products product:productList){

@@ -411,7 +411,7 @@ public static void printAllOrders() {
             boolean isvalid = false;
             System.out.println();
             System.out.printf("Type cancel/id:/name: ");
-            String Input=scanner.nextLine();
+            String Input=scanner.nextLine().trim();
 
             //id: command
             if(Input.equalsIgnoreCase("cancel")){
@@ -1045,7 +1045,7 @@ public static void ShowOrdersDetailsByIdOrCostumer() {
         while (true) {
             System.out.println("Enter an order id or Costumer's Name: ");
             System.out.println("Or Enter cancel to cancel");
-            String Input = scanner.nextLine();
+            String Input = scanner.nextLine().trim();
 
             if (Input.equalsIgnoreCase("cancel")) {
                 return;

@@ -9,10 +9,10 @@ import java.util.Scanner;
 public class UserInterface{
 
 
-
+    // gets a string from the user, it checks if is a character and also trims the input
     public static String StringInput(String Message) {
         Scanner scanner = new Scanner(System.in);
-        String UserInput = "";
+        String UserInput = ""; 
     
         while (true) {
             System.out.printf("%s",Message);
@@ -37,6 +37,8 @@ public class UserInterface{
         return UserInput;
     }
 
+
+
     public static Integer InputTypeAFM(String Message){
         Scanner scanner = new Scanner(System.in);
 
@@ -44,7 +46,7 @@ public class UserInterface{
         System.out.printf("%s",Message);
         while(true){
             boolean isValid = false;
-            StringNumber = scanner.nextLine();
+            StringNumber = scanner.nextLine().trim();
             if( StringNumber.length()==8){
                 for (int i=0; i < StringNumber.length();i++){
                     char c = StringNumber.charAt(i);
@@ -66,9 +68,9 @@ public class UserInterface{
     
         Scanner scanner = new Scanner(System.in);
        
-        System.out.println(Message);
+        System.out.printf("%s",Message);
         while (true) {
-            String PlateNumber = scanner.nextLine();
+            String PlateNumber = scanner.nextLine().trim();
             System.out.println(PlateNumber.length());
             boolean isValidLetters=false;
             boolean isValidNumbers=false;
@@ -110,7 +112,7 @@ public class UserInterface{
         String SecodPart="";
         System.out.printf("%s",Message);
         while (true) {
-            String Input = scanner.nextLine();
+            String Input = scanner.nextLine().trim();
             Integer SpacePos = Input.indexOf(" ");
 
             if ((Input.length()>=3) && (SpacePos!=-1) && (SpacePos< Input.length()-1)){
@@ -127,7 +129,7 @@ public class UserInterface{
         Scanner scanner = new Scanner(System.in);
         System.out.println(message);
         while (true) {
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             if (input.length() == 1) {
                 char ch = input.charAt(0);
                 if (ch >= '0' && ch <= '9') {
@@ -147,7 +149,7 @@ public class UserInterface{
         System.err.printf("%s", Message);
 
         while (true) {
-            String Email = scanner.nextLine();
+            String Email = scanner.nextLine().trim();
             
             // Check for invalid sequences
             boolean IsValidSequence = (
@@ -179,8 +181,8 @@ public class UserInterface{
     public static String InputTypeAdress(String Message){
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            System.out.println(Message);
-            String Input = scanner.nextLine();
+            System.out.printf("%s",Message);
+            String Input = scanner.nextLine().trim();
             String StreetAdress = "" ;
             String StreetNumber = "";
             boolean isValidStreetAdress = false;
@@ -214,7 +216,7 @@ public class UserInterface{
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println(Message);
-            String Input = scanner.nextLine(); 
+            String Input = scanner.nextLine().trim(); 
             if (Input.equalsIgnoreCase("yes") || Input.equalsIgnoreCase("Yes") || Input.equalsIgnoreCase("YES") || Input.equalsIgnoreCase("y") || Input.equalsIgnoreCase("Y")){
                 return true;
             }
@@ -227,7 +229,7 @@ public class UserInterface{
         Scanner scanner = new Scanner(System.in);
         System.out.println(Message);
         while (true) {
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             if (input.length() == 1) {
                 char c = input.charAt(0);
                 if(c=='1'){
@@ -256,7 +258,7 @@ public class UserInterface{
     public static String InputTypeAllCharactersAllowed(String Message){
         System.out.println(Message);
         Scanner scanner = new Scanner(System.in);
-        String ProductName = scanner.nextLine();
+        String ProductName = scanner.nextLine().trim();
         return ProductName;
 
     }
@@ -270,7 +272,7 @@ public class UserInterface{
         boolean isNumb = true;
         while (true) {
 
-        String Selection = scanner.nextLine();   
+        String Selection = scanner.nextLine().trim();   
             if(!Selection.isEmpty()){
                 try {
                     number = Integer.parseInt(Selection);
@@ -301,7 +303,7 @@ public class UserInterface{
         System.out.println(Message);
         boolean isNumb = false;
         while (true) {
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
             if(!input.isEmpty()){
                 try {
                     number = Integer.parseInt(input);
@@ -327,7 +329,7 @@ public class UserInterface{
     
         while (true) {
             
-            String StringNumber = scanner.nextLine();
+            String StringNumber = scanner.nextLine().trim();
             try {
                 SelectedOption = Integer.parseInt(StringNumber);
                 if(SelectedOption > 0 && SelectedOption<=Max){
@@ -431,7 +433,7 @@ public class UserInterface{
     public static void pressAnyKeyToContinue() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Press any key to continue...");
-        scanner.nextLine();
+        scanner.nextLine().trim();
     }
     
 }
