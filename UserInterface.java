@@ -169,26 +169,30 @@ public class UserInterface{
 
         System.out.printf("%s", Message);
         while (true) {
-            String email = scanner.nextLine().trim();
-          
-            // forbidden sequences
-            boolean invalidSequence = email.contains("@.") || email.contains("..") ||
-                                      email.contains(".@") || email.startsWith(".") ||
-                                      email.startsWith("@") || email.endsWith(".") ||
-                                      email.endsWith("@");
-          
-            // Check for single "@" and at least one dot after "@"
-            int atPosition = email.indexOf('@');
-            boolean validFormat = atPosition != -1 && email.indexOf('@', atPosition + 1) == -1 &&
-                                  atPosition != -1 && email.indexOf('.', atPosition + 1) != -1;
-          
-            // Check for domain with only dots 
-            String domain = email.substring(atPosition + 1);
-            boolean validDomain = domain.matches("^[^.]+$");  // only dots allowed
-          
-            if (validFormat && !invalidSequence && validDomain) {
-              return email;
-            } else {
+            String Email = scanner.nextLine().trim();
+
+            // Check for invalid sequences
+            boolean IsValidSequence = (
+                !Email.contains("@.") &&
+                !Email.contains("..") &&
+                !Email.contains(".@") &&
+                !Email.startsWith(".") &&
+                !Email.startsWith("@") &&
+                !Email.endsWith(".") &&
+                !Email.endsWith("@")
+            );
+
+            // Check if email contains exactly one @
+            int atPosition = Email.indexOf('@');
+            boolean validat = atPosition != -1 && Email.indexOf('@', atPosition + 1) == -1;
+
+            // Check if email contains at least one dot after the @
+            boolean ValiddotPOS = atPosition != -1 && Email.indexOf('.', atPosition + 1) != -1;
+
+            // If all conditions are met
+            if (IsValidSequence && ValiddotPOS && validat) {
+                return Email;}
+            else {
               System.out.printf("Invalid email address. Please enter again: ");
             }
           }
