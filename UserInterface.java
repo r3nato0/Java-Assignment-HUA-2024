@@ -13,7 +13,7 @@ public class UserInterface{
     public static String StringInput(String Message) {
         Scanner scanner = new Scanner(System.in);
         String UserInput = ""; 
-    
+        
         while (true) {
             System.out.printf("%s",Message);
             UserInput = scanner.nextLine().trim();
@@ -146,6 +146,7 @@ public class UserInterface{
         } 
     }
 
+    //we get a number from the user, also prints the message
     public static Integer InputTypeNumber(String message) {
         Scanner scanner = new Scanner(System.in);
         System.out.println(message);
@@ -266,7 +267,7 @@ public class UserInterface{
     }
     
 
-
+    //returns a boolean value
     public static boolean InputTypeBoolean(String Message){
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -280,6 +281,8 @@ public class UserInterface{
             }
         }
     }
+
+    //is used for the user to select a locker or home delivery, and then returns the string of the type
     public static String InputTypeLockerORHome(String Message){
         Scanner scanner = new Scanner(System.in);
         System.out.println(Message);
@@ -298,6 +301,9 @@ public class UserInterface{
             }
         }
     }
+
+
+    // a small method that will format the String based on the maxlenght provided and also adding 3 dots, is used when displaying the product names
     public static String PrintOnly(String str, int maxLength) {
         if (str == null) {
             return null;
@@ -309,7 +315,7 @@ public class UserInterface{
         }
     }
 
-    //all characters are alowed
+    //all characters are alowed, is used for named the product
     public static String InputTypeAllCharactersAllowed(String Message){
         System.out.println(Message);
         Scanner scanner = new Scanner(System.in);
@@ -318,6 +324,8 @@ public class UserInterface{
 
     }
 
+
+    //this merhod helps when creating a new product. selecting the category based on the list
     public static  Integer InputTypeProductCategory(List<String> CategoryList){
         Integer number=null;
         Scanner scanner = new Scanner(System.in);
@@ -352,6 +360,9 @@ public class UserInterface{
         }   
 
     }
+
+
+    // no limit for the inteder, will help adding the quantity of the new product created
     public static Integer InputTypeIntegerNoLimit(String Message){
         Integer number=null;
         Scanner scanner = new Scanner(System.in);
@@ -377,15 +388,15 @@ public class UserInterface{
         return number;
     }
 
+
+    //the user is promted to select a numer with max value to the one passed in 
     public static Integer SelectNumber(Integer Max){
         Scanner scanner = new Scanner(System.in);
         Integer SelectedOption;
-
-    
         while (true) {
             
             String StringNumber = scanner.nextLine().trim();
-            try {
+            try {//error handling as the other methods
                 SelectedOption = Integer.parseInt(StringNumber);
                 if(SelectedOption > 0 && SelectedOption<=Max){
 
@@ -402,7 +413,7 @@ public class UserInterface{
 
     }
 
-
+    // The menu method
     public static void ShowMenu(){
         System.out.println("Choose by typing number");
         System.out.println("1) Add New Driver");
@@ -421,62 +432,62 @@ public class UserInterface{
         switch (Action) {
             case 1:
                 DriverManager.AddNewDriver();
-                pressAnyKeyToContinue();
-                ShowMenu();
+                pressEnterKeyToContinue();
+                ShowMenu(); // recursion call
                 break;
             case 2:
                 CostumerManager.AddNewCostumer();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 3:
                 LockerManager.AddNewLocker();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 4:
                 OrderManager.CreateSecond();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 5:
                 OrderManager.ChangeDriver();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 6:
                 OrderManager.ChangeOrdersAddress();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 7:
                 OrderManager.CompleteOrder();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 8:
                 OrderManager.LeaveReview();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 9:
                 OrderManager.ShowOrdersDetailsByIdOrCostumer();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 10:
                 OrderManager.ProductsBoughtSummary();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 11:
                 OrderManager.ShowDriverOrdes();
-                pressAnyKeyToContinue();
+                pressEnterKeyToContinue();
                 ShowMenu();
                 break;
             case 12:
                OrderManager.ShowAverageReviews();
-               pressAnyKeyToContinue();
+               pressEnterKeyToContinue();
                ShowMenu();
                 break;
 
@@ -485,9 +496,10 @@ public class UserInterface{
                 break;
         }
     }
-    public static void pressAnyKeyToContinue() {
+    // helps by passing the run of the program
+    public static void pressEnterKeyToContinue() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Press any key to continue...");
+        System.out.println("Press Enter key to continue...");
         scanner.nextLine().trim();
     }
     

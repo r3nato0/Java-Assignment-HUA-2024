@@ -16,44 +16,50 @@ public class OrderManager{
 
 
    public static void CreateSecond() {
-        
-        List<String> ActionRecorder=null;
+        // i named it CreateSecond, since is my second varient of this method, in this varient i will ask the user first to pick the type of order he wants
+        List<String> ActionRecorder=null; // will store the return values from the NotFoundAddNew, and we check the values after the driver was created.
         String HomeOrLocker = UserInterface.InputTypeLockerORHome("Press : 1) For Home delivery\nPress : 2) For Lockers Delivery");
         Drivers SelectedDriver=null;
         String DriverFullName;
+        // we get in the loop bellow, getting the name of the Driver
         while (true) {
             DriverFullName = UserInterface.InputTypeStringWithSpace("Please Provide the full name of the driver (upper cases will be ignored)  (example: FirstName Lastname): ");
-            boolean DriverOld=DriverManager.CheckDriverExists(DriverFullName);
-            if (DriverOld){
-                if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equalsIgnoreCase(HomeOrLocker)){
+            boolean DriverOld=DriverManager.CheckDriverExists(DriverFullName); // return true or false
+            if (DriverOld){ // if the driver exists,
+                if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equalsIgnoreCase(HomeOrLocker)){ // we check if he also does the same order type the user selected
                     System.out.println("The Driver allready Exsits. The rest of the fields are filled accordingly %n");
                     System.out.println("The Selected Driver also does "+HomeOrLocker);
+                    SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); // in that case we get the driver instance selected
                     
-                    break;
+                    break;//then we break from the loop
                 }else{
                     System.out.println("Driver Exists but does not do the type of delivery you selected");
-                    System.out.println("Select Another ");
+                    System.out.println("Select Another "); // the driver does not do the type of orders the user selected so he will be prompted to enter another Driver, he can still create a new one or select another one
                 }
     
             }
-            else{
+            else{ // in case the driver does not exists we creat the driver based on the provided Name
                 System.out.println("The Driver does not exits, Creating new Entry");
                 ActionRecorder = DriverManager.NotFoundAddNew(DriverFullName,HomeOrLocker); // Other Filleds are prompted and filled via the NotFoundAddNew Method
                 break;
             }            
         }
-
+        // if the list is not null, meaning the above NotFoundAddNew method was launched, we get the values from the list
         if(ActionRecorder!=null){
-            if((ActionRecorder.size()==2)){
-                HomeOrLocker = ActionRecorder.get(1);
+            if((ActionRecorder.size()==2)){ // if there are 2 values returned, then a specific part of the NotFoundAddNew was run, 
+                //meaning the user selected to change the ordertype,so we get the changed value
+                HomeOrLocker = ActionRecorder.get(1); // we store it in the same varriable as the first input so bellow we create the order accordingly 
+                DriverFullName = ActionRecorder.get(0);// also we get that new drivers name
             }else{
-                System.out.println(ActionRecorder.get(0));
+                System.out.println(ActionRecorder.get(0)); // if the lenght is not 2 but also is the list is not null(first statement) then only the new driversname is taken
                 DriverFullName = ActionRecorder.get(0);
                 
             }
-            }
+            // we get the new driver instance
+            SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName);
+        }
 
-        SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName);
+
         
 
         //Costumer Selection Part
@@ -132,7 +138,10 @@ public static void printAllOrders() {
     System.out.println();
     System.out.printf("%-10s %-20s %-20s %-25s %-20s %-10s %-10s %-10s\n", "Order ID", "CustomerName","DriversName","Address", "ProductName", "Quantity","Status","Rating");
     System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");
-
+    if(AllOrdersList.isEmpty()){ // in any case that there are no order, jsut adding it for best practise, since we will always start the program with default orders
+        System.out.println("There are no orders placed yet!");
+        return;
+    }
     for (Orders order : AllOrdersList) {
         if (order instanceof OrdersHome) {
             OrdersHome ordersHome = (OrdersHome) order;
@@ -211,10 +220,11 @@ public static void printAllOrders() {
 
 
     public static String CurrentDateTime(){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm");
+        // a simple method that will get the current datetime the instance of the order is created
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm"); // we modify the pattern 
         LocalDateTime now = LocalDateTime.now();
         String formattedDateTime = now.format(formatter);
-        return formattedDateTime;
+        return formattedDateTime; // we return it as a string
     }
  
 
@@ -369,36 +379,33 @@ public static void printAllOrders() {
         
     }
 
-
+    // will select an order by the input of the user
     public static Orders SelectOrder(){
         Orders SelectedOrder=null;
-        boolean ValidOrder =false;
+        boolean isValid=false;;
         Integer OrderId;
-
+        printAllOrders();
 
         while (true) {
-            OrderId = UserInterface.InputTypeIntegerNoLimit("Please type the number id of the order:");
-            if(OrderId<=AllOrdersList.size()){
-                ValidOrder =true;
-                break;
-            }else{
-                System.out.println("No such Order Exists");
-            }
-        }
-        if(ValidOrder){
-            for(Orders order : AllOrdersList){
+            OrderId = UserInterface.InputTypeNumber("Please type the number id of the order:");// gets a integer from the user, and also check for any input
+            for(Orders order : AllOrdersList){// we search the order
                 if(order.getOrderId()==OrderId){
                     SelectedOrder =order;
+                    isValid=true;// in case it was found
+                    break;
                 }
             }
-        }
-
-        return SelectedOrder;
+            if(isValid){// we return it if was found
+                return SelectedOrder;
+            }else{//it was not found, prompt user
+                System.out.println("That order does not exists: Try again:");
+            }
     
 }
+    }
 
     public static void ChangeOrdersAddress(){
-        printAllOrders();
+        printAllOrders(); //printing all orders for reference to the user
         System.out.println("Type id: and then the id of the order ");
         System.out.println("Type name: and then the name of the costumer to search for");
         Scanner scanner = new Scanner(System.in);
@@ -415,11 +422,12 @@ public static void printAllOrders() {
 
             //id: command
             if(Input.equalsIgnoreCase("cancel")){
-                return;
+                return; //in case the user regreted the action to change driver
             }
 
-
-            if(Input.startsWith(CommandId)){
+            // first we implemend the logic for searching by id
+            if(Input.startsWith(CommandId)){ //we get the commmad from the input and parse the substring left from it,
+                //if the substring is an integer , we get the order by that integerand break 
                 try {
                     ProductId = Input.substring(CommandId.length());
                     parsedProductId = Integer.parseInt(ProductId);
@@ -432,23 +440,24 @@ public static void printAllOrders() {
                         }
                     }
                 } catch (NumberFormatException e) {
-                        System.out.println("Invalid product ID format.");
-                    }}
-
-                    if (!isvalid && parsedProductId!=null) {
-                        System.out.println("No product found with the given ID.");
-
+                        System.out.println("Invalid product ID format."); // here, it checks in case the user typed "id:something"
+                    }
+                }
+                    // now if we searched the orders, but the parsedProductId is still null (from the start), order does not exist
+                if (!isvalid && parsedProductId!=null) {
+                    System.out.println("No product found with the given ID."); //
+                    // if the selected order is orderlocker instance but also the order exists
                     }else if(Selectedorder!=null && Selectedorder instanceof OrdersLocker){
                         System.out.println("Cannot Change the the Selected Orders Adress, is a LockersOrder");
                         if(Selectedorder.getStatus().equalsIgnoreCase(Constants.COMPLETED)){
                             System.out.println("The order is Also Completed!");
                         }
-
+                        // in case there is a selected order and is instance of ordershome
                     }else if(Selectedorder!=null && Selectedorder instanceof OrdersHome){
                         OrdersHome homeorder = (OrdersHome) Selectedorder;
-                        if(homeorder.getStatus().equalsIgnoreCase(Constants.COMPLETED)){
+                        if(homeorder.getStatus().equalsIgnoreCase(Constants.COMPLETED)){ //we check if its completed, if it we do nothing
                             System.out.println("The order you Selected Has been Completed Cannot Change The Address");
-                        }else{
+                        }else{ // the order is pending then, and we do then folowing:
                             System.out.printf("Enter New Address: ");
                             String AddressInput=UserInterface.InputTypeAdress("");
                             homeorder.setAddress(AddressInput);
@@ -458,7 +467,7 @@ public static void printAllOrders() {
                         }
                     }
 
-
+            //now the part that the user searched by name:
             else if (Input.startsWith(CommandName)){
                 String SelectedCostumerName = Input.substring(CommandName.length());
                 List<Orders> CostumerOrders=new ArrayList<>();
@@ -486,7 +495,7 @@ public static void printAllOrders() {
                             PrintOrder(homeorder);
                             break;
                         }
-                    }else if(CostumerOrders.size()>1){
+                    }else if(CostumerOrders.size()>1){ // if he has more than 1 orders 
                         // We Will remove from the list all the Lockers order and the Completed orders
                         Iterator<Orders> iterator = CostumerOrders.iterator();
                         while (iterator.hasNext()) {
@@ -508,14 +517,14 @@ public static void printAllOrders() {
                             break;
 
                         //if after the removes the user has more than one order that he can change the address off
-                        //we need to ask him to select from the orders by id 
+                        //we need to ask him to select from all his orders by id 
                         }else if(CostumerOrders.size()>1){
                             for(Orders order:CostumerOrders){
                                 PrintOrder(order);
                             }
                             System.out.println("Please Select from the above orders by id, Becouse the user has more than 1 HomeOrders Pending");
 
-                            while (true) {
+                            while (true) {// 
                                 boolean found = false;
                                 Integer Selection = UserInterface.InputTypeNumber("Order id:");
                                 for(Orders order:CostumerOrders){
@@ -527,6 +536,7 @@ public static void printAllOrders() {
                                 }
                                 if (found) break;
                             }
+                            //after the above loop break the user selected a valid order, from the filtered list CostumerOrders
                             OrdersHome homeorder = (OrdersHome) Selectedorder;
                             System.out.printf("Enter New Address: ");
                             String AddressInput=UserInterface.InputTypeAdress("");
@@ -544,7 +554,7 @@ public static void printAllOrders() {
                         break;
                     }
 
-                }else{
+                }else{ // in case the user provides a wrong input
                     System.out.println("Please Type id:number name:CostumerNAME or cancel for cancel");
                 }
 
@@ -556,8 +566,10 @@ public static void printAllOrders() {
 
 
     public static void CompleteOrder(){
+
         boolean OrderToCompelte=false;
         Orders order=null;
+        //prints all the pending orders, but also sets the OrderToCompelte =true, if left false there are no others to complete
         for(Orders orders:AllOrdersList){
             if (orders.getStatus().equalsIgnoreCase(Constants.PENDING)){
                 PrintOrder(orders);
@@ -568,23 +580,24 @@ public static void printAllOrders() {
  
         if(OrderToCompelte){
             System.out.println("Printed all "+ Constants.PENDING +" Orders for reference");
-            order = SelectOrder();
+            order = SelectOrder(); //will be promted to select order
         }
         else{
             System.out.println("All the orders in the system have been completed!");
         }
-
+        //if there is an order and that order is an instance of ordershome the bellow statement will be run 
         if(OrderToCompelte && order instanceof OrdersHome ){
-            OrdersHome ordersHome = (OrdersHome) order;
+            OrdersHome ordersHome = (OrdersHome) order; // we make it a OrdersHome 
             String status = ordersHome.getStatus();
+
             if(status.equalsIgnoreCase(Constants.COMPLETED)){
-                System.out.println("The order has already been completed");
+                System.out.println("The order has already been completed"); //even after the printing, if the user gave other id than those shown, we show this message also
             }else{
                 ordersHome.setStatusCompleted();
-                System.out.println("The Order Has been Completed!");
+                System.out.println("The Order Has been Completed!"); 
                 PrintOrder(order);
             }
-
+            //same logic as above
         }else if (OrderToCompelte && order instanceof OrdersLocker ){
             OrdersLocker OrdersLocker = (OrdersLocker) order;
             String status = OrdersLocker.getStatus();
@@ -605,6 +618,7 @@ public static void printAllOrders() {
 
 
     public static void PrintOrder(Orders order){
+            //in case the order is OrdersHome we will print the bellow format, 
             if (order instanceof OrdersHome) {
                 System.out.println("-----------------------------------------------------------------------------------------------------------------------Order In the costumer's Address");
                 System.out.println();
@@ -640,6 +654,7 @@ public static void printAllOrders() {
                     }
                 }
                 System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------");}
+                //else its OrdersLockers, no other instance can it be
             else{
                 System.out.println("--------------------------------------------------------------------------------------------------------------------------Order In the Locker's Address");
                 System.out.println();
@@ -795,7 +810,7 @@ public static void ShowAverageReviews() {
 public static void ProductsBoughtSummary() {
 
     List<ProductsInBucket> productsBought = new ArrayList<>(); // A list to store all the elements of all products bought
-
+    List<Costumers> CostumersWithOrders =new ArrayList<>(); //will store costumers that have orders only
 
     //will use set so i dont store duplicates
     Set<String> barcodesPerCostumer = new HashSet<>(); 
@@ -809,7 +824,14 @@ public static void ProductsBoughtSummary() {
     for (Orders order : AllOrdersList) {
         List<ProductsInBucket> itemsBought = order.getProductsInOrder();
         productsBought.addAll(itemsBought);
+        for(Costumers costumer:CostumerManager.getCostumersList()){
+            if(costumer.getCostumersFullName().equalsIgnoreCase(order.getCostumerFullName())){
+                CostumersWithOrders.add(costumer);
+            }
+        }
     }
+
+
 
     // will clear any values if exist in the sets, before we fill them
     CategoryALL.clear();
@@ -817,7 +839,7 @@ public static void ProductsBoughtSummary() {
 
     //for every costumer now
 
-    for(Costumers costumer:CostumerManager.getCostumersList()){
+    for(Costumers costumer:CostumersWithOrders){
         Integer totalOrderQuantity = 0;
 
         //get the name
@@ -847,7 +869,10 @@ public static void ProductsBoughtSummary() {
         }
 
 
-
+        System.out.println();
+        System.out.println("----------------------------------------------------------------------------------------------------Current Costumer: "+ CurrentCostumer);
+        System.out.println();
+        System.out.println();
         // after we stored the costumers barocodes/categorys we will count their quantitys, first by barcode
         boolean FirstLoop=true;
         System.out.printf("%-30s %-30s %-30s %-30s \n","Costumer's Name","Costumer's Total Orders","Products Bought By Barcode","Quantity Barcode","Products Bought By Category","Quantity Category");
@@ -917,13 +942,15 @@ public static void ProductsBoughtSummary() {
 
     // after the end of the above loop (costumers) we printed all the costumers products bought by barcode and category
     //what remains now is printing from all the orders the categorys/barcodes bought
-
-
+    System.out.println();
+    System.out.printf("------------------------------------------------------------------------------------------------------------------------------------All Orders Totals\n");
+    System.out.println();
+    System.out.println();
     //printing all orders summary by barcode
     System.out.println();
     System.out.println();
     Integer TotalCounter=0;
-    System.out.printf("---------------------------------------------------------------------------------------------All Orders Totals\n");
+    System.out.printf("---------------------------------------------------------------------------------------------All Orders by Barcode\n");
     System.out.printf(" %-30s %-30s %-30s\n","Total Orders","Barcodes","Quantity of each");
     System.out.println("--------------------------------------------------------------------------------------------------------------");
     boolean Ffloop=true;
@@ -953,7 +980,7 @@ public static void ProductsBoughtSummary() {
     System.out.println();
     System.out.println();
     Integer TotalCounterCategory=0;
-    System.out.printf("---------------------------------------------------------------------------------------------All Orders Totals\n");
+    System.out.printf("---------------------------------------------------------------------------------------------All Orders by Category\n");
     System.out.printf(" %-30s %-30s %-30s\n","Total Orders","Category","Quantity of each");
     System.out.println("--------------------------------------------------------------------------------------------------------------");
     boolean Floop=true;
@@ -990,7 +1017,7 @@ public static void ShowDriverOrdes() {
     "Pending Lockers Orders","Completed Lockers Orders",
     "Total Per Driver");
     System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-
+    //the bellow variables will store the total for each attribute that is named
     Integer AllOrderCount =0;
     Integer PendingHomeOrdersTotal = 0;
     Integer CompletedHomeOrdersTotal =0;
@@ -1003,6 +1030,7 @@ public static void ShowDriverOrdes() {
         Integer PendingLockersOrders = 0;
         Integer CompletedLockersOrders = 0;
         Integer TotalperDriver=0;
+        //in every loop we need to set the above values to 0 , so the next driver gets calculated hes own values
         for (Orders orders : AllOrdersList) {
             if (orders.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName())) {
                 if (orders.getStatus().equalsIgnoreCase(Constants.PENDING)) {
@@ -1020,6 +1048,7 @@ public static void ShowDriverOrdes() {
                 }
             }
         }
+        //we get the values inside the loop
         PendingHomeOrdersTotal+=PendingHomeOrders;
         CompletedHomeOrdersTotal+=CompletedHomeOrders;
         PendingLockersOrdersTotal+=PendingLockersOrders;
@@ -1034,7 +1063,7 @@ public static void ShowDriverOrdes() {
             CompletedLockersOrders,TotalperDriver);
         }
     }
-    if(AllOrderCount>0){
+    if(AllOrderCount>0){ // will print the totals of all orders
         System.out.println();
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
         System.out.printf(" %-25s %-25s %-25s %-25d %-25d %-25d %-25d | %-25d\n","Total Of All Orders:","--------","--------",PendingHomeOrdersTotal,CompletedHomeOrdersTotal,
@@ -1047,7 +1076,7 @@ public static void ShowDriverOrdes() {
 }
 
 public static void ShowOrdersDetailsByIdOrCostumer() {
-        List<Orders> CostumerOrders = new ArrayList<>();
+        List<Orders> CostumerOrders = new ArrayList<>(); // will store each  costumers orders
         Scanner scanner = new Scanner(System.in);
         Integer Orderid = null;
         String CostumerName = null;
@@ -1058,29 +1087,29 @@ public static void ShowOrdersDetailsByIdOrCostumer() {
             String Input = scanner.nextLine().trim();
 
             if (Input.equalsIgnoreCase("cancel")) {
-                return;
+                return; //if user typed cancel, he will be promted to return to main menu
             }
 
             try {
-                Orderid = Integer.parseInt(Input);
+                Orderid = Integer.parseInt(Input);// if it gets pasred then its a number and we seach order ids by that number
                 System.out.println("You entered an id. Searching the orders by id...");
                 for (Orders order : AllOrdersList) {
                     if (order.getOrderId().equals(Orderid)) {
-                        CostumerOrders.add(order);
+                        CostumerOrders.add(order); //adding to list, 1 will be added
                         break;
                     }
                 }
             } catch (NumberFormatException e) {
-                CostumerName = Input;
+                CostumerName = Input; //else is string and searching by costumersname
                 for (Orders order : AllOrdersList) {
                     if (order.getCostumerFullName().equalsIgnoreCase(CostumerName)) {
-                        CostumerOrders.add(order);
+                        CostumerOrders.add(order); //adding to list
                     }
                 }
             }
 
             
-            if (CostumerOrders.isEmpty()) {
+            if (CostumerOrders.isEmpty()) {// if there are not orders from the above adding
                 if (Orderid != null) {
                     System.out.println("There are no Orders with that id.");
                 } else if (CostumerName != null){
@@ -1091,17 +1120,16 @@ public static void ShowOrdersDetailsByIdOrCostumer() {
                 CostumerName = null;
                 CostumerOrders.clear();
             } else {
-                
-                break;
+                break; // is not empty, then we continue with the printing
             }
         }
 
-        if (CostumerOrders.size() > 1) {
+        if (CostumerOrders.size() > 1) { // if is above 1(we searched with the costumer's name)
             for (Orders order : CostumerOrders) {
                 PrintOrder(order);
             }
         } else if (CostumerOrders.size() == 1) {
-            PrintOrder(CostumerOrders.get(0));
+            PrintOrder(CostumerOrders.get(0)); // its one only becouse we searched with id
         }
     }
 

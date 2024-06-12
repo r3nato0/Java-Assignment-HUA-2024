@@ -1,21 +1,20 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 public class ProductManager{
     private static List<Products> productList = new ArrayList<>();
-    private static List<String> CategoryList = new ArrayList<>(Arrays.asList("hygiene", "detergent", "Drinks","Food"));
+    private static List<String> CategoryList = Constants.CategoryList;
 
 
 
 
-
+    //returns the list of the products that have been created (all products are created via the list)
     public static List<String> getCategoryList(){
         return CategoryList;
     }
 
-    
+    //creates default products
     public static void CreateDefaultProducts(){
         for (String[] ProductsDATA : Constants.PRODUCTS_DATA) {
             String name = ProductsDATA[0];
@@ -26,20 +25,20 @@ public class ProductManager{
         }
         }
 
-
+    
     public static Integer GetSelectedProductsQuantity(Products SelectedProduct){
         Scanner scanner = new Scanner(System.in);
         Integer SelectedQuantity ;
         while (true) {
-        System.out.printf("Specify Quantiy of product, ranging from 1 to %d \n",SelectedProduct.getAvailableQuantity());
-        SelectedQuantity = scanner.nextInt();
+        System.out.printf("Specify Quantiy of product");
+        SelectedQuantity = UserInterface.SelectNumber(SelectedProduct.getAvailableQuantity());// will ask user for quantity to select
 
-        if((SelectedQuantity>0) && (SelectedQuantity<=SelectedProduct.getAvailableQuantity())){
+        if(SelectedQuantity>0){
             Integer NewAvailableQuantity = SelectedProduct.getAvailableQuantity() - SelectedQuantity;
-            SelectedProduct.setAvailableQuantity(NewAvailableQuantity);
+            SelectedProduct.setAvailableQuantity(NewAvailableQuantity); //sets the new avaible quantity based on the users input
             break;
         }else{
-            System.out.printf("Please Provide a quantity that is Valid, ranging from 1 to %d \n",SelectedProduct.getAvailableQuantity());
+            System.out.printf("Please Provide a quantity that is Valid");// in case of wrong input
         }
 
         }
@@ -47,6 +46,8 @@ public class ProductManager{
     }
 
 
+
+    //will ask user to select product
     public static Products GetProductByNameORId(){
         printTableProducts();
         System.out.println("For Reference look the product's table above!");
@@ -61,15 +62,15 @@ public class ProductManager{
             System.out.printf("Select Product name:/id: ");
             String Selection = scanner.nextLine().trim();
             if (Selection.startsWith(CommandByname)){
-                String ProductName = Selection.substring(5, Selection.length());
+                String ProductName = Selection.substring(5, Selection.length());// in case the user gave a name then we get the product based ont he substring
                 for (Products product:productList){
                     if(product.getName().equalsIgnoreCase(ProductName) ){
                         isValid=true;
                         SelectedProduct=product;
                         break;}}                    }
 
-                        if (Selection.startsWith(CommandById)) {
-                            try {
+                        if (Selection.startsWith(CommandById)) { //if he gave an id
+                            try { //we check if its a numer
                                 String ProductId = Selection.substring(CommandById.length());
                                 int parsedProductId = Integer.parseInt(ProductId);
                         
@@ -87,7 +88,7 @@ public class ProductManager{
                         
                                     System.out.println("No product found with the given ID.");
                                 }
-                            } catch (NumberFormatException e) {
+                            } catch (NumberFormatException e) { // if its not a number, we print an error. example id:CocaCola
                             
                                 System.out.println("Invalid product ID format.");
                             }}
@@ -95,7 +96,7 @@ public class ProductManager{
             if(isValid ){
                 return SelectedProduct;}
             else{
-                System.out.println("Please specify the search criteria " + "name:" + "or" + "id: (example: name:ProductName id:ProductId)" );
+                System.out.println("Please specify the search criteria " + "name:" + "or" + "id: (example: name:ProductName id:ProductId)" );//we help the user with this print
             }
         }
     }
@@ -116,7 +117,7 @@ public class ProductManager{
         }
     }
 
-    // Generate random 13-digit barcode
+    // genarates random 13 digit code for barcodes
     public static long generateBarcode() {
         Random random = new Random();
         long barcode = 0;
@@ -126,7 +127,7 @@ public class ProductManager{
         return barcode;
         }
     
-        
+    //gets the product by id passed in the parrameter
     public static Products GetProductById(Integer id){
         Products SelectedProduct=null;
         for(Products product : productList){
@@ -137,7 +138,7 @@ public class ProductManager{
         }
         return SelectedProduct;
     }
-
+    //adds new product, from main menu
     public static void AddNewProduct(){
         String ProductName = UserInterface.InputTypeAllCharactersAllowed("Give The product's Name:");
         Integer StockQuanity = UserInterface.InputTypeIntegerNoLimit("Give the product's quantity to set");
@@ -154,7 +155,7 @@ public class ProductManager{
     }
 
 
-
+    //gets the category based on the barcode
     public static String getCategoryByBarcode(String barcode){
         String category=null;
         for(Products product:productList){
@@ -175,17 +176,17 @@ public class ProductManager{
             }
         }
         // the error handling
-        return "This product has no barcode for some reason!";
+        return "No Barcode!";
     }
 
-        
-        public static String getCategoryByName(String Name) {
-            for (Products product : productList) {
-                if (product.getName().equalsIgnoreCase(Name)) {
-                    return product.getCategory();
-                }
+    //we will return the gategory based on the product name
+    public static String getCategoryByName(String Name) {
+        for (Products product : productList) {
+            if (product.getName().equalsIgnoreCase(Name)) {
+                return product.getCategory();
             }
-            // some error handling
-            return "This product has no barcode for some reason!";
+        }
+        // some error handling
+        return "This product has no barcode for some reason!";
         }
 }
