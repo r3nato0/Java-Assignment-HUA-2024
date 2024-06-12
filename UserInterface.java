@@ -16,7 +16,7 @@ public class UserInterface{
     
         while (true) {
             System.out.printf("%s",Message);
-            UserInput = scanner.nextLine();
+            UserInput = scanner.nextLine().trim();
     
             boolean isValid = true; 
             for (int i = 0; i < UserInput.length(); i++) {

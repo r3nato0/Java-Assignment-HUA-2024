@@ -173,7 +173,7 @@ public class DriverManager{
         String Email = UserInterface.InputTypeEmail("Type Costumes Email: ");
         Integer AFM = UserInterface.InputTypeAFM("Enter Driver's AFM:");
         String PlateNumber = UserInterface.InputTypePlateNumber("Enter Driver's Plate Number:");
-        System.out.printf("%s %s\n %s\n %s\n","Choose By Typing :","1)For Home Deliveries","2)locker Deliveries","3)Home & Locker Deliveries");
+        System.out.printf("%s\n %s\n %s\n %s\n","Choose By Typing :","1)For Home Deliveries","2)locker Deliveries","3)Home & Locker Deliveries");
         Integer SelectDeliveryType = UserInterface.SelectNumber(3);
         String TYPE="";
         switch (SelectDeliveryType) {
@@ -188,14 +188,14 @@ public class DriverManager{
                 break;
         }
         Drivers Driver = new Drivers(DriverFirstName,DriverLastName,address,Email,AFM,PlateNumber,TYPE);
-        System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s" ,"The Driver Was Added Successfully",
+        System.out.printf("%s\n %s %d\n %s %s\n%s %s\n %s %s\n%s %s\n %s %d\n%s %s %s" ,"The Driver Was Added Successfully",
         "Driver ID: ",Driver.getId(),
         "Driver First Name: ",Driver.getName(),
         " Driver Last Name: ",Driver.getSurname(),
         "Driver's Address: ",Driver.getAddress(),
         " Driver's Email: ",Driver.getEmail(),
         "Driver's AFM: ",Driver.getDriverAFM(),
-        " Driver's PLateNumber: ",Driver.getPlateNumber());
+        " Driver's PLateNumber: ",Driver.getPlateNumber(),"\n");
     }
     //we will pass as parameters the search criteria ,First parameter the status we search, and second parameter the instance of the order
 
