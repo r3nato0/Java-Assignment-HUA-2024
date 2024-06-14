@@ -105,29 +105,31 @@ public class ProductManager{
     }
 
 
-
-
-
-
     public static void printTableProducts() {
         // Printing table header
-        System.out.printf("%-5s %-17s %-70s %-50s %-20s %-10s%n", "ID","Barcode", "Name", "Category", "Brand", "Quantity");
+        System.out.printf("%-5s %-17s %-70s %-20s %-20s %-10s%n", "ID","Barcode", "Name", "Category", "Brand", "Quantity");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        // Printing each product row
+        // Printing each product row 
         for (int i = 0; i < productList.size(); i++) {
             Products product = productList.get(i);
-            System.out.printf("%-5d %-17s %-70s %-50s %-20s %-10d%n", product.getId(), String.format("%013d", product.getBarcode()), product.getName(), product.getCategory(), product.getBrand(), product.getAvailableQuantity());
+            System.out.printf("%-5d %-17s %-70s %-20s %-20s %-10d%n", product.getId(),product.getBarcode(), product.getName(), product.getCategory(), product.getBrand(), product.getAvailableQuantity());
         }
     }
 
-    // genarates random 13 digit code for barcodes
-    public static long generateBarcode() {
+
+    public static String generateBarcode() {
+        // i was getting some problems with long type, so i made it returning a String,
+        //overflow problem in some cases and etc
+    
         Random random = new Random();
-        long barcode = 0;
+        StringBuilder barcode = new StringBuilder();
+        // i will generate each number differently, and then return the value in string
         for (int i = 0; i < 13; i++) {
-            barcode = barcode * 10 + random.nextInt(10);
+            barcode.append(random.nextInt(10));
         }
-        return barcode;
+            
+            return barcode.toString();
         }
     
     //gets the product by id passed in the parrameter

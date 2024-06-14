@@ -4,7 +4,7 @@
 public class Products {
     private static Integer nextId = 1;
     private Integer id;
-    private long barcode;
+    private String barcode;
     private String name;
     private String category;
     private String brand;
@@ -24,7 +24,7 @@ public class Products {
         return id;
     }
     
-    public long getBarcode() {
+    public String getBarcode() {
         return barcode;
     }
 
@@ -45,7 +45,7 @@ public class Products {
     }
 
     // Setters
-    public void setBarcode(long barcode) {
+    public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
 
@@ -71,7 +71,6 @@ public class Products {
         Integer CurrenteQuantity= this.getAvailableQuantity();
         Integer NewQuantity = CurrenteQuantity+Quantity;
         this.setAvailableQuantity(NewQuantity);
-
     }
 }
 

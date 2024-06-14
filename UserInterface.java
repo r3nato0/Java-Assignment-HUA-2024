@@ -430,77 +430,73 @@ public class UserInterface{
         System.out.println("10)Show Order's Details With Product's Category and Barcode");
         System.out.println("11)Show All Orders By Driver and Address(Lockers or HomeAddress)");
         System.out.println("12)Show Average reviews of Delivery System, And Each Costumer's Lowest and Highest Review rating");
-        Integer Action = SelectNumber(12);
+        System.out.println("13)Show All products info");
+        Integer Action = SelectNumber(13);
         switch (Action) {
             case 1:
-            for(Costumers costumer:CostumerManager.getCostumersList()){
-                System.out.println(costumer.getId());
-                System.out.println(costumer.getFullname());
-            }
-            for(Drivers driver:DriverManager.getDriverList()){
-                System.out.println(driver.getId());
-                System.out.println(driver.getFullname());
-            }
                 DriverManager.AddNewDriver();
                 pressEnterKeyToContinue();
                 ShowMenu(); // recursion call
-                break;
+
             case 2:
                 CostumerManager.AddNewCostumer();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 3:
                 LockerManager.AddNewLocker();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 4:
                 OrderManager.CreateSecond();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 5:
                 OrderManager.ChangeDriver();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 6:
                 OrderManager.ChangeOrdersAddress();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 7:
                 OrderManager.CompleteOrder();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 8:
                 OrderManager.LeaveReview();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 9:
                 OrderManager.ShowOrdersDetailsByIdOrCostumer();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 10:
                 OrderManager.ProductsBoughtSummary();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 11:
                 OrderManager.ShowDriverOrdes();
                 pressEnterKeyToContinue();
                 ShowMenu();
-                break;
+
             case 12:
                OrderManager.ShowAverageReviews();
                pressEnterKeyToContinue();
                ShowMenu();
-                break;
 
+            case 13:
+                ProductManager.printTableProducts();
+                pressEnterKeyToContinue();
+                ShowMenu();
 
             default:
                 break;

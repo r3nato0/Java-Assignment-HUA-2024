@@ -5,7 +5,7 @@ public class ProductsInBucket {
     private String ProductCategory;
     private Integer Productid;
     private String ProductBrand;
-    private Long barcode;
+    private String barcode;
     private Costumers costumer;
     
     public ProductsInBucket(Products product, int quantity,Costumers costumer) {
@@ -22,7 +22,7 @@ public class ProductsInBucket {
         return costumer.getFullname();
     }
 
-    public Long getBarcode(){
+    public String getBarcode(){
     return this.barcode;
     }
 

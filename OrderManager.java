@@ -9,7 +9,11 @@ import java.time.format.DateTimeFormatter;
 public class OrderManager{
     private static List<Orders> AllOrdersList = new ArrayList<>();
     private final static Integer MaxProductsPrintLength = 15; // Just a Limit of characters from products name to get printed, will be passed to UserInterface.PrintOnly(Name,Max...)
-    
+    //Καταλαθος κατάλαβα οτι εργασία ζητούσε και την ποσότητα για κάθε προιον σε κάθε παραγελία, έτσι καθε προιόν εχει και μια διαθέσιμη ποσοτητα στο πρόγραμα
+    //Επισης την εργασία την έγραψα σε visual studio code
+    //και μετα την εβαλα στο netbeans, συγνώμη αμα υπαρξει κάποιο λάθος σε αυτή την μετατροπή
+
+
     public static List<Orders> GetAllOrdersList(){
         return AllOrdersList;
     }
@@ -1110,11 +1114,11 @@ public static void ShowDriverOrdes() {
 }
 
 public static void ShowOrdersDetailsByIdOrCostumer() {
-        List<Orders> CostumerOrders = new ArrayList<>(); // will store each  costumers orders
+        List<Orders> CostumerOrders = new ArrayList<>(); // will store each costumers orders
         Scanner scanner = new Scanner(System.in);
         Integer Orderid = null;
         String CostumerName = null;
-
+        printAllOrders();//for reference
         while (true) {
             System.out.println("Enter an order id or Costumer's Name: ");
             System.out.println("Or Enter cancel to cancel");
