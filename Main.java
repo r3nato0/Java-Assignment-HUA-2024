@@ -10,5 +10,6 @@ public class Main {
         LockerManager.CreateDefaultLockers();
         OrderManager.CreateDefaultOrders();;
         UserInterface.ShowMenu();
+        UserInterface.closeScanner();
     }
 }

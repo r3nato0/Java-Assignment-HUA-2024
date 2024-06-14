@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 public class ProductManager{
     private static List<Products> productList = new ArrayList<>();
     private static List<String> CategoryList = Constants.CategoryList;
@@ -31,7 +30,7 @@ public class ProductManager{
 
     
     public static Integer GetSelectedProductsQuantity(Products SelectedProduct){
-        Scanner scanner = new Scanner(System.in);
+
         Integer SelectedQuantity ;
         while (true) {
         System.out.printf("Specify Quantiy of product: from 1 to %d :",SelectedProduct.getAvailableQuantity());
@@ -55,7 +54,7 @@ public class ProductManager{
         printTableProducts();
         System.out.println("For Reference look the product's table above!");
         System.out.println("Start with name: and then the product name OR id: and then the product id" );
-        Scanner scanner = new Scanner(System.in);
+        
         Products SelectedProduct=null;
         //System.out.println(Message);
         String CommandByname = "name:";
@@ -63,7 +62,7 @@ public class ProductManager{
         boolean isValid=false;
         while (true) {
             System.out.printf("Select Product name:/id: ");
-            String Selection = scanner.nextLine().trim();
+            String Selection = UserInterface.scanner.nextLine().trim();
             if (Selection.startsWith(CommandByname)){
                 String ProductName = Selection.substring(5, Selection.length());// in case the user gave a name then we get the product based ont he substring
                 for (Products product:productList){

@@ -7,11 +7,10 @@ import java.util.Scanner;
 //https://docs.oracle.com/javase/8/docs/api/java/lang/String.html
 //no specific part of code has beeing copied , onlt the methods are beeing used 
 public class UserInterface{
-
+    public static final Scanner scanner = new Scanner(System.in);
 
     // gets a string from the user, it checks if is a character and also trims the input
     public static String StringInput(String Message) {
-        Scanner scanner = new Scanner(System.in);
         String UserInput = ""; 
         
         while (true) {
@@ -38,9 +37,16 @@ public class UserInterface{
     }
 
 
+    public static void closeScanner() {
+        if (scanner != null) {
+            scanner.close();
+        }
+    }
+
+    
 
     public static Integer InputTypeAFM(String Message){
-        Scanner scanner = new Scanner(System.in);
+
 
         String StringNumber ;
         while(true){
@@ -72,7 +78,7 @@ public class UserInterface{
 
     public static String InputTypePlateNumber(String Message){
     
-        Scanner scanner = new Scanner(System.in);
+
        
         System.out.printf("%s",Message);
         while (true) {
@@ -115,7 +121,6 @@ public class UserInterface{
 
     public static String InputTypeStringWithSpace(String Message){ 
         //will usually be used for a full name String value
-        Scanner scanner = new Scanner(System.in);
         String FirstPart="";
         String SecodPart="";
         String formatedSecondpart="";
@@ -148,7 +153,7 @@ public class UserInterface{
 
     //we get a number from the user, also prints the message
     public static Integer InputTypeNumber(String message) {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println(message);
         while (true) {
             String input = scanner.nextLine().trim();
@@ -166,7 +171,7 @@ public class UserInterface{
     }
 
     public static String InputTypeEmail(String Message) {
-        Scanner scanner = new Scanner(System.in);
+
 
         System.out.printf("%s", Message);
         while (true) {
@@ -269,7 +274,7 @@ public class UserInterface{
 
     //returns a boolean value
     public static boolean InputTypeBoolean(String Message){
-        Scanner scanner = new Scanner(System.in);
+
         while (true) {
             System.out.println(Message);
             String Input = scanner.nextLine().trim(); 
@@ -284,7 +289,7 @@ public class UserInterface{
 
     //is used for the user to select a locker or home delivery, and then returns the string of the type
     public static String InputTypeLockerORHome(String Message){
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println(Message);
         while (true) {
             String input = scanner.nextLine().trim();
@@ -318,7 +323,7 @@ public class UserInterface{
     //all characters are alowed, is used for named the product
     public static String InputTypeAllCharactersAllowed(String Message){
         System.out.println(Message);
-        Scanner scanner = new Scanner(System.in);
+
         String ProductName = scanner.nextLine().trim();
         return ProductName;
 
@@ -328,7 +333,7 @@ public class UserInterface{
     //this merhod helps when creating a new product. selecting the category based on the list
     public static  Integer InputTypeProductCategory(List<String> CategoryList){
         Integer number=null;
-        Scanner scanner = new Scanner(System.in);
+
         for(int i =1 ; i <= CategoryList.size();i++){
             System.out.println("Press " + i + " To seelect Category: " + CategoryList.get(i-1) );
         }
@@ -365,7 +370,7 @@ public class UserInterface{
     // no limit for the inteder, will help adding the quantity of the new product created
     public static Integer InputTypeIntegerNoLimit(String Message){
         Integer number=null;
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println(Message);
         boolean isNumb = false;
         while (true) {
@@ -393,7 +398,7 @@ public class UserInterface{
 
     //the user is promted to select a numer with max value to the one passed in 
     public static Integer SelectNumber(Integer Max){
-        Scanner scanner = new Scanner(System.in);
+
         Integer SelectedOption;
         while (true) {
             
@@ -504,7 +509,7 @@ public class UserInterface{
     }
     // helps by passing the run of the program
     public static void pressEnterKeyToContinue() {
-        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Press Enter key to continue...");
         scanner.nextLine().trim();
     }

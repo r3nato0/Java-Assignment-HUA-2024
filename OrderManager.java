@@ -11,7 +11,7 @@ public class OrderManager{
     private final static Integer MaxProductsPrintLength = 15; // Just a Limit of characters from products name to get printed, will be passed to UserInterface.PrintOnly(Name,Max...)
     //Καταλαθος κατάλαβα οτι εργασία ζητούσε και την ποσότητα για κάθε προιον σε κάθε παραγελία, έτσι καθε προιόν εχει και μια διαθέσιμη ποσοτητα στο πρόγραμα
     //Επισης την εργασία την έγραψα σε visual studio code
-    //και μετα την εβαλα στο netbeans, συγνώμη αμα υπαρξει κάποιο λάθος σε αυτή την μετατροπή
+    //και μετα την εβαλα στο netbeans, συγνώμη αμα υπαρξει κάποιο λάθος σε κατα την μετατροπή
 
 
     public static List<Orders> GetAllOrdersList(){
@@ -320,14 +320,6 @@ public static void printAllOrders() {
         }
         }
 
-
-
-
-
-
-
-    
-
     public static void ChangeDriver(){
         //First We need to make sure there are Pending Order
         //We need to make sure that there are Drivers that do the type of delivery
@@ -445,7 +437,7 @@ public static void printAllOrders() {
         printAllOrders(); //printing all orders for reference to the user
         System.out.println("Type id: and then the id of the order ");
         System.out.println("Type name: and then the name of the costumer to search for");
-        Scanner scanner = new Scanner(System.in);
+
         String CommandId= "id:";
         String CommandName= "name:";
         while (true) {
@@ -455,7 +447,7 @@ public static void printAllOrders() {
             boolean isvalid = false;
             System.out.println();
             System.out.printf("Type cancel/id:/name: ");
-            String Input=scanner.nextLine().trim();
+            String Input=UserInterface.scanner.nextLine().trim();
 
             //id: command
             if(Input.equalsIgnoreCase("cancel")){
@@ -1115,14 +1107,14 @@ public static void ShowDriverOrdes() {
 
 public static void ShowOrdersDetailsByIdOrCostumer() {
         List<Orders> CostumerOrders = new ArrayList<>(); // will store each costumers orders
-        Scanner scanner = new Scanner(System.in);
+
         Integer Orderid = null;
         String CostumerName = null;
         printAllOrders();//for reference
         while (true) {
             System.out.println("Enter an order id or Costumer's Name: ");
             System.out.println("Or Enter cancel to cancel");
-            String Input = scanner.nextLine().trim();
+            String Input = UserInterface.scanner.nextLine().trim();
 
             if (Input.equalsIgnoreCase("cancel")) {
                 return; //if user typed cancel, he will be promted to return to main menu
