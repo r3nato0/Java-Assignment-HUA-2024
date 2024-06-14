@@ -65,5 +65,13 @@ public class Products {
 
         this.AvailableQuantity = AvailableQuantity;
     }
+
+    public void addAvailableQuantity( Integer Quantity) {
+
+        Integer CurrenteQuantity= this.getAvailableQuantity();
+        Integer NewQuantity = CurrenteQuantity+Quantity;
+        this.setAvailableQuantity(NewQuantity);
+
+    }
 }
 

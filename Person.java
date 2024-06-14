@@ -1,6 +1,4 @@
 public abstract class  Person{
-    private static int nextId = 1;
-    private int PersonId;
     private String Name;
     private String Surname;
     private String Adress;
@@ -8,7 +6,6 @@ public abstract class  Person{
 
 
     public Person(String Name,String Surname,String Adress,String Email){
-        this.PersonId=nextId++;
         this.Name = Name;
         this.Surname = Surname;
         this.Adress = Adress;
@@ -16,11 +13,12 @@ public abstract class  Person{
     }
 
 
-    public void setPersonId(int PersonId){
-        this.PersonId = PersonId;
-    }
-    public Integer getId() {
-        return this.PersonId;
+    public abstract void setId(Integer id);
+
+    public abstract Integer getId();
+    
+    public String getFullname(){
+        return this.Name+ " " +this.Surname;
     }
 
 
@@ -32,7 +30,7 @@ public abstract class  Person{
     public String getSurname() {
         return this.Surname;
     }
-    public String getAdress() {
+    public String getAddress() {
         return this.Adress;
     }
     public String getEmail() {

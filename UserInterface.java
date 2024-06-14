@@ -375,6 +375,8 @@ public class UserInterface{
                     number = Integer.parseInt(input);
                     if(number > 0){
                         isNumb=true;
+                    }else{
+                        System.out.println("Integer should be a positive number ");
                     }
                 } catch (NumberFormatException e) {
                     isNumb=false;
@@ -431,6 +433,14 @@ public class UserInterface{
         Integer Action = SelectNumber(12);
         switch (Action) {
             case 1:
+            for(Costumers costumer:CostumerManager.getCostumersList()){
+                System.out.println(costumer.getId());
+                System.out.println(costumer.getFullname());
+            }
+            for(Drivers driver:DriverManager.getDriverList()){
+                System.out.println(driver.getId());
+                System.out.println(driver.getFullname());
+            }
                 DriverManager.AddNewDriver();
                 pressEnterKeyToContinue();
                 ShowMenu(); // recursion call

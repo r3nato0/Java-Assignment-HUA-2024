@@ -94,7 +94,7 @@ public class CostumerManager{
         //loop to print every costuer in a specific way
         for (int i = 0; i < costumersList.size(); i++) {
             Costumers costumer = costumersList.get(i);
-                System.out.printf("%-5d %-17s %-20s %-30s %-20s%n",costumer.getCostumerid(),costumer.getName(),costumer.getSurname(),costumer.getAdress(),costumer.getEmail());
+                System.out.printf("%-5d %-17s %-20s %-30s %-20s%n",costumer.getCostumerid(),costumer.getName(),costumer.getSurname(),costumer.getAddress(),costumer.getEmail());
             }
     }
 

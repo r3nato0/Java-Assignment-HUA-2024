@@ -7,8 +7,12 @@ public class LockerManager{
     
 
     public static void CreateDefaultLockers(){
-        LockersList.add(new Lockers("Sygkrou 150",30));
-        LockersList.add(new Lockers("Beikoy 63",15));
+        for (String[] lockerdata : Constants.LOCKERS_DATA) {
+            String address = lockerdata[0];
+            Integer spaces = Integer.parseInt(lockerdata[1]);
+
+            LockersList.add( new Lockers (address,spaces));
+        }
     }
 
 
@@ -86,10 +90,10 @@ public class LockerManager{
     }
     // ads new locker
     public static void AddNewLocker(){
-        String LockerAddress = UserInterface.InputTypeAdress("Please type in the Locker's Address");
+        String LockerAddress = UserInterface.InputTypeAdress("Please type in the Locker's Address:");
         Integer LockerSpaces = UserInterface.InputTypeIntegerNoLimit("Please Provide The Locker's Free Spaces:");
         Lockers locker = new Lockers(LockerAddress, LockerSpaces);
-        System.out.printf("%s\n %s %d\n %s %s\n %s %d","The Locker has been Created successfuly",
+        System.out.printf("%s\n %s %d\n %s %s\n %s %d\n","The Locker has been Created successfuly",
         "Locker's ID: " , locker.getLockerId(),
         "Locker's Adress: ",locker.getAddress(),
         "Locker's spaces: ",locker.getSpaces());

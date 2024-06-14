@@ -7,6 +7,7 @@ public class ProductsInBucket {
     private String ProductBrand;
     private Long barcode;
     private Costumers costumer;
+    
     public ProductsInBucket(Products product, int quantity,Costumers costumer) {
         this.Productid = product.getId();
         this.ProductName = product.getName();
@@ -18,7 +19,7 @@ public class ProductsInBucket {
     }
 
     public String getCostumersFullName(){
-        return costumer.getCostumersFullName();
+        return costumer.getFullname();
     }
 
     public Long getBarcode(){

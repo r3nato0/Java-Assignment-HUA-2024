@@ -69,7 +69,7 @@ public class DriverManager{
             // Printing each product row
             for (int i = 0; i < driverList.size(); i++) {
                 Drivers drivers = driverList.get(i);
-                System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAdress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
+                System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAddress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
             }
         }
 
@@ -277,7 +277,7 @@ public class DriverManager{
         System.out.printf("%-5s %-17s %-20s %-30s %-20s %-19s %-10s %-20s%n ", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
         for(Drivers driver:driverList){
             if(driver.getType().equalsIgnoreCase(Type) || driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER)){
-                System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",driver.getDriverid(),driver.getName(),driver.getSurname(),driver.getAdress(),driver.getEmail(),driver.getDriverAFM(),driver.getPlateNumber(),driver.getType());
+                System.out.printf("%-5d %-17s %-20s %-30s %-20s %-19d %-10s %-20s \n",driver.getDriverid(),driver.getName(),driver.getSurname(),driver.getAddress(),driver.getEmail(),driver.getDriverAFM(),driver.getPlateNumber(),driver.getType());
             }
         }//printes driver for reference based on the passed variable from the parameters
 
@@ -298,7 +298,7 @@ public class DriverManager{
 
             
         }
-        return Selecteddriver.getDriverFullName(); // returnes the name of the driver
+        return Selecteddriver.getFullname(); // returnes the name of the driver
     }
 
     public static boolean DriverByTypeExists(String Type){

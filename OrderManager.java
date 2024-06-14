@@ -17,7 +17,7 @@ public class OrderManager{
 
    public static void CreateSecond() {
         // i named it CreateSecond, since is my second varient of this method, in this varient i will ask the user first to pick the type of order he wants
-        List<String> ActionRecorder=null; // will store the return values from the NotFoundAddNew, and we check the values after the driver was created.
+        List<String> ActionRecorder=null; // will store the return values from the NotFoundAddNew, and we check the values after and act accordingly.
         String HomeOrLocker = UserInterface.InputTypeLockerORHome("Press : 1) For Home delivery\nPress : 2) For Lockers Delivery");
         Drivers SelectedDriver=null;
         String DriverFullName;
@@ -27,20 +27,21 @@ public class OrderManager{
             boolean DriverOld=DriverManager.CheckDriverExists(DriverFullName); // return true or false
             if (DriverOld){ // if the driver exists,
                 if(DriverManager.GetCurrentDriverByFullName(DriverFullName).getType().equalsIgnoreCase(HomeOrLocker)){ // we check if he also does the same order type the user selected
-                    System.out.println("The Driver allready Exsits. The rest of the fields are filled accordingly %n");
+                    System.out.println("The Driver allready Exsits. The rest of the fields are filled accordingly ");
                     System.out.println("The Selected Driver also does "+HomeOrLocker);
                     SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName); // in that case we get the driver instance selected
                     
                     break;//then we break from the loop
                 }else{
+                    // the driver does not do the type of orders the user selected so he will be prompted to enter another Driver, he can still create a new one or select another one
                     System.out.println("Driver Exists but does not do the type of delivery you selected");
-                    System.out.println("Select Another "); // the driver does not do the type of orders the user selected so he will be prompted to enter another Driver, he can still create a new one or select another one
+                    System.out.println("Select Another "); 
                 }
     
             }
-            else{ // in case the driver does not exists we creat the driver based on the provided Name
+            else{ // in case the driver does not exists we create the driver based on the provided Name
                 System.out.println("The Driver does not exits, Creating new Entry");
-                ActionRecorder = DriverManager.NotFoundAddNew(DriverFullName,HomeOrLocker); // Other Filleds are prompted and filled via the NotFoundAddNew Method
+                ActionRecorder = DriverManager.NotFoundAddNew(DriverFullName,HomeOrLocker); // Other Fillds are prompted and filled via the NotFoundAddNew Method
                 break;
             }            
         }
@@ -48,14 +49,14 @@ public class OrderManager{
         if(ActionRecorder!=null){
             if((ActionRecorder.size()==2)){ // if there are 2 values returned, then a specific part of the NotFoundAddNew was run, 
                 //meaning the user selected to change the ordertype,so we get the changed value
-                HomeOrLocker = ActionRecorder.get(1); // we store it in the same varriable as the first input so bellow we create the order accordingly 
+                HomeOrLocker = ActionRecorder.get(1); // we store it in the same varriable as the first input so at the of this method we create the order accordingly 
                 DriverFullName = ActionRecorder.get(0);// also we get that new drivers name
             }else{
-                System.out.println(ActionRecorder.get(0)); // if the lenght is not 2 but also is the list is not null(first statement) then only the new driversname is taken
+                System.out.println(ActionRecorder.get(0)); // if the ActionRecorder lenght is not 2 but also is not null(first statement) then only the new driversname exusts unside 
                 DriverFullName = ActionRecorder.get(0);
                 
             }
-            // we get the new driver instance
+            // we get the new driver/old driver 
             SelectedDriver = DriverManager.GetCurrentDriverByFullName(DriverFullName);
         }
 
@@ -88,7 +89,7 @@ public class OrderManager{
                 System.out.println("The product has 0 avaiable quantity,please select another prodduct");
             }
             
-            boolean addAnotherProduct = UserInterface.InputTypeBoolean("Add another product to the bucket;  ");
+            boolean addAnotherProduct = UserInterface.InputTypeBoolean("Add another product to the bucket; yes/YES/y No/NO/n ");
 
             if (!addAnotherProduct) {
                 break;//user want no other products, we continue
@@ -99,7 +100,7 @@ public class OrderManager{
         // a Case where the first product the costumer wants has 0 quantity, but he also does not wish any other product to buy
         if (SelectedCostumer.getProductsInBucket().size()==0){
             System.out.println("The Costumer does not want any product, the order has been canceled,returning to Main Menu");
-            UserInterface.ShowMenu();
+            return;
         }
 
 
@@ -109,6 +110,7 @@ public class OrderManager{
             AllOrdersList.add(NewOrderHome);
             System.out.println("The order has been created successfully, Details of the order:");
             PrintOrder(NewOrderHome);
+            
         }
 
 
@@ -126,6 +128,17 @@ public class OrderManager{
                 PrintOrder(OrdersLocker);
             }else{
                 System.out.println("There are no avaiable Lockers, The order has been canceled");
+                //since the order is canceled, we need to clear the costumer's bucket. so in the next order he does not have the orders in the bucket.
+                //but we also need to set the products quantity back to the previous values, before the order started taking place.
+                //this values are stored in the costumer's backet
+                for(ProductsInBucket product :SelectedCostumer.getProductsInBucket()){
+                    for(Products productsInStock:ProductManager.getProductsList()){
+                        if(product.getProductid().equals(productsInStock.getId())){
+                            productsInStock.addAvailableQuantity(product.getQuantity());
+                        }
+                    }
+                }
+                SelectedCostumer.clearBucket();
             }}
 
 
@@ -270,8 +283,14 @@ public static void printAllOrders() {
             SelectedCostumerThird.addProductToBucket(productThird, 2);
         }
         Lockers RandomLocker = LockerManager.getRandomFreeLocker();
-        EachCompartmentOfLockers RandomCompartment = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
-        OrdersLocker OrdersLockerFirst = new OrdersLocker(SelectedCostumerThird, SelectedDriverThird,RandomLocker,RandomCompartment);
+        if(RandomLocker!=null){
+            EachCompartmentOfLockers RandomCompartment = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
+            OrdersLocker OrdersLockerFirst = new OrdersLocker(SelectedCostumerThird, SelectedDriverThird,RandomLocker,RandomCompartment);
+            AllOrdersList.add(OrdersLockerFirst);
+        }else{
+            System.out.println("Error Creating Default Locker Order 1/2, no free Lockers avaiable!");
+        }
+
 
         
         Drivers SelectedDriverForth = DriverManager.GetCurrentDriverByFullName("sofia alekou"); 
@@ -281,19 +300,29 @@ public static void printAllOrders() {
             Products productForth = ProductManager.GetProductById(i);
             SelectedCostumerForth.addProductToBucket(productForth, 1);
         }
+
+
         Lockers RandomLockerSecond = LockerManager.getRandomFreeLocker();
-        EachCompartmentOfLockers RandomCompartmentSecond = LockerManager.getRandomCompartmentOfLocker(RandomLocker);
-        OrdersLocker OrdersLockerSecond = new OrdersLocker(SelectedCostumerForth, SelectedDriverForth,RandomLockerSecond,RandomCompartmentSecond);
-        AllOrdersList.add(OrdersLockerFirst);
-        AllOrdersList.add(OrdersLockerSecond);
-        OrdersLockerSecond.setStatusCompleted();
-        OrdersLockerSecond.setCompartmentAvailable();
-        OrdersLockerSecond.LockerAddSpace();
-        OrdersLockerSecond.setRating(5);
+        if(RandomLockerSecond!=null){
+            EachCompartmentOfLockers RandomCompartmentSecond = LockerManager.getRandomCompartmentOfLocker(RandomLockerSecond);
+            OrdersLocker OrdersLockerSecond = new OrdersLocker(SelectedCostumerForth, SelectedDriverForth,RandomLockerSecond,RandomCompartmentSecond);
+            AllOrdersList.add(OrdersLockerSecond);
+            OrdersLockerSecond.setStatusCompleted();
+            OrdersLockerSecond.setCompartmentAvailable();
+            OrdersLockerSecond.LockerAddSpace();
+            OrdersLockerSecond.setRating(5);
+        }else{
+            System.out.println("Error Creating Default Locker Order 2/2, no free Lockers avaiable!");
+        }
+        }
 
 
 
-    }
+
+
+
+
+    
 
     public static void ChangeDriver(){
         //First We need to make sure there are Pending Order
@@ -312,7 +341,7 @@ public static void printAllOrders() {
 
 
         while (PendingOrders) {
-            SelectedOrder = SelectOrder();
+            SelectedOrder = SelectOrder(false);
             if(SelectedOrder.getStatus().equalsIgnoreCase(Constants.PENDING)){  // we select and order from above
                 break;
             }
@@ -339,8 +368,8 @@ public static void printAllOrders() {
                 System.out.printf("%-5s %-17s %-20s %-25s %-35s %-10s %-20s %-20s \n", "ID","Name", "lastName", "Adress", "Email", "AFM","Plate Number","Orders Type");
                 System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
                 for(Drivers drivers:DriverManager.getDriverList()){
-                    if((drivers.getType().equalsIgnoreCase(TypeOrder)|| drivers.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equalsIgnoreCase(drivers.getDriverFullName()))){
-                        System.out.printf("%-5d %-17s %-20s %-25s %-35s %-10d %-20s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAdress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
+                    if((drivers.getType().equalsIgnoreCase(TypeOrder)|| drivers.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equalsIgnoreCase(drivers.getFullname()))){
+                        System.out.printf("%-5d %-17s %-20s %-25s %-35s %-10d %-20s %-20s \n",drivers.getDriverid(),drivers.getName(),drivers.getSurname(),drivers.getAddress(),drivers.getEmail(),drivers.getDriverAFM(),drivers.getPlateNumber(),drivers.getType());
                     }
                 }
                 System.out.println("Select Driver, Look The Abode drivers For reference.\n");
@@ -352,14 +381,14 @@ public static void printAllOrders() {
             String DriverName = UserInterface.InputTypeStringWithSpace("Type the Drivers Full name :");
             if(DriverManager.CheckDriverExists(DriverName)){
                 Drivers driver = DriverManager.GetCurrentDriverByFullName(DriverName);
-                if((driver.getType().equalsIgnoreCase(TypeOrder)|| driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName()))){
+                if((driver.getType().equalsIgnoreCase(TypeOrder)|| driver.getType().equalsIgnoreCase(Constants.HOMEANDLOCKER))&& (!SelectedOrder.getDriverFullName().equalsIgnoreCase(driver.getFullname()))){
                     SelectedOrder.setNewDriver(driver);
                     PrintOrder(SelectedOrder);
                     System.out.println();
                     System.out.println("The Driver Has Been Changed");
                     loopCompleted=true;
                     break;
-                }else if ((SelectedOrder.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName()))){
+                }else if ((SelectedOrder.getDriverFullName().equalsIgnoreCase(driver.getFullname()))){
                     System.out.println("You gave the name of the Current Driver, Select another one");
                 }else{
                     System.out.println("The Driver cannot be selected he does "+ driver.getType());
@@ -380,11 +409,15 @@ public static void printAllOrders() {
     }
 
     // will select an order by the input of the user
-    public static Orders SelectOrder(){
+    public static Orders SelectOrder(boolean PrintOrders){
+        if(PrintOrders){
+            printAllOrders();
+        }
+        
         Orders SelectedOrder=null;
         boolean isValid=false;;
         Integer OrderId;
-        printAllOrders();
+        
 
         while (true) {
             OrderId = UserInterface.InputTypeNumber("Please type the number id of the order:");// gets a integer from the user, and also check for any input
@@ -580,7 +613,7 @@ public static void printAllOrders() {
  
         if(OrderToCompelte){
             System.out.println("Printed all "+ Constants.PENDING +" Orders for reference");
-            order = SelectOrder(); //will be promted to select order
+            order = SelectOrder(false); //will be promted to select order
         }
         else{
             System.out.println("All the orders in the system have been completed!");
@@ -711,7 +744,7 @@ public static void printAllOrders() {
             return;
         }
     
-    Orders selectedOrder = SelectOrder();
+    Orders selectedOrder = SelectOrder(false);
     
     if (selectedOrder == null) {
             System.out.println("No valid order was selected"); // a simple error handling (there is no point really, just adding it for good practise)
@@ -735,12 +768,12 @@ public static void printAllOrders() {
     
 public static void ShowAverageReviews() {
     double avg = 0.0;
-    Integer totalRatings=null;
+    Integer Ratings=null;
     List<Orders> ratedOrders = new ArrayList<>();
     Set<String> customerNames = new HashSet<>(); // so we dont get duplicates we wil use sets
     List<Integer> customerHighestR = new ArrayList<>();
     List<Integer> customerLowestR = new ArrayList<>();
-
+    List<Integer> totalRatings = new ArrayList<>();
     // we get the costumer names
     for (Orders order : AllOrdersList) {
         if (order.getStatus().equalsIgnoreCase(Constants.COMPLETED) && order.getRating() != null) {
@@ -753,11 +786,11 @@ public static void ShowAverageReviews() {
     for (String customerName : customerNames) {
         Integer highest = -1; // the rating cant be lower than 1 or bigger than 10, so we use this values 
         Integer lowest = 11;
-        totalRatings=0;
+        Ratings=0;
         for (Orders order : ratedOrders) {
             if (order.getCostumerFullName().equalsIgnoreCase(customerName)) {
                 Integer rating = order.getRating();
-                totalRatings++;
+                Ratings++;
                 if (rating > highest) {
                     highest = rating;
                 }
@@ -766,6 +799,7 @@ public static void ShowAverageReviews() {
                 }
             }
         }
+        totalRatings.add(Ratings);
         customerHighestR.add(highest);
         customerLowestR.add(lowest);
     }
@@ -785,7 +819,7 @@ public static void ShowAverageReviews() {
     //print results
     int index = 0;
     for (String customerName : customerNames) {
-        System.out.printf("| %-30s | %-30s | %-30d | %-30d \n", customerName,totalRatings, customerHighestR.get(index), customerLowestR.get(index));
+        System.out.printf("| %-30s | %-30s | %-30d | %-30d \n", customerName,totalRatings.get(index), customerHighestR.get(index), customerLowestR.get(index));
         index++;
         System.out.println();
     }
@@ -810,8 +844,7 @@ public static void ShowAverageReviews() {
 public static void ProductsBoughtSummary() {
 
     List<ProductsInBucket> productsBought = new ArrayList<>(); // A list to store all the elements of all products bought
-    List<Costumers> CostumersWithOrders =new ArrayList<>(); //will store costumers that have orders only
-
+    Set<Costumers> CostumersWithOrders = new HashSet<>();//will store costumers that have orders only
     //will use set so i dont store duplicates
     Set<String> barcodesPerCostumer = new HashSet<>(); 
     Set<String> barcodesALL = new HashSet<>();
@@ -825,12 +858,13 @@ public static void ProductsBoughtSummary() {
         List<ProductsInBucket> itemsBought = order.getProductsInOrder();
         productsBought.addAll(itemsBought);
         for(Costumers costumer:CostumerManager.getCostumersList()){
-            if(costumer.getCostumersFullName().equalsIgnoreCase(order.getCostumerFullName())){
-                CostumersWithOrders.add(costumer);
+            if(costumer.getFullname().equalsIgnoreCase(order.getCostumerFullName())){
+                CostumersWithOrders.add(costumer);//used set so i dont have to make a separate loop for adding the costumers
             }
         }
     }
 
+    
 
 
     // will clear any values if exist in the sets, before we fill them
@@ -843,7 +877,7 @@ public static void ProductsBoughtSummary() {
         Integer totalOrderQuantity = 0;
 
         //get the name
-        String CurrentCostumer=costumer.getCostumersFullName();
+        String CurrentCostumer=costumer.getFullname();
         Integer CurrentCostumerOrdersCount = CostumerManager.getCostumersTotalOrders(costumer.getId()); //get the total orders of the costumer
 
         //clear any previous values of the costumer before (if not the second ...third costumers will have the barcodes/categorys of the costumers before)
@@ -860,10 +894,10 @@ public static void ProductsBoughtSummary() {
             barcodesALL.add(String.valueOf(item.getBarcode()));
             CategoryALL.add(item.getProductCategory());
             //we store the costumers barcode to the set
-            if(costumer.getCostumersFullName().equalsIgnoreCase(item.getCostumersFullName())){
+            if(costumer.getFullname().equalsIgnoreCase(item.getCostumersFullName())){
                 barcodesPerCostumer.add(String.valueOf(item.getBarcode()));
             }
-            if(costumer.getCostumersFullName().equalsIgnoreCase(item.getCostumersFullName())){
+            if(costumer.getFullname().equalsIgnoreCase(item.getCostumersFullName())){
                 CategoryPerCostumer.add(item.getProductCategory());
             }
         }
@@ -881,7 +915,7 @@ public static void ProductsBoughtSummary() {
             Integer QuantityBarcode=0;
             for(ProductsInBucket product:productsBought){
                 //if the user has bought the product 
-                if(costumer.getCostumersFullName().equalsIgnoreCase(product.getCostumersFullName()) && barcodes.equalsIgnoreCase(String.valueOf(product.getBarcode()))){
+                if(costumer.getFullname().equalsIgnoreCase(product.getCostumersFullName()) && barcodes.equalsIgnoreCase(String.valueOf(product.getBarcode()))){
                     QuantityBarcode+=product.getQuantity();
                     totalOrderQuantity+=product.getQuantity();
 
@@ -909,7 +943,7 @@ public static void ProductsBoughtSummary() {
         for(String Category:CategoryPerCostumer){
             Integer QuantityCategory=0;
             for(ProductsInBucket product:productsBought){
-                if(costumer.getCostumersFullName().equalsIgnoreCase(product.getCostumersFullName()) && Category.equalsIgnoreCase(product.getProductCategory())){
+                if(costumer.getFullname().equalsIgnoreCase(product.getCostumersFullName()) && Category.equalsIgnoreCase(product.getProductCategory())){
                     QuantityCategory+=product.getQuantity();
                     TotalQuantityCategory+=product.getQuantity();}
             }
@@ -1012,7 +1046,7 @@ public static void ProductsBoughtSummary() {
 public static void ShowDriverOrdes() {
     //HEADER OF THE PRINT
     System.out.println();
-    System.out.printf(" %-25s %-25s %-25s %-25s %-25s %-25s %-25s | %-15s\n","Driver's ID","DriverCategory",
+    System.out.printf(" %-15s %-25s %-25s %-25s %-25s %-25s %-25s | %-15s\n","Driver's ID","DriverCategory",
     "Driver's Name","Pending Home Orders","Completed Home Orders",
     "Pending Lockers Orders","Completed Lockers Orders",
     "Total Per Driver");
@@ -1032,7 +1066,7 @@ public static void ShowDriverOrdes() {
         Integer TotalperDriver=0;
         //in every loop we need to set the above values to 0 , so the next driver gets calculated hes own values
         for (Orders orders : AllOrdersList) {
-            if (orders.getDriverFullName().equalsIgnoreCase(driver.getDriverFullName())) {
+            if (orders.getDriverFullName().equalsIgnoreCase(driver.getFullname())) {
                 if (orders.getStatus().equalsIgnoreCase(Constants.PENDING)) {
                     if (orders instanceof OrdersHome) {
                         PendingHomeOrders++;
@@ -1057,7 +1091,7 @@ public static void ShowDriverOrdes() {
         AllOrderCount+=TotalperDriver;
         //i will not show drivers that have no orders,(my though processis that if there are for example 100 drivers, there is no need to show the ones without orders)
         if(TotalperDriver>0){
-            System.out.printf(" %-25d %-25s %-25s %-25d %-25d %-25d %-25d | %-15d\n",driver.getDriverid(),driver.getType(), driver.getDriverFullName(),  PendingHomeOrders,
+            System.out.printf(" %-15d %-25s %-25s %-25d %-25d %-25d %-25d | %-15d\n",driver.getDriverid(),driver.getType(), driver.getFullname(),  PendingHomeOrders,
             CompletedHomeOrders,
             PendingLockersOrders,
             CompletedLockersOrders,TotalperDriver);
@@ -1066,7 +1100,7 @@ public static void ShowDriverOrdes() {
     if(AllOrderCount>0){ // will print the totals of all orders
         System.out.println();
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf(" %-25s %-25s %-25s %-25d %-25d %-25d %-25d | %-25d\n","Total Of All Orders:","--------","--------",PendingHomeOrdersTotal,CompletedHomeOrdersTotal,
+        System.out.printf(" %-15s %-20s %-25s %-25d %-25d %-25d %-25d | %-25d\n","Total Of All Orders:","-","-",PendingHomeOrdersTotal,CompletedHomeOrdersTotal,
         PendingLockersOrdersTotal,CompletedLockersOrdersTotal,AllOrderCount);
         System.out.println();
     }else{

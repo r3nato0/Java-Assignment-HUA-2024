@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 public class Constants {
+    
     public static final String PENDING = "Pending";
     public static final String COMPLETED = "Completed";
     public static final String DELIVERYHOME = "HomeDelivery";
@@ -9,7 +10,7 @@ public class Constants {
     public static final String LOCKERDELIVERY = "LockersDelivery";
     public static final List<String> CategoryList = new ArrayList<>(Arrays.asList("hygiene", "detergent", "Drinks","Food"));
 
-
+    
 
     public static final List<String[]> CUSTOMER_DATA = Arrays.asList(
         new String[]{"george","tsoulas", "Dimitraopoyloy 105", "george@yahoo.com"},
@@ -34,6 +35,11 @@ public class Constants {
         new String[]{"Cif General Purpose Cleansing Cream 500ml", CategoryList.get(1), "Cif ", "4"},
         new String[]{"Swaz Professional General Purpose Cleaning Liquid 4lt", CategoryList.get(2), "Swaz", "2"},
         new String[]{"Amita Peach fruit drink 1000ml", "Drinks", CategoryList.get(3), "12"}
+    );
+
+    public static final List<String[]> LOCKERS_DATA = Arrays.asList(
+        new String[]{"Sygkrou 150","30"},
+        new String[]{"Beikoy 63", "15"}
     );
 
 

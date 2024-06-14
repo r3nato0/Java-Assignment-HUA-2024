@@ -8,10 +8,14 @@ public class ProductManager{
 
 
 
-
     //returns the list of the products that have been created (all products are created via the list)
+    public static List<Products> getProductsList(){
+        return productList;
+    }
+
+    //returns the category list (all products are created via the list)
     public static List<String> getCategoryList(){
-        return CategoryList;
+        return Constants.CategoryList;
     }
 
     //creates default products
@@ -30,9 +34,8 @@ public class ProductManager{
         Scanner scanner = new Scanner(System.in);
         Integer SelectedQuantity ;
         while (true) {
-        System.out.printf("Specify Quantiy of product");
-        SelectedQuantity = UserInterface.SelectNumber(SelectedProduct.getAvailableQuantity());// will ask user for quantity to select
-
+        System.out.printf("Specify Quantiy of product: from 1 to %d :",SelectedProduct.getAvailableQuantity());
+        SelectedQuantity = UserInterface.SelectNumber(SelectedProduct.getAvailableQuantity());// the parameter hold the max number allowed to select, in this case is the max quantity of the product
         if(SelectedQuantity>0){
             Integer NewAvailableQuantity = SelectedProduct.getAvailableQuantity() - SelectedQuantity;
             SelectedProduct.setAvailableQuantity(NewAvailableQuantity); //sets the new avaible quantity based on the users input
